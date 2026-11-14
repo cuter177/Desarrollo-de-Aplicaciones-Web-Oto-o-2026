@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sitio web de [Nombre de la empresa], desarrollo de software web, dashboards y aplicaciones móviles.">
+  <title>[Nombre de la empresa] — Desarrollo de software</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <script type="module" src="assets/js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name">[Nombre de la empresa]</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="index.html" aria-current="page">Inicio</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="pages/login.html">Iniciar sesión</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="pages/registro.html">Crear cuenta</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">
+            Cerrar sesión
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero">
+      <div class="container">
+        <p class="hero__eyebrow">Proyecto de Desarrollo de Aplicaciones Web</p>
+        <h1 class="hero__title">Sitio en construcción</h1>
+        <p class="hero__lead">
+          Estamos preparando el sitio público, el portal de clientes y el panel
+          administrativo de la empresa. La autenticación con PHP y SQL Server ya
+          está disponible en esta etapa.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="pages/registro.html">Crear cuenta de cliente</a>
+          <a class="btn btn--secondary" href="pages/login.html">Iniciar sesión</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section__title">Experiencias previstas</h2>
+        <div class="grid">
+          <article class="card">
+            <h3 class="card__title">Sitio público</h3>
+            <p class="card__body">
+              Inicio, servicios, portafolio, nosotros, contacto y solicitud de
+              cotización.
+            </p>
+            <span class="badge badge--warning">Pendiente</span>
+          </article>
+
+          <article class="card">
+            <h3 class="card__title">Portal del cliente</h3>
+            <p class="card__body">
+              Registro, inicio de sesión, perfil, proyectos y solicitudes
+              propias.
+            </p>
+            <span class="badge badge--info">Acceso habilitado</span>
+          </article>
+
+          <article class="card">
+            <h3 class="card__title">Panel administrativo</h3>
+            <p class="card__body">
+              Usuarios, clientes, servicios, proyectos, tecnologías, solicitudes
+              y mensajes.
+            </p>
+            <span class="badge badge--info">Dashboard habilitado</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted">
+      <div class="container">
+        <h2 class="section__title">Estado del proyecto</h2>
+        <p>
+          Versión <strong>0.2.0</strong>: base de datos SQL Server, API PHP y
+          autenticación con sesión, roles, CSRF y rate limit. Las pantallas de
+          negocio y los catálogos públicos se implementarán en las siguientes
+          etapas.
+        </p>
+        <p>
+          <span class="badge badge--success">Health check real</span>
+          <span class="badge badge--success">Login y registro</span>
+          <span class="badge badge--info">Portal y dashboard protegidos</span>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

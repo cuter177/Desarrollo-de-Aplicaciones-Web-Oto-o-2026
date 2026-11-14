@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Inicia sesión en el portal de clientes de [Nombre de la empresa].">
+  <title>Iniciar sesión — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/login.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name">[Nombre de la empresa]</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">
+            Cerrar sesión
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container auth">
+      <section class="auth__panel" aria-labelledby="login-title">
+        <h1 class="auth__title" id="login-title">Iniciar sesión</h1>
+        <p class="auth__lead">
+          Accede al portal para consultar tus proyectos y solicitudes.
+        </p>
+
+        <div class="alert" id="login-alert" role="alert" hidden></div>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="form__field">
+            <label class="form__label" for="email">Correo electrónico</label>
+            <input
+              class="form__input"
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="nombre@empresa.com"
+              maxlength="254"
+              required
+            >
+          </div>
+
+          <div class="form__field">
+            <label class="form__label" for="password">Contraseña</label>
+            <input
+              class="form__input"
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              maxlength="200"
+              required
+            >
+          </div>
+
+          <div class="form__actions">
+            <button class="btn btn--block" type="submit">Entrar</button>
+          </div>
+        </form>
+
+        <p class="auth__footer">
+          ¿Aún no tienes cuenta?
+          <a href="/pages/registro.html">Regístrate como cliente</a>.
+        </p>
+      </section>
+
+      <aside class="auth__aside" aria-labelledby="login-aside-title">
+        <h2 id="login-aside-title">¿Qué puedes hacer en el portal?</h2>
+        <ul>
+          <li>Consultar el avance de tus proyectos.</li>
+          <li>Revisar el estado de tus solicitudes de cotización.</li>
+          <li>Mantener actualizados los datos de tu empresa.</li>
+        </ul>
+        <p>
+          Si olvidaste tu contraseña, contacta al administrador del sitio para
+          restablecerla.
+        </p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

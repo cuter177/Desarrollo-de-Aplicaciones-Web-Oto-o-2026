@@ -131,7 +131,77 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Tecnologias WHERE nombre = N'React Native')
 GO
 
 /* ==========================================================================
-   4. Usuarios de prueba
+   4. Planes
+   ========================================================================== */
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Planes WHERE slug = N'esencial')
+BEGIN
+    INSERT INTO dbo.Planes (
+        slug, nombre, subtitulo, descripcion, precio_desde, precio_hasta,
+        caracteristicas, dirigido_a, destacado, activo, orden
+    )
+    VALUES (
+        N'esencial',
+        N'Plan Esencial',
+        N'Presencia digital que convierte',
+        N'Sitio web profesional, responsive y optimizado para captar clientes, con formularios y analítica básica.',
+        18000.00,
+        35000.00,
+        N'["Sitio web responsive","Hasta 5 secciones","Formulario de contacto","SEO básico","Analítica de visitas","Soporte por 30 días"]',
+        N'Negocios que necesitan presencia web profesional',
+        0,
+        1,
+        1
+    );
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Planes WHERE slug = N'crecimiento')
+BEGIN
+    INSERT INTO dbo.Planes (
+        slug, nombre, subtitulo, descripcion, precio_desde, precio_hasta,
+        caracteristicas, dirigido_a, destacado, activo, orden
+    )
+    VALUES (
+        N'crecimiento',
+        N'Plan Crecimiento',
+        N'Automatiza y mide tu operación',
+        N'Sitio web, dashboard de indicadores y automatizaciones para reducir trabajo manual y tomar mejores decisiones.',
+        45000.00,
+        90000.00,
+        N'["Todo el Plan Esencial","Dashboard de indicadores","Integración con bases de datos","Automatización de reportes","Capacitación al equipo","Soporte por 90 días"]',
+        N'PyMEs con procesos manuales y metas de crecimiento',
+        1,
+        1,
+        2
+    );
+END
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Planes WHERE slug = N'transformacion')
+BEGIN
+    INSERT INTO dbo.Planes (
+        slug, nombre, subtitulo, descripcion, precio_desde, precio_hasta,
+        caracteristicas, dirigido_a, destacado, activo, orden
+    )
+    VALUES (
+        N'transformacion',
+        N'Plan Transformación',
+        N'Software a la medida para escalar',
+        N'Aplicación web o móvil a la medida, integraciones, consultoría y acompañamiento para transformar la operación.',
+        120000.00,
+        250000.00,
+        N'["Todo el Plan Crecimiento","Aplicación web o móvil","Integraciones con sistemas existentes","Consultoría de arquitectura","Soporte prioritario","Acompañamiento por 6 meses"]',
+        N'Empresas que buscan digitalizar procesos críticos',
+        0,
+        1,
+        3
+    );
+END
+GO
+
+/* ==========================================================================
+   5. Usuarios de prueba
    ========================================================================== */
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Usuarios WHERE email = N'admin@devstudio.local')
@@ -191,7 +261,7 @@ END
 GO
 
 /* ==========================================================================
-   5. Clientes
+   6. Clientes
    ========================================================================== */
 
 IF NOT EXISTS (
@@ -252,7 +322,7 @@ END
 GO
 
 /* ==========================================================================
-   6. Proyectos
+   7. Proyectos
    ========================================================================== */
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Proyectos WHERE slug = N'portal-comercial-andina')
@@ -394,7 +464,7 @@ END
 GO
 
 /* ==========================================================================
-   7. Tecnologías por proyecto
+   8. Tecnologías por proyecto
    ========================================================================== */
 
 INSERT INTO dbo.ProyectoTecnologia (proyecto_id, tecnologia_id)
@@ -470,7 +540,7 @@ WHERE p.slug = N'landing-innovatech'
 GO
 
 /* ==========================================================================
-   8. Solicitudes de cotización
+   9. Solicitudes de cotización
    ========================================================================== */
 
 IF NOT EXISTS (
@@ -614,8 +684,90 @@ BEGIN
 END
 GO
 
+/* Completar el diagnóstico de las solicitudes de ejemplo */
+
+UPDATE dbo.SolicitudesCotizacion
+SET plan_id = (SELECT id FROM dbo.Planes WHERE slug = N'esencial'),
+    giro = N'Tecnología',
+    necesidades = N'Sitio corporativo con catálogo de productos, formulario de contacto y presencia profesional.',
+    servicios_interes = N'["desarrollo-web"]',
+    meta_crecimiento_pct = 25.00,
+    ahorro_horas_semana = 8,
+    procesos_automatizar = N'Captura de prospectos y envío de cotizaciones.',
+    plazo_deseado = N'1 a 3 meses',
+    etapa_decision = N'evaluando',
+    puntaje = 5,
+    recomendacion = N'El Plan Esencial cubre la presencia web y el formulario de contacto; el crecimiento esperado y las horas de ahorro son moderados.'
+WHERE email = N'maria.lopez@startup.mx'
+  AND nombre_contacto = N'María López';
+GO
+
+UPDATE dbo.SolicitudesCotizacion
+SET plan_id = (SELECT id FROM dbo.Planes WHERE slug = N'crecimiento'),
+    giro = N'Logística',
+    necesidades = N'Tablero para monitorear envíos, tiempos de entrega, costos por ruta y desempeño operativo.',
+    servicios_interes = N'["dashboards"]',
+    meta_crecimiento_pct = 30.00,
+    ahorro_horas_semana = 20,
+    procesos_automatizar = N'Reportes manuales de entregas y consolidación de indicadores.',
+    plazo_deseado = N'2 a 4 meses',
+    etapa_decision = N'comparando opciones',
+    puntaje = 9,
+    recomendacion = N'El Plan Crecimiento permite centralizar indicadores y automatizar reportes; el ahorro de 20 horas semanales justifica el tablero.'
+WHERE email = N'jorge.ramirez@logisticaexpress.com'
+  AND nombre_contacto = N'Jorge Ramírez';
+GO
+
+UPDATE dbo.SolicitudesCotizacion
+SET plan_id = (SELECT id FROM dbo.Planes WHERE slug = N'transformacion'),
+    giro = N'Comercio minorista',
+    necesidades = N'App móvil para que los clientes consulten pedidos, reciban promociones y den seguimiento a sus compras.',
+    servicios_interes = N'["apps-moviles","desarrollo-web"]',
+    meta_crecimiento_pct = 60.00,
+    ahorro_horas_semana = 35,
+    procesos_automatizar = N'Atención de pedidos, notificaciones y seguimiento postventa.',
+    plazo_deseado = N'3 a 6 meses',
+    etapa_decision = N'lista para iniciar',
+    puntaje = 15,
+    recomendacion = N'El Plan Transformación integra app móvil, portal y automatizaciones; la meta de crecimiento y el volumen de procesos a eficientar requieren una solución a la medida.'
+WHERE email = N'cliente@devstudio.local'
+  AND nombre_contacto = N'Laura Méndez';
+GO
+
+UPDATE dbo.SolicitudesCotizacion
+SET plan_id = (SELECT id FROM dbo.Planes WHERE slug = N'crecimiento'),
+    giro = N'Tecnología',
+    necesidades = N'Revisión de arquitectura, seguridad y plan de migración del portal a la nube.',
+    servicios_interes = N'["consultoria","dashboards"]',
+    meta_crecimiento_pct = 20.00,
+    ahorro_horas_semana = 12,
+    procesos_automatizar = N'Despliegues manuales y monitoreo de la plataforma.',
+    plazo_deseado = N'1 a 3 meses',
+    etapa_decision = N'lista para iniciar',
+    puntaje = 8,
+    recomendacion = N'El Plan Crecimiento combina consultoría y automatización para ordenar la arquitectura y reducir trabajo operativo.'
+WHERE email = N'carlos.ruiz@innovatech.mx'
+  AND nombre_contacto = N'Carlos Ruiz';
+GO
+
+UPDATE dbo.SolicitudesCotizacion
+SET plan_id = (SELECT id FROM dbo.Planes WHERE slug = N'esencial'),
+    giro = N'Educación',
+    necesidades = N'Sitio informativo con calendario escolar, galería y formulario de admisión.',
+    servicios_interes = N'["desarrollo-web"]',
+    meta_crecimiento_pct = 10.00,
+    ahorro_horas_semana = 4,
+    procesos_automatizar = N'Recepción de solicitudes de admisión.',
+    plazo_deseado = N'1 a 2 meses',
+    etapa_decision = N'evaluando',
+    puntaje = 3,
+    recomendacion = N'El Plan Esencial es suficiente para una presencia informativa con formulario de admisión.'
+WHERE email = N'sofia.herrera@escuelacrecer.mx'
+  AND nombre_contacto = N'Sofía Herrera';
+GO
+
 /* ==========================================================================
-   9. Mensajes de contacto
+   10. Mensajes de contacto
    ========================================================================== */
 
 IF NOT EXISTS (

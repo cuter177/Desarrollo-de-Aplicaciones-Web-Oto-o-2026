@@ -3,7 +3,7 @@
 **Base URL:** `http://localhost:8080/api/v1`
 **Formato:** JSON UTF-8
 **Autenticación:** cookie de sesión + token CSRF
-**Versión:** 0.2.0 (autenticación y health check implementados; el resto del contrato sigue pendiente)
+**Versión:** 0.3.0 (autenticación, diagnóstico público, solicitudes y proyectos implementados)
 
 ## 1. Convenciones
 
@@ -217,14 +217,16 @@ Respuesta `204` sin cuerpo.
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/health` | Estado de la API y de la base de datos |
-| GET | `/config` | Datos de la empresa, redes y textos |
+| GET | `/planes` | Planes activos con precios y características |
 | GET | `/servicios` | Servicios activos |
-| GET | `/servicios/{slug}` | Detalle por `slug` |
-| GET | `/tecnologias` | Catálogo activo |
-| GET | `/portafolio` | Proyectos publicados |
-| GET | `/portafolio/{slug}` | Detalle de caso publicado |
-| POST | `/contacto` | Envía mensaje de contacto |
-| POST | `/cotizaciones` | Solicitud de cotización pública |
+| POST | `/diagnostico` | Diagnóstico público y plan recomendado |
+| GET | `/config` | Datos de la empresa, redes y textos *(pendiente)* |
+| GET | `/servicios/{slug}` | Detalle por `slug` *(pendiente)* |
+| GET | `/tecnologias` | Catálogo activo *(pendiente)* |
+| GET | `/portafolio` | Proyectos publicados *(pendiente)* |
+| GET | `/portafolio/{slug}` | Detalle de caso publicado *(pendiente)* |
+| POST | `/contacto` | Envía mensaje de contacto *(pendiente)* |
+| POST | `/cotizaciones` | Solicitud de cotización simple *(sustituida por `/diagnostico`)* |
 
 ### Ejemplo: contacto
 
@@ -254,10 +256,10 @@ Respuesta `201`:
 }
 ```
 
-### Ejemplo: cotización pública
+### Ejemplo: diagnóstico público
 
 ```http
-POST /api/v1/cotizaciones
+POST /api/v1/diagnostico
 Content-Type: application/json
 X-CSRF-Token: <token>
 
@@ -265,14 +267,39 @@ X-CSRF-Token: <token>
   "nombre_contacto": "María Ruiz",
   "email": "maria@empresa.com",
   "empresa": "Empresa SA",
+  "giro": "Comercio",
   "telefono": "5551234567",
-  "servicio_id": 2,
-  "descripcion": "Aplicación móvil para clientes.",
-  "presupuesto_estimado": 80000
+  "necesidades": "Necesitamos un portal de pedidos y un tablero de ventas.",
+  "servicios_interes": ["desarrollo-web", "dashboards"],
+  "meta_crecimiento_pct": 30,
+  "ahorro_horas_semana": 15,
+  "procesos_automatizar": "Reportes manuales y seguimiento de pedidos.",
+  "plazo_deseado": "2 a 4 meses",
+  "etapa_decision": "evaluando",
+  "presupuesto_estimado": 85000
 }
 ```
 
-Respuesta `201` con `estado: "nueva"` y `origen: "publico"`.
+Respuesta `201`:
+
+```json
+{
+  "data": {
+    "solicitud_id": 12,
+    "plan": {
+      "id": 2,
+      "slug": "crecimiento",
+      "nombre": "Plan Crecimiento",
+      "precio_desde": 45000
+    },
+    "puntaje": 8,
+    "recomendacion": "El Plan Crecimiento permite automatizar procesos y medir indicadores…"
+  }
+}
+```
+
+El endpoint exige CSRF, aplica rate limit por IP y guarda la solicitud con
+`estado: "nueva"` y `origen: "publico"`.
 
 ## 4. Portal del cliente
 
@@ -337,12 +364,18 @@ Respuesta `200` (implementada):
       "cliente_id": null
     },
     "metricas": {
-      "usuarios_activos": 3,
-      "clientes": 2,
-      "proyectos": 0,
-      "solicitudes_nuevas": 0,
-      "mensajes_nuevos": 0
-    }
+      "usuarios_activos": 4,
+      "clientes": 3,
+      "proyectos": 6,
+      "solicitudes_nuevas": 1,
+      "mensajes_nuevos": 1,
+      "solicitudes_total": 5,
+      "solicitudes_aceptadas": 1,
+      "pipeline_valor": 315000,
+      "promedio_crecimiento": 29,
+      "tasa_conversion": 20
+    },
+    "solicitudes_recientes": []
   }
 }
 ```
@@ -383,12 +416,14 @@ Solo responde al rol `admin`; un cliente recibe `403 SIN_PERMISOS` y un visitant
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/admin/proyectos` | Lista con filtros `cliente`, `estado`, `publicado` |
-| POST | `/admin/proyectos` | Crea proyecto |
-| GET | `/admin/proyectos/{id}` | Detalle con tecnologías |
-| PATCH | `/admin/proyectos/{id}` | Actualiza datos y tecnologías |
-| DELETE | `/admin/proyectos/{id}` | Elimina si no tiene historial; si lo tiene, responde `409` y debe cancelarse con `PATCH` |
-| PATCH | `/admin/proyectos/{id}/publicacion` | Publica o despublica en portafolio |
+| GET | `/admin/proyectos` | Lista de proyectos con su cliente |
+| POST | `/admin/proyectos` | Crea proyecto y genera `slug` único |
+| GET | `/admin/proyectos/{id}` | Detalle |
+| PATCH | `/admin/proyectos/{id}` | Actualiza datos, estado, fechas, publicación y destacado |
+
+La creación manual requiere `cliente_id`, `nombre`, `descripcion` y `estado`.
+Los estados permitidos son `planificado`, `en_progreso`, `en_revision`,
+`entregado`, `pausado` y `cancelado`.
 
 ### 5.6 Tecnologías
 
@@ -403,10 +438,14 @@ Solo responde al rol `admin`; un cliente recibe `403 SIN_PERMISOS` y un visitant
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/admin/solicitudes` | Lista con filtros `estado`, `origen`, `q` |
-| GET | `/admin/solicitudes/{id}` | Detalle |
-| PATCH | `/admin/solicitudes/{id}/estado` | Cambia estado |
-| POST | `/admin/solicitudes/{id}/convertir` | Crea cliente y/o proyecto desde la solicitud |
+| GET | `/admin/solicitudes` | Lista con filtros `estado`, `plan_id` y `q` |
+| GET | `/admin/solicitudes/{id}` | Detalle con diagnóstico y plan |
+| PATCH | `/admin/solicitudes/{id}` | Actualiza estado, plan, cliente vinculado y notas |
+| POST | `/admin/solicitudes/{id}/convertir` | Crea el proyecto a partir de la solicitud |
+
+La conversión requiere que la solicitud tenga un `cliente_id`; si no, responde
+`409 SOLICITUD_SIN_CLIENTE`. La operación crea el proyecto, vincula
+`solicitudes.proyecto_id` y deja la solicitud en estado `aceptada`.
 
 ### 5.8 Mensajes
 
@@ -497,10 +536,12 @@ Respuesta `429`:
 |---|---|
 | Health check | Implementado (`GET /health` consulta la base de datos) |
 | Autenticación | Implementado (csrf, login, logout, me, registro y cambio de contraseña) |
-| Dashboard administrativo | Implementado (conteos reales) |
-| Públicos | Pendiente (servicios, tecnologías, portafolio, contacto y cotizaciones) |
+| Dashboard administrativo | Implementado (métricas de leads, pipeline y conversión) |
+| Públicos | Implementado `GET /planes`, `GET /servicios` y `POST /diagnostico`; el resto sigue pendiente |
+| Panel de solicitudes | Implementado (bandeja, detalle, actualización y conversión a proyecto) |
+| Panel de proyectos | Implementado (listado, alta, edición y publicación) |
 | Portal del cliente (`/mi/*`) | Pendiente |
-| CRUD administrativos | Pendiente |
+| CRUD administrativos restantes | Pendiente (usuarios, servicios, tecnologías y mensajes) |
 | Recuperación de contraseña | Pendiente (opcional) |
 
 La implementación debe respetar este contrato o actualizarlo junto con el changelog del backend.

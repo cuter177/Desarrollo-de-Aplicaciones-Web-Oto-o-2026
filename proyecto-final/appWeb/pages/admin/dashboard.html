@@ -41,10 +41,17 @@
         <p class="hero__eyebrow">Administración</p>
         <h1 class="page__title">Dashboard</h1>
         <p class="page__lead">
-          Resumen operativo del sistema. Los datos se consultan a la API con la
-          sesión del administrador.
+          Resumen operativo del sistema, solicitudes entrantes y estado del
+          portafolio. Los datos se consultan a la API con la sesión del
+          administrador.
         </p>
       </header>
+
+      <nav class="admin-nav" aria-label="Secciones del panel">
+        <a class="admin-nav__link is-active" href="/pages/admin/dashboard.html" aria-current="page">Resumen</a>
+        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+      </nav>
 
       <div class="alert" id="admin-alert" role="alert" hidden></div>
 
@@ -69,6 +76,28 @@
           <p class="metric__label">Mensajes nuevos</p>
           <p class="metric__value" data-metric="mensajes_nuevos">—</p>
         </article>
+        <article class="metric">
+          <p class="metric__label">Pipeline estimado</p>
+          <p class="metric__value" data-metric="pipeline_valor">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Tasa de conversión</p>
+          <p class="metric__value" data-metric="tasa_conversion">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Crecimiento promedio</p>
+          <p class="metric__value" data-metric="promedio_crecimiento">—</p>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="admin-recientes-title">
+        <div class="panel__header">
+          <h2 class="panel__title" id="admin-recientes-title">Solicitudes recientes</h2>
+          <a class="btn btn--ghost" href="/pages/admin/solicitudes.html">Ver bandeja</a>
+        </div>
+        <div id="solicitudes-recientes" aria-live="polite">
+          <div class="empty-state">Cargando solicitudes…</div>
+        </div>
       </section>
 
       <section class="panel" aria-labelledby="admin-sesion-title">
@@ -90,10 +119,16 @@
       </section>
 
       <section class="panel" aria-labelledby="admin-pendiente-title">
-        <h2 class="panel__title" id="admin-pendiente-title">Módulos en construcción</h2>
-        <div class="empty-state">
-          Usuarios, clientes, servicios, proyectos, tecnologías, solicitudes y
-          mensajes se habilitarán en las siguientes etapas.
+        <h2 class="panel__title" id="admin-pendiente-title">Módulos del panel</h2>
+        <div class="module-links">
+          <a class="module-link" href="/pages/admin/solicitudes.html">
+            <strong>Solicitudes</strong>
+            <span>Bandeja, diagnóstico, pipeline y conversión a proyecto.</span>
+          </a>
+          <a class="module-link" href="/pages/admin/proyectos.html">
+            <strong>Proyectos</strong>
+            <span>Alta, estado, fechas y publicación en el portafolio.</span>
+          </a>
         </div>
       </section>
     </div>

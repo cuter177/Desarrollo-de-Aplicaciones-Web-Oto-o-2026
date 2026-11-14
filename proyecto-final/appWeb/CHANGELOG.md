@@ -8,7 +8,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y 
 
 ### Added
 
-- Nada por ahora.
+- Página `pages/cotizacion.html` con presentación, planes y wizard de diagnóstico en cuatro pasos.
+- Lógica `assets/js/pages/cotizacion.js` para cargar planes/servicios, validar por pasos y mostrar el plan recomendado.
+- Página `pages/admin/solicitudes.html` con bandeja, filtros, detalle y acciones de gestión.
+- Página `pages/admin/proyectos.html` con formulario de alta/edición y listado de proyectos.
+- Módulos `admin-solicitudes.js` y `admin-proyectos.js`.
+- Dashboard administrativo ampliado con pipeline, conversión, crecimiento promedio y solicitudes recientes.
+- Estilos para planes, wizard, bandeja, tablas, estados y detalle.
+- Navegación al diagnóstico desde `index.html` y copy comercial de la página principal.
+
+### Changed
+
+- `index.html` actualiza la propuesta de valor y el estado a `0.3.0`.
+- `admin.js` formatea métricas y renderiza solicitudes recientes.
+- `components.css` incorpora los componentes de la etapa 3.
 
 ## [0.2.0] - 2026-11-13
 

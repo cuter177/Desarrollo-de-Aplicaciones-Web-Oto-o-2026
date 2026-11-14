@@ -91,6 +91,9 @@ docker compose exec -T mssql /bin/bash -c \
   < backEnd/database/seed.sql
 ```
 
+> Si ya tenías la base de datos de la etapa 2, aplica antes la migración
+> `backEnd/database/migrations/001_planes_diagnostico.sql` con el mismo comando.
+
 El seed es idempotente e incluye cuentas de prueba:
 
 | Rol | Correo | Contraseña |
@@ -141,7 +144,7 @@ Los pasos completos, la conexión desde Azure Data Studio o DBeaver y la soluci�
 
 ## Estado del proyecto
 
-`0.2.0` — Base de datos SQL Server, API PHP y autenticación end-to-end: registro de clientes, login/logout, sesión por cookie, roles `admin`/`cliente`, CSRF, rate limit, health check real, portal de cliente y dashboard administrativo protegidos. Los catálogos públicos y los CRUD de negocio quedan para la siguiente etapa.
+`0.3.0` — Diagnóstico público y gestión de proyectos: wizard que recomienda un plan, bandeja de solicitudes con pipeline, conversión de lead a proyecto y publicación en portafolio. Se mantienen la autenticación, el portal protegido y el dashboard administrativo de la etapa anterior.
 
 ## Licencia
 

@@ -26,16 +26,19 @@ backEnd/
 
 ## Estado actual
 
-`0.2.0` — Base de datos y autenticación implementadas:
+`0.3.0` — Diagnóstico público y gestión de proyectos:
 
-- Esquema completo e idempotente en `database/schema.sql` y catálogos con datos de demostración en `database/seed.sql` (usuarios, clientes, proyectos, solicitudes y mensajes).
-- Router en `public/index.php` con rutas `/api/v1/*`.
-- Registro de clientes, login, logout, sesión por cookie, `GET /auth/me` y cambio de contraseña.
-- Roles `admin`/`cliente` verificados en el servidor; dashboard administrativo protegido.
-- CSRF con `X-CSRF-Token`, rate limit de login y health check real contra SQL Server.
+- Esquema completo e idempotente en `database/schema.sql`, migración incremental en `database/migrations/` y datos de demostración en `database/seed.sql`.
+- Catálogo de planes (`Planes`) y campos de diagnóstico en `SolicitudesCotizacion`.
+- Endpoints públicos `GET /planes`, `GET /servicios` y `POST /diagnostico`.
+- Recomendación de plan calculada en el servidor (`PlanRecommender`).
+- Bandeja administrativa de solicitudes con filtros, detalle, notas, cambio de plan/cliente/estado y conversión a proyecto.
+- Gestión administrativa de proyectos con alta, edición, estado y publicación.
+- Router con parámetros dinámicos (`/admin/solicitudes/{id}`, `/admin/proyectos/{id}`).
+- Registro de clientes, login, logout, sesión por cookie, roles, CSRF, rate limit y health check real.
 - Script `scripts/crear-admin.php` para el administrador inicial.
 
-Los endpoints públicos de catálogos, el portal `/mi/*` y los CRUD administrativos siguen pendientes.
+El portal `/mi/*`, los mensajes de contacto y los CRUD de usuarios/servicios/tecnologías siguen pendientes.
 
 ## Documentación
 
@@ -86,6 +89,9 @@ curl -i http://localhost:8080/api/v1/health
 |---|---|---|
 | GET | `/api/v1` | Público |
 | GET | `/api/v1/health` | Público |
+| GET | `/api/v1/planes` | Público |
+| GET | `/api/v1/servicios` | Público |
+| POST | `/api/v1/diagnostico` | Público + CSRF |
 | GET | `/api/v1/auth/csrf` | Público |
 | POST | `/api/v1/auth/login` | Público |
 | POST | `/api/v1/auth/logout` | Autenticado |
@@ -93,3 +99,12 @@ curl -i http://localhost:8080/api/v1/health
 | POST | `/api/v1/auth/registro` | Público |
 | PATCH | `/api/v1/auth/password` | Autenticado |
 | GET | `/api/v1/admin/dashboard` | Solo `admin` |
+| GET | `/api/v1/admin/clientes` | Solo `admin` |
+| GET | `/api/v1/admin/solicitudes` | Solo `admin` |
+| GET | `/api/v1/admin/solicitudes/{id}` | Solo `admin` |
+| PATCH | `/api/v1/admin/solicitudes/{id}` | Solo `admin` |
+| POST | `/api/v1/admin/solicitudes/{id}/convertir` | Solo `admin` |
+| GET | `/api/v1/admin/proyectos` | Solo `admin` |
+| GET | `/api/v1/admin/proyectos/{id}` | Solo `admin` |
+| POST | `/api/v1/admin/proyectos` | Solo `admin` |
+| PATCH | `/api/v1/admin/proyectos/{id}` | Solo `admin` |

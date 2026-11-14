@@ -6,11 +6,15 @@ Interfaz del proyecto: sitio público, portal de cliente y panel administrativo.
 
 ```text
 appWeb/
-├── index.html                 # Página de inicio (placeholder)
-├── pages/                     # Páginas internas del sitio
+├── index.html                 # Inicio con navegación dinámica
+├── pages/
+│   ├── login.html             # Inicio de sesión
+│   ├── registro.html          # Registro de cliente
+│   ├── portal/index.html      # Portal del cliente (protegido)
+│   └── admin/dashboard.html   # Dashboard administrativo (protegido)
 ├── assets/
-│   ├── css/                   # Estilos Mobile First
-│   ├── js/                    # Módulos de JavaScript
+│   ├── css/                   # main.css (base) y components.css (UI)
+│   ├── js/                    # api.js, auth.js, ui.js, app.js y pages/
 │   ├── img/                   # Imágenes y logotipos
 │   └── fonts/                 # Tipografías locales
 ├── docs/                      # Arquitectura, páginas, estilos y accesibilidad
@@ -20,7 +24,14 @@ appWeb/
 
 ## Estado actual
 
-`0.1.0` — Andamiaje. Solo existe la página de inicio con estilos base y un archivo JS vacío. No hay navegación, formularios ni llamadas a la API implementadas.
+`0.2.0` — Autenticación conectada a la API:
+
+- Login, registro de cliente y cierre de sesión.
+- Restauración de sesión con `GET /auth/me` y header dinámico por rol.
+- Portal de cliente y dashboard administrativo protegidos en el front y en el backend.
+- Manejo de CSRF, errores de validación y estados de carga.
+
+El sitio público completo y los módulos de negocio siguen pendientes.
 
 ## Desarrollo
 
@@ -39,9 +50,21 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 
 - Base: `/api/v1` (mismo origen).
 - Las peticiones incluyen cookies: `fetch(url, { credentials: 'same-origin' })`.
-- Las mutaciones envían `X-CSRF-Token`.
-- El token se obtiene de `GET /api/v1/auth/me` después del login.
+- Antes de una mutación se obtiene el token con `GET /auth/csrf`; después del login se usa el `csrf_token` devuelto.
+- Las mutaciones envían `X-CSRF-Token` y el backend responde `403 CSRF_INVALIDO` si falta o no coincide.
+- Al recargar, `GET /auth/me` restaura la sesión y el token; si responde `401`, el header vuelve al estado de visitante.
+- Los errores de la API se muestran con `textContent` en el bloque `role="alert"` de cada formulario.
 - El contrato completo está en [`../backEnd/docs/03-api.md`](../backEnd/docs/03-api.md).
+
+## Rutas del front
+
+| Página | Ruta | Acceso |
+|---|---|---|
+| Inicio | `/index.html` | Público |
+| Login | `/pages/login.html` | Público; redirige si hay sesión |
+| Registro | `/pages/registro.html` | Público; redirige si hay sesión |
+| Portal | `/pages/portal/index.html` | `cliente` y `admin` |
+| Dashboard | `/pages/admin/dashboard.html` | Solo `admin` |
 
 ## Convenciones
 

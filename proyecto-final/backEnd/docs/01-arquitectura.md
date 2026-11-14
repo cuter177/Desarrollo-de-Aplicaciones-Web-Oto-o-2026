@@ -103,11 +103,12 @@ Error:
 
 ## 6. Sesiones y CSRF
 
-- La sesión se crea en `POST /api/v1/auth/login`.
+- La sesión se crea en `GET /api/v1/auth/csrf` y se autentica en `POST /api/v1/auth/login`.
 - La cookie se configura con `HttpOnly`, `SameSite=Lax` y `Secure` en producción.
-- `GET /api/v1/auth/me` devuelve el usuario y un token CSRF.
+- `GET /api/v1/auth/me` devuelve el usuario y un token CSRF; revalida que el usuario siga activo.
 - Las mutaciones requieren el header `X-CSRF-Token`.
 - El backend regenera el ID de sesión después del login para evitar fijación de sesión.
+- El rate limit de login vive en `app/helpers/RateLimiter.php` y usa archivos temporales.
 
 ## 7. Configuración
 
@@ -117,10 +118,14 @@ Toda la configuración se lee de variables de entorno:
 |---|---|
 | `APP_ENV` | `development` o `production` |
 | `APP_URL` | URL base para enlaces y cookies |
+| `APP_TIMEZONE` | Zona horaria de PHP |
 | `DB_HOST`, `DB_PORT` | Conexión a SQL Server |
 | `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Credenciales |
-| `SESSION_NAME`, `SESSION_SECURE` | Cookie de sesión |
+| `DB_ENCRYPT`, `DB_TRUST_CERT` | Cifrado y confianza del certificado |
+| `SESSION_NAME`, `SESSION_SECURE`, `SESSION_SAMESITE` | Cookie de sesión |
 | `API_PREFIX` | Prefijo de la API |
+| `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Alta del administrador inicial |
+| `RATE_LIMIT_DIR` | Carpeta opcional del rate limit |
 
 El archivo `.env` no se versiona. `.env.example` documenta las variables.
 
@@ -143,4 +148,4 @@ El archivo `.env` no se versiona. `.env.example` documenta las variables.
 
 ## 10. Estado actual
 
-`0.1.0` — Solo existe el front controller con respuestas informativas. Las capas, rutas y modelos están definidos en la documentación y pendientes de implementación.
+`0.2.0` — Implementados el router, la conexión PDO, los modelos base, la autenticación con sesión/CSRF/roles, el rate limit de login, el health check real y el dashboard administrativo. Los catálogos públicos, el portal `/mi/*` y los CRUD siguen pendientes.

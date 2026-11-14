@@ -66,7 +66,7 @@ La descripción detallada está en [`docs/01-modelacion/05-estructura-archivos.m
 ```bash
 cd proyecto-final
 cp .env.example .env
-# Editar .env y cambiar DB_PASSWORD
+# Editar .env y cambiar DB_PASSWORD, ADMIN_PASSWORD y APP_URL
 docker compose up -d --build
 ```
 
@@ -76,17 +76,30 @@ Servicios disponibles:
 |---|---|
 | Sitio web | <http://localhost:8080> |
 | API | <http://localhost:8080/api/v1> |
+| Health check | <http://localhost:8080/api/v1/health> |
 | SQL Server | `localhost:1433` |
 
-Para cargar el esquema inicial:
+Cargar el esquema y los catálogos iniciales:
 
 ```bash
 docker compose exec -T mssql /bin/bash -c \
   '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
   < backEnd/database/schema.sql
+
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/seed.sql
+```
+
+Crear el administrador inicial (usa `ADMIN_*` de `.env`):
+
+```bash
+docker compose exec api php scripts/crear-admin.php
 ```
 
 > Si tu instalación usa la ruta antigua de las herramientas, cambia `/opt/mssql-tools18/bin/sqlcmd` por `/opt/mssql-tools/bin/sqlcmd`.
+
+Abrir <http://localhost:8080/pages/login.html> e iniciar sesión con el correo y la contraseña definidos en `ADMIN_EMAIL` y `ADMIN_PASSWORD`.
 
 Los pasos completos, la conexión desde Azure Data Studio o DBeaver y la solución de problemas están en el [manual técnico](docs/03-manual-tecnico/README.md).
 
@@ -120,7 +133,7 @@ Los pasos completos, la conexión desde Azure Data Studio o DBeaver y la soluci�
 
 ## Estado del proyecto
 
-`0.1.0` — Andamiaje del repositorio y documentación base. Aún no hay endpoints ni pantallas funcionales.
+`0.2.0` — Base de datos SQL Server, API PHP y autenticación end-to-end: registro de clientes, login/logout, sesión por cookie, roles `admin`/`cliente`, CSRF, rate limit, health check real, portal de cliente y dashboard administrativo protegidos. Los catálogos públicos y los CRUD de negocio quedan para la siguiente etapa.
 
 ## Licencia
 

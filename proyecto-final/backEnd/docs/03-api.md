@@ -3,7 +3,7 @@
 **Base URL:** `http://localhost:8080/api/v1`
 **Formato:** JSON UTF-8
 **Autenticación:** cookie de sesión + token CSRF
-**Versión:** 0.1.0 (contrato; implementación pendiente)
+**Versión:** 0.2.0 (autenticación y health check implementados; el resto del contrato sigue pendiente)
 
 ## 1. Convenciones
 
@@ -82,9 +82,11 @@ Error:
 
 1. `GET /auth/csrf` crea la sesión y devuelve un token.
 2. `POST /auth/login` envía credenciales y el token CSRF.
-3. El servidor regenera la sesión y devuelve el usuario.
+3. El servidor regenera la sesión, rota el token CSRF y devuelve el usuario.
 4. El front llama `GET /auth/me` para restaurar el estado al recargar.
 5. `POST /auth/logout` destruye la sesión.
+
+> El registro (`POST /auth/registro`) también exige un token CSRF previo. El front lo solicita antes de enviar el formulario.
 
 ### Endpoints
 
@@ -96,8 +98,8 @@ Error:
 | GET | `/auth/me` | autenticado | Usuario actual y token CSRF |
 | POST | `/auth/registro` | público | Registro de cliente |
 | PATCH | `/auth/password` | autenticado | Cambio de contraseña |
-| POST | `/auth/recuperar` | público | *Opcional:* solicita recuperación |
-| POST | `/auth/restablecer` | público | *Opcional:* restablece con token |
+| POST | `/auth/recuperar` | público | *Opcional:* solicita recuperación (no implementado) |
+| POST | `/auth/restablecer` | público | *Opcional:* restablece con token (no implementado) |
 
 ### Ejemplo: login
 
@@ -146,7 +148,69 @@ X-CSRF-Token: <token>
 }
 ```
 
-Respuesta `201` con el usuario creado. Si el correo ya existe: `409 CORREO_DUPLICADO`.
+Respuesta `201`:
+
+```json
+{
+  "data": {
+    "usuario": {
+      "id": 13,
+      "nombre": "Ana Pérez",
+      "email": "ana@ejemplo.com",
+      "rol": "cliente",
+      "cliente_id": 6
+    }
+  }
+}
+```
+
+Si el correo ya existe: `409 CORREO_DUPLICADO`. El registro crea el usuario con rol `cliente` y su fila en `Clientes` dentro de una transacción.
+
+### Ejemplo: sesión actual
+
+```http
+GET /api/v1/auth/me
+```
+
+Respuesta `200` mientras la sesión sea válida:
+
+```json
+{
+  "data": {
+    "usuario": {
+      "id": 13,
+      "nombre": "Ana Pérez",
+      "email": "ana@ejemplo.com",
+      "rol": "cliente",
+      "cliente_id": 6
+    },
+    "csrf_token": "token-actual"
+  }
+}
+```
+
+Sin sesión responde `401 NO_AUTENTICADO`; si el usuario fue desactivado, la API cierra la sesión y responde igual.
+
+### Ejemplo: cerrar sesión
+
+```http
+POST /api/v1/auth/logout
+X-CSRF-Token: <token>
+```
+
+Respuesta `204` sin cuerpo.
+
+### Errores de autenticación
+
+| Código | HTTP | Cuándo |
+|---|---|---|
+| `VALIDACION` | `422` | Campos faltantes, formato inválido o contraseña débil |
+| `CREDENCIALES_INVALIDAS` | `401` | Correo inexistente, contraseña incorrecta o usuario inactivo |
+| `CORREO_DUPLICADO` | `409` | El correo ya está registrado |
+| `CSRF_INVALIDO` | `403` | Falta el token o no coincide con la sesión |
+| `DEMASIADAS_PETICIONES` | `429` | Se superó el límite de intentos de login |
+| `NO_AUTENTICADO` | `401` | Ruta protegida sin sesión |
+| `SIN_PERMISOS` | `403` | Sesión válida sin el rol requerido |
 
 ## 3. Endpoints públicos
 
@@ -259,6 +323,31 @@ GET /api/v1/mi/proyectos?page=1&per_page=10
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/admin/dashboard` | Conteos de usuarios, clientes, proyectos, solicitudes nuevas y mensajes sin atender |
+
+Respuesta `200` (implementada):
+
+```json
+{
+  "data": {
+    "usuario": {
+      "id": 1,
+      "nombre": "Administrador",
+      "email": "admin@devstudio.local",
+      "rol": "admin",
+      "cliente_id": null
+    },
+    "metricas": {
+      "usuarios_activos": 3,
+      "clientes": 2,
+      "proyectos": 0,
+      "solicitudes_nuevas": 0,
+      "mensajes_nuevos": 0
+    }
+  }
+}
+```
+
+Solo responde al rol `admin`; un cliente recibe `403 SIN_PERMISOS` y un visitante `401 NO_AUTENTICADO`.
 
 ### 5.2 Usuarios y roles
 
@@ -373,12 +462,14 @@ nuevo → en_revision → atendido → archivado
 
 ## 8. Rate limit
 
-| Endpoint | Límite sugerido |
-|---|---|
-| `POST /auth/login` | 5 intentos por IP cada 15 minutos |
-| `POST /auth/registro` | 3 por IP cada hora |
-| `POST /contacto` | 3 por IP cada hora |
-| `POST /cotizaciones` | 3 por IP cada hora |
+| Endpoint | Límite | Estado |
+|---|---|---|
+| `POST /auth/login` | 5 intentos por IP **y** por correo cada 15 minutos | Implementado |
+| `POST /auth/registro` | 3 por IP cada hora | Pendiente |
+| `POST /contacto` | 3 por IP cada hora | Pendiente |
+| `POST /cotizaciones` | 3 por IP cada hora | Pendiente |
+
+El contador de login se guarda en archivos temporales (`sys_get_temp_dir()/devstudio-rate-limit`, configurable con `RATE_LIMIT_DIR`) y se limpia al iniciar sesión correctamente. En un despliegue con varios nodos conviene moverlo a Redis o a la base de datos.
 
 Respuesta `429`:
 
@@ -404,10 +495,25 @@ Respuesta `429`:
 
 | Grupo | Estado |
 |---|---|
-| Públicos | Pendiente |
-| Autenticación | Pendiente |
-| Portal del cliente | Pendiente |
-| Administración | Pendiente |
-| Health check | Placeholder implementado |
+| Health check | Implementado (`GET /health` consulta la base de datos) |
+| Autenticación | Implementado (csrf, login, logout, me, registro y cambio de contraseña) |
+| Dashboard administrativo | Implementado (conteos reales) |
+| Públicos | Pendiente (servicios, tecnologías, portafolio, contacto y cotizaciones) |
+| Portal del cliente (`/mi/*`) | Pendiente |
+| CRUD administrativos | Pendiente |
+| Recuperación de contraseña | Pendiente (opcional) |
 
 La implementación debe respetar este contrato o actualizarlo junto con el changelog del backend.
+
+## 11. Validaciones implementadas
+
+| Campo | Regla |
+|---|---|
+| `nombre` | 2–120 caracteres |
+| `email` | Formato válido, máximo 254 caracteres, único |
+| `empresa` | 2–150 caracteres (obligatorio en el registro) |
+| `telefono` | Opcional; 7–30 caracteres si se envía |
+| `password` | 8–200 caracteres, mayúscula, minúscula y número |
+| `password_confirmacion` | Debe coincidir con `password` |
+| `acepta_terminos` | Debe ser `true` en el registro |
+| `password_actual` / `password_nueva` | Obligatorios y válidos en el cambio de contraseña |

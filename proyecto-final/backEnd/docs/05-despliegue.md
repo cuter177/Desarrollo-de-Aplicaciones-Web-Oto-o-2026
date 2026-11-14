@@ -31,11 +31,18 @@ Editar `.env`:
 APP_ENV=development
 APP_NAME="[Nombre de la empresa]"
 APP_URL=http://localhost:8080
+APP_TIMEZONE=America/Mexico_City
 WEB_PORT=8080
 DB_NAME=DevStudioDB
 DB_USER=sa
 DB_PASSWORD="UnaClaveSegura#2026"
+DB_ENCRYPT=true
+DB_TRUST_CERT=true
 SESSION_SECURE=false
+SESSION_SAMESITE=Lax
+ADMIN_NAME="Administrador"
+ADMIN_EMAIL=admin@devstudio.local
+ADMIN_PASSWORD="Admin#2026"
 ```
 
 > La contraseña de SQL Server debe tener al menos 8 caracteres, mayúscula, minúscula, número y símbolo.
@@ -91,7 +98,26 @@ docker compose exec -T mssql /bin/bash -c \
   < backEnd/database/seed.sql
 ```
 
-### 5.3 Conexión desde el host
+### 5.3 Crear el administrador inicial
+
+```bash
+docker compose exec api php scripts/crear-admin.php
+```
+
+Lee `ADMIN_NAME`, `ADMIN_EMAIL` y `ADMIN_PASSWORD` de `.env`. Es idempotente: si el correo ya existe, no modifica la cuenta. Requiere que `seed.sql` haya creado el rol `admin`.
+
+Verificar el login:
+
+```bash
+curl -c cookies.txt http://localhost:8080/api/v1/auth/csrf
+# Usar el csrf_token devuelto y la cookie guardada
+curl -b cookies.txt -c cookies.txt -X POST http://localhost:8080/api/v1/auth/login \
+  -H 'Content-Type: application/json' \
+  -H 'X-CSRF-Token: <token>' \
+  -d '{"email":"admin@devstudio.local","password":"Admin#2026"}'
+```
+
+### 5.4 Conexión desde el host
 
 | Parámetro | Valor |
 |---|---|
@@ -132,7 +158,10 @@ Checklist mínimo:
 
 - [ ] `APP_ENV=production` y `display_errors=Off`.
 - [ ] `SESSION_SECURE=true` y HTTPS con certificado válido.
+- [ ] `DB_TRUST_CERT=false` con certificado válido y `DB_ENCRYPT=true`.
 - [ ] Usuario de SQL Server distinto de `sa`, con permisos mínimos.
+- [ ] `ADMIN_PASSWORD` fuerte y contraseña del administrador cambiada tras el primer acceso.
+- [ ] `RATE_LIMIT_DIR` en un volumen persistente o rate limit migrado a Redis/BD.
 - [ ] Contraseñas y secretos en un gestor seguro.
 - [ ] Respaldos automáticos y restauración probada.
 - [ ] Logs centralizados y monitoreo.
@@ -180,6 +209,11 @@ WITH REPLACE;
 | No conecta desde el host | Puerto ocupado o firewall | Verificar `1433` y `DB_PORT` |
 | Error de arquitectura | Host ARM | Usar `x86_64` o emulación |
 | Cambios no reflejados | Caché de Nginx/navegador | Recargar sin caché; revisar volúmenes |
+| `429 DEMASIADAS_PETICIONES` al hacer login | Rate limit de 5 intentos / 15 min | Esperar `Retry-After` o borrar `devstudio-rate-limit` en el contenedor |
+| `403 CSRF_INVALIDO` | Falta el token o la sesión cambió | Solicitar `GET /api/v1/auth/csrf` y reenviar `X-CSRF-Token` |
+| `401` inmediato tras login | Cookie bloqueada o `SESSION_SECURE=true` sin HTTPS | Revisar `SESSION_SECURE`, dominio y cookies del navegador |
+| `scripts/crear-admin.php` falla por rol | `seed.sql` no ejecutado | Cargar `seed.sql` antes del script |
+| `health` responde `503 degraded` | La API no conecta a SQL Server | Revisar `DB_*`, que `mssql` esté saludable y las extensiones `sqlsrv` |
 
 ## 11. Comandos de referencia
 

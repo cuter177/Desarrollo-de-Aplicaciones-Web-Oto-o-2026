@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panel administrativo de [Nombre de la empresa].">
+  <title>Dashboard administrativo — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name">[Nombre de la empresa]</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html" aria-current="page">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">
+            Cerrar sesión
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Administración</p>
+        <h1 class="page__title">Dashboard</h1>
+        <p class="page__lead">
+          Resumen operativo del sistema. Los datos se consultan a la API con la
+          sesión del administrador.
+        </p>
+      </header>
+
+      <div class="alert" id="admin-alert" role="alert" hidden></div>
+
+      <section class="metrics" aria-label="Métricas del sistema">
+        <article class="metric">
+          <p class="metric__label">Usuarios activos</p>
+          <p class="metric__value" data-metric="usuarios_activos">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Clientes</p>
+          <p class="metric__value" data-metric="clientes">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Proyectos</p>
+          <p class="metric__value" data-metric="proyectos">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Solicitudes nuevas</p>
+          <p class="metric__value" data-metric="solicitudes_nuevas">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Mensajes nuevos</p>
+          <p class="metric__value" data-metric="mensajes_nuevos">—</p>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="admin-sesion-title">
+        <h2 class="panel__title" id="admin-sesion-title">Sesión actual</h2>
+        <dl class="data-list">
+          <div class="data-list__row">
+            <dt class="data-list__label">Nombre</dt>
+            <dd class="data-list__value" data-user-name>—</dd>
+          </div>
+          <div class="data-list__row">
+            <dt class="data-list__label">Correo</dt>
+            <dd class="data-list__value" data-user-email>—</dd>
+          </div>
+          <div class="data-list__row">
+            <dt class="data-list__label">Rol</dt>
+            <dd class="data-list__value" data-user-role>—</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="panel" aria-labelledby="admin-pendiente-title">
+        <h2 class="panel__title" id="admin-pendiente-title">Módulos en construcción</h2>
+        <div class="empty-state">
+          Usuarios, clientes, servicios, proyectos, tecnologías, solicitudes y
+          mensajes se habilitarán en las siguientes etapas.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -24,7 +24,8 @@ Lineamientos obligatorios para la implementación del backend y del frontend.
 - Política mínima: 8 caracteres, una mayúscula, una minúscula y un número.
 - Nunca registrar contraseñas ni hashes en logs.
 - No devolver `password_hash` en ninguna respuesta.
-- El seed usa una contraseña temporal que debe cambiarse antes de desplegar.
+- El administrador inicial se crea con `scripts/crear-admin.php` usando `ADMIN_PASSWORD`; no hay contraseñas en `seed.sql`.
+- Cambiar `ADMIN_PASSWORD` y la contraseña del administrador antes de desplegar.
 
 ## 3. Sesiones
 
@@ -43,7 +44,13 @@ session_start();
 - Regenerar el ID después de iniciar sesión: `session_regenerate_id(true)`.
 - Destruir la sesión y la cookie al cerrar sesión.
 - Expirar por inactividad (por ejemplo, 2 horas).
-- Guardar en la sesión solo `usuario_id`, `rol` y `csrf_token`; no datos sensibles.
+- Guardar en la sesión solo datos públicos del usuario (`id`, `nombre`, `email`, `rol`, `cliente_id`) y el token CSRF; nunca el hash.
+
+Implementación actual (`config/bootstrap.php` y `app/middleware/Auth.php`):
+
+- `session.use_strict_mode`, `use_only_cookies`, `cookie_httponly` y `SameSite` configurable (`SESSION_SAMESITE`).
+- `SESSION_SECURE` se activa en producción con HTTPS.
+- `GET /auth/me` revalida contra la base de datos que el usuario siga activo; si no, destruye la sesión.
 
 ## 4. CSRF
 
@@ -101,13 +108,12 @@ $stmt->execute([':email' => $email]);
 
 ## 9. Rate limiting
 
-Aplicar en:
+Estado:
 
-- Login: 5 intentos por IP cada 15 minutos.
-- Registro: 3 por IP cada hora.
-- Contacto y cotizaciones: 3 por IP cada hora.
+- **Login (implementado):** 5 intentos por IP y por correo cada 15 minutos. Devuelve `429` con `Retry-After` y `details.retry_after`; el contador del correo se limpia tras un login exitoso.
+- **Registro, contacto y cotizaciones (pendiente):** 3 por IP cada hora.
 
-Registrar el intento y devolver `429` con `Retry-After`.
+El login usa `app/helpers/RateLimiter.php` con archivos JSON en `sys_get_temp_dir()`, endurecido con `LOCK_EX` y nombres hasheados. Para varios nodos, reemplazar por Redis o una tabla de la base de datos.
 
 ## 10. Cabeceras HTTP
 
@@ -161,15 +167,16 @@ Evitar `db_owner` y `sysadmin` para la aplicación.
 
 ## 15. Checklist de seguridad
 
-- [ ] Contraseñas con hash y política mínima.
-- [ ] Consultas preparadas en todos los modelos.
-- [ ] Sesión `HttpOnly`, `SameSite` y `Secure` en producción.
-- [ ] CSRF en mutaciones.
-- [ ] Roles y propiedad validados en el servidor.
-- [ ] Entradas validadas y salidas escapadas.
-- [ ] Rate limit en login y formularios públicos.
-- [ ] Cabeceras de seguridad configuradas.
-- [ ] `.env` fuera de Git y del ZIP.
+- [x] Contraseñas con hash y política mínima.
+- [x] Consultas preparadas en los modelos implementados.
+- [x] Sesión `HttpOnly`, `SameSite` y `Secure` configurable.
+- [x] CSRF en mutaciones.
+- [x] Roles y propiedad validados en el servidor para las rutas implementadas.
+- [x] Entradas validadas y salidas escapadas con `textContent`.
+- [x] Rate limit en login.
+- [ ] Rate limit en registro y formularios públicos.
+- [x] Cabeceras de seguridad base en la API.
+- [x] `.env` fuera de Git.
 - [ ] Usuario de BD con permisos mínimos.
 - [ ] Respaldos y restauración probados.
-- [ ] Errores de producción sin trazas.
+- [ ] Errores de producción sin trazas (verificar con `APP_ENV=production`).

@@ -20,10 +20,10 @@ Criterios para que el sitio sea usable con teclado, lectores de pantalla y difer
 - Mantener los datos capturados tras un error.
 
 ```html
-<div class="field">
-  <label class="field__label" for="email">Correo electrónico</label>
+<div class="form__field">
+  <label class="form__label" for="email">Correo electrónico</label>
   <input
-    class="field__input"
+    class="form__input"
     id="email"
     name="email"
     type="email"
@@ -31,7 +31,7 @@ Criterios para que el sitio sea usable con teclado, lectores de pantalla y difer
     required
     aria-describedby="email-error"
   >
-  <p class="field__error" id="email-error" role="alert">
+  <p class="form__error" id="email-error" role="alert">
     Ingresa un correo válido.
   </p>
 </div>

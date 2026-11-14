@@ -61,6 +61,7 @@ proyecto-final/
 │   │   ├── schema.sql             # Esquema de SQL Server
 │   │   ├── seed.sql               # Datos iniciales
 │   │   └── migrations/            # Cambios incrementales
+│   ├── scripts/                   # Utilidades CLI (crear-admin.php)
 │   └── tests/
 │
 ├── appWeb/                        # Front estático

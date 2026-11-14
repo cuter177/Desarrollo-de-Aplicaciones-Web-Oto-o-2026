@@ -18,6 +18,7 @@ backEnd/
 │   └── migrations/    # Cambios incrementales del esquema
 ├── docs/              # Arquitectura, BD, API, seguridad y despliegue
 ├── public/            # Document root: .htaccess e index.php (API)
+├── scripts/           # Utilidades CLI (alta de administrador)
 ├── tests/             # Pruebas del backend
 ├── CHANGELOG.md
 └── README.md
@@ -25,7 +26,16 @@ backEnd/
 
 ## Estado actual
 
-`0.1.0` — Andamiaje. `public/index.php` solo responde información básica y un health check sin base de datos. No hay autenticación ni CRUD implementados.
+`0.2.0` — Base de datos y autenticación implementadas:
+
+- Esquema completo e idempotente en `database/schema.sql` y catálogos en `database/seed.sql`.
+- Router en `public/index.php` con rutas `/api/v1/*`.
+- Registro de clientes, login, logout, sesión por cookie, `GET /auth/me` y cambio de contraseña.
+- Roles `admin`/`cliente` verificados en el servidor; dashboard administrativo protegido.
+- CSRF con `X-CSRF-Token`, rate limit de login y health check real contra SQL Server.
+- Script `scripts/crear-admin.php` para el administrador inicial.
+
+Los endpoints públicos de catálogos, el portal `/mi/*` y los CRUD administrativos siguen pendientes.
 
 ## Documentación
 
@@ -62,4 +72,24 @@ docker compose exec api bash
 
 # Verificar extensiones de SQL Server
 docker compose exec api php -m | grep -i sqlsrv
+
+# Crear el administrador inicial (lee ADMIN_* de .env)
+docker compose exec api php scripts/crear-admin.php
+
+# Health check con estado de la base de datos
+curl -i http://localhost:8080/api/v1/health
 ```
+
+## Rutas implementadas
+
+| Método | Ruta | Acceso |
+|---|---|---|
+| GET | `/api/v1` | Público |
+| GET | `/api/v1/health` | Público |
+| GET | `/api/v1/auth/csrf` | Público |
+| POST | `/api/v1/auth/login` | Público |
+| POST | `/api/v1/auth/logout` | Autenticado |
+| GET | `/api/v1/auth/me` | Autenticado |
+| POST | `/api/v1/auth/registro` | Público |
+| PATCH | `/api/v1/auth/password` | Autenticado |
+| GET | `/api/v1/admin/dashboard` | Solo `admin` |

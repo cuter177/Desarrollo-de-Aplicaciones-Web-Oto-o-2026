@@ -85,17 +85,19 @@ Sistema visual del front. Los valores deben coincidir con las variables de `asse
 ### Botones
 
 ```css
-.button {
-  min-height: 44px;
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-md);
-  font-weight: 600;
+.btn {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
 }
-.button--primary { background: var(--color-primary); color: #fff; }
-.button--ghost { border: 1px solid var(--color-border); background: transparent; }
+.btn--secondary { background: var(--color-surface); border-color: var(--color-border); color: var(--color-text); }
+.btn--ghost { background: transparent; color: var(--color-primary-dark); }
+.btn--danger { background: var(--color-danger); }
+.btn--block { width: 100%; }
 ```
 
-Estados: `:hover`, `:focus-visible`, `:disabled`, `.is-loading`.
+Estados: `:hover`, `:focus-visible`, `:disabled`. El estado de carga se aplica con `setBotonCargando()` de `ui.js`, que cambia el texto y deshabilita el botón.
 
 ### Formularios
 

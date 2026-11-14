@@ -1,9 +1,9 @@
 # Manual de usuario
 
 **Sistema:** `[Nombre de la empresa]` — sitio web, portal de clientes y panel administrativo
-**Versión:** 0.1.0 · **Última actualización:** 2026-11-13
+**Versión:** 0.2.0 · **Última actualización:** 2026-11-13
 
-> Este manual está en construcción. La estructura y el contenido inicial ya están definidos; las capturas y los pasos definitivos se agregarán cuando las pantallas estén implementadas.
+> Este manual está en construcción. La versión 0.2.0 ya permite registrarse, iniciar sesión y entrar al portal o al dashboard según el rol. Las secciones de proyectos, solicitudes, catálogos y CRUD describen el comportamiento previsto y se completarán en las siguientes etapas.
 
 ## Contenido
 
@@ -37,28 +37,41 @@ Este manual explica cómo usar la aplicación web de `[Nombre de la empresa]`. E
 
 ### 3.1 Crear una cuenta
 
-1. Abrir `http://localhost:8080/registro`.
-2. Capturar nombre completo, correo electrónico, empresa y contraseña.
-3. Leer y aceptar los términos.
+1. Abrir `http://localhost:8080/pages/registro.html`.
+2. Capturar nombre completo, correo electrónico y empresa. El teléfono es opcional.
+3. Escribir la contraseña dos veces y aceptar los términos.
 4. Pulsar **Crear cuenta**.
-5. Iniciar sesión con el correo y la contraseña registrados.
+5. El sistema vuelve al login con un mensaje de confirmación.
+6. Iniciar sesión con el correo y la contraseña registrados.
 
-**Política de contraseña:** mínimo 8 caracteres, una mayúscula, una minúscula y un número.
+**Política de contraseña:** entre 8 y 200 caracteres, con al menos una mayúscula, una minúscula y un número.
+
+**Errores frecuentes:**
+
+| Mensaje | Causa | Solución |
+|---|---|---|
+| “Este correo ya está registrado” | La cuenta existe | Iniciar sesión o usar otro correo |
+| “Las contraseñas no coinciden” | Confirmación distinta | Volver a escribirla |
+| “La contraseña debe incluir…” | No cumple la política | Agregar mayúscula, minúscula o número |
 
 ### 3.2 Iniciar sesión
 
-1. Abrir `http://localhost:8080/login`.
+1. Abrir `http://localhost:8080/pages/login.html`.
 2. Capturar correo y contraseña.
 3. Pulsar **Entrar**.
 4. El sistema redirige automáticamente según el rol:
-   - Cliente → `/portal`
-   - Administrador → `/admin/dashboard`
+   - Cliente → `/pages/portal/index.html`
+   - Administrador → `/pages/admin/dashboard.html`
+
+Tras cinco intentos fallidos desde la misma IP o con el mismo correo, el sistema bloquea el login durante 15 minutos.
 
 ### 3.3 Cerrar sesión
 
 Pulsar **Cerrar sesión** en el encabezado. El sistema elimina la sesión y vuelve al inicio.
 
-> **Captura pendiente:** pantalla de inicio de sesión.
+El encabezado cambia según la sesión: un visitante ve **Iniciar sesión** y **Crear cuenta**; un cliente ve **Mi portal**; un administrador ve además **Administración**.
+
+> **Captura pendiente:** pantallas de registro y login implementadas en la versión 0.2.0.
 
 ## 4. Sitio público
 
@@ -102,6 +115,8 @@ Muestra proyectos publicados por el administrador. Cada caso incluye reto, soluc
 
 ## 5. Portal del cliente
 
+> **Estado 0.2.0:** el portal ya valida la sesión y muestra el nombre, correo, rol y empresa del cliente. Los listados de proyectos y solicitudes son placeholders hasta la siguiente etapa.
+
 ### 5.1 Resumen
 
 Después de iniciar sesión, el cliente ve un resumen con sus proyectos y solicitudes recientes.
@@ -130,9 +145,13 @@ Permite actualizar nombre, teléfono, empresa y contraseña. El correo electrón
 
 ## 6. Panel de administración
 
+> **Estado 0.2.0:** el dashboard ya es accesible solo con rol `admin` y muestra conteos reales de usuarios activos, clientes, proyectos, solicitudes nuevas y mensajes nuevos. Los demás módulos son placeholders.
+
 ### 6.1 Dashboard
 
 Muestra conteos de usuarios, proyectos, solicitudes nuevas y mensajes sin atender, además de la actividad reciente.
+
+Si un cliente intenta abrir `/pages/admin/dashboard.html`, el front lo redirige a su portal; si intenta llamar la API directamente, el backend responde `403`.
 
 ### 6.2 Usuarios
 
@@ -208,3 +227,4 @@ Al reportar un problema, incluir: página, acción realizada, mensaje de error, 
 | Versión | Fecha | Cambio |
 |---|---|---|
 | 0.1.0 | 2026-11-13 | Estructura inicial del manual |
+| 0.2.0 | 2026-11-13 | Rutas reales de registro/login, política de contraseña, rate limit y estado del portal/dashboard |

@@ -20,4 +20,4 @@ Carpeta reservada para las pruebas de la API.
 
 ## Estado
 
-`0.1.0` — Sin pruebas implementadas.
+`0.2.0` — Sin pruebas automatizadas. La autenticación y el dashboard están implementados, pero no se pudieron ejecutar en Docker/PHP desde el equipo de desarrollo.

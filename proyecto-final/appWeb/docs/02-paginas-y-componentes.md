@@ -4,61 +4,65 @@ Inventario de pantallas y piezas reutilizables del front.
 
 ## 1. Páginas públicas
 
-| Página | Archivo previsto | Contenido | API |
-|---|---|---|---|
-| Inicio | `index.html` | Hero, servicios destacados, portafolio y CTA | `GET /servicios`, `GET /portafolio` |
-| Servicios | `pages/servicios.html` | Catálogo | `GET /servicios` |
-| Detalle de servicio | `pages/servicio-detalle.html?slug=` | Descripción y CTA | `GET /servicios/{slug}` |
-| Portafolio | `pages/portafolio.html` | Casos publicados | `GET /portafolio` |
-| Detalle de caso | `pages/caso-detalle.html?slug=` | Reto, solución y tecnologías | `GET /portafolio/{slug}` |
-| Nosotros | `pages/nosotros.html` | Historia y enfoque | `GET /config` |
-| Contacto | `pages/contacto.html` | Formulario | `POST /contacto` |
-| Cotización | `pages/cotizacion.html` | Formulario | `GET /servicios`, `POST /cotizaciones` |
-| Login | `pages/login.html` | Acceso | `GET /auth/csrf`, `POST /auth/login` |
-| Registro | `pages/registro.html` | Alta de cliente | `GET /auth/csrf`, `POST /auth/registro` |
+| Página | Archivo | Contenido | API | Estado |
+|---|---|---|---|---|
+| Inicio | `index.html` | Hero, accesos y estado del proyecto | — | Implementado |
+| Servicios | `pages/servicios.html` | Catálogo | `GET /servicios` | Pendiente |
+| Detalle de servicio | `pages/servicio-detalle.html?slug=` | Descripción y CTA | `GET /servicios/{slug}` | Pendiente |
+| Portafolio | `pages/portafolio.html` | Casos publicados | `GET /portafolio` | Pendiente |
+| Detalle de caso | `pages/caso-detalle.html?slug=` | Reto, solución y tecnologías | `GET /portafolio/{slug}` | Pendiente |
+| Nosotros | `pages/nosotros.html` | Historia y enfoque | `GET /config` | Pendiente |
+| Contacto | `pages/contacto.html` | Formulario | `POST /contacto` | Pendiente |
+| Cotización | `pages/cotizacion.html` | Formulario | `GET /servicios`, `POST /cotizaciones` | Pendiente |
+| Login | `pages/login.html` | Acceso y redirección por rol | `GET /auth/csrf`, `POST /auth/login`, `GET /auth/me` | Implementado |
+| Registro | `pages/registro.html` | Alta de cliente | `GET /auth/csrf`, `POST /auth/registro` | Implementado |
 
 ## 2. Portal del cliente
 
-| Página | Archivo previsto | Contenido | API |
-|---|---|---|---|
-| Resumen | `pages/portal/index.html` | Bienvenida y accesos | `GET /auth/me` |
-| Proyectos | `pages/portal/proyectos.html` | Lista | `GET /mi/proyectos` |
-| Detalle | `pages/portal/proyecto-detalle.html?id=` | Estado y tecnologías | `GET /mi/proyectos/{id}` |
-| Solicitudes | `pages/portal/solicitudes.html` | Historial y alta | `GET/POST /mi/solicitudes` |
-| Detalle | `pages/portal/solicitud-detalle.html?id=` | Estado | `GET /mi/solicitudes/{id}` |
-| Perfil | `pages/portal/perfil.html` | Datos y contraseña | `GET/PATCH /mi/perfil` |
+| Página | Archivo | Contenido | API | Estado |
+|---|---|---|---|---|
+| Resumen | `pages/portal/index.html` | Bienvenida, datos de sesión y placeholders | `GET /auth/me` | Implementado |
+| Proyectos | `pages/portal/proyectos.html` | Lista | `GET /mi/proyectos` | Pendiente |
+| Detalle | `pages/portal/proyecto-detalle.html?id=` | Estado y tecnologías | `GET /mi/proyectos/{id}` | Pendiente |
+| Solicitudes | `pages/portal/solicitudes.html` | Historial y alta | `GET/POST /mi/solicitudes` | Pendiente |
+| Detalle | `pages/portal/solicitud-detalle.html?id=` | Estado | `GET /mi/solicitudes/{id}` | Pendiente |
+| Perfil | `pages/portal/perfil.html` | Datos y contraseña | `GET/PATCH /mi/perfil` | Pendiente |
 
 ## 3. Panel de administración
 
-| Página | Archivo previsto | Contenido | API |
-|---|---|---|---|
-| Dashboard | `pages/admin/dashboard.html` | Métricas y actividad | `GET /admin/dashboard` |
-| Usuarios | `pages/admin/usuarios.html` | Tabla y formulario | `GET/POST/PATCH /admin/usuarios` |
-| Clientes | `pages/admin/clientes.html` | Tabla y formulario | `GET/POST/PATCH /admin/clientes` |
-| Servicios | `pages/admin/servicios.html` | CRUD | `GET/POST/PATCH/DELETE /admin/servicios` |
-| Proyectos | `pages/admin/proyectos.html` | CRUD y publicación | `GET/POST/PATCH /admin/proyectos` |
-| Tecnologías | `pages/admin/tecnologias.html` | CRUD | `GET/POST/PATCH/DELETE /admin/tecnologias` |
-| Solicitudes | `pages/admin/solicitudes.html` | Bandeja y estados | `GET/PATCH /admin/solicitudes` |
-| Mensajes | `pages/admin/mensajes.html` | Bandeja | `GET/PATCH/DELETE /admin/mensajes` |
+| Página | Archivo | Contenido | API | Estado |
+|---|---|---|---|---|
+| Dashboard | `pages/admin/dashboard.html` | Métricas reales y datos de sesión | `GET /admin/dashboard` | Implementado |
+| Usuarios | `pages/admin/usuarios.html` | Tabla y formulario | `GET/POST/PATCH /admin/usuarios` | Pendiente |
+| Clientes | `pages/admin/clientes.html` | Tabla y formulario | `GET/POST/PATCH /admin/clientes` | Pendiente |
+| Servicios | `pages/admin/servicios.html` | CRUD | `GET/POST/PATCH/DELETE /admin/servicios` | Pendiente |
+| Proyectos | `pages/admin/proyectos.html` | CRUD y publicación | `GET/POST/PATCH /admin/proyectos` | Pendiente |
+| Tecnologías | `pages/admin/tecnologias.html` | CRUD | `GET/POST/PATCH/DELETE /admin/tecnologias` | Pendiente |
+| Solicitudes | `pages/admin/solicitudes.html` | Bandeja y estados | `GET/PATCH /admin/solicitudes` | Pendiente |
+| Mensajes | `pages/admin/mensajes.html` | Bandeja | `GET/PATCH/DELETE /admin/mensajes` | Pendiente |
 
 ## 4. Componentes reutilizables
 
-| Componente | Clases | Uso |
-|---|---|---|
-| Encabezado | `.site-header`, `.nav`, `.nav__link` | Navegación y sesión |
-| Pie | `.site-footer` | Enlaces y copyright |
-| Hero | `.hero`, `.hero__title`, `.hero__actions` | Portada |
-| Tarjeta | `.card`, `.card__title`, `.card__body` | Servicios y proyectos |
-| Botón | `.button`, `.button--primary`, `.button--ghost` | Acciones |
-| Formulario | `.form`, `.form__group`, `.form__error` | Contacto, login, CRUD |
-| Campo | `.field`, `.field__label`, `.field__input` | Entradas |
-| Tabla | `.table`, `.table--responsive` | Listados administrativos |
-| Badge de estado | `.badge`, `.badge--success`, `.badge--warning` | Estados |
-| Alerta | `.alert`, `.alert--error`, `.alert--success` | Mensajes |
-| Modal | `.modal`, `.modal__dialog` | Confirmaciones |
-| Estado vacío | `.empty-state` | Listas sin datos |
-| Paginación | `.pagination` | Listados |
-| Cargando | `.spinner`, `.skeleton` | Peticiones |
+| Componente | Clases | Uso | Estado |
+|---|---|---|---|
+| Encabezado | `.site-header`, `.site-nav`, `.site-nav__link`, `[data-auth]` | Navegación y sesión | Implementado |
+| Pie | `.site-footer` | Enlaces y copyright | Implementado |
+| Hero | `.hero`, `.hero__title`, `.hero__actions` | Portada | Implementado |
+| Tarjeta | `.card`, `.card__title`, `.card__body` | Servicios y proyectos | Implementado |
+| Botón | `.btn`, `.btn--secondary`, `.btn--ghost`, `.btn--danger`, `.btn--block` | Acciones | Implementado |
+| Formulario | `.form`, `.form__field`, `.form__error`, `.form__actions` | Login, registro, CRUD | Implementado |
+| Campo | `.form__label`, `.form__input`, `.form__select`, `.form__textarea` | Entradas | Implementado |
+| Alerta | `.alert`, `.alert--info`, `.alert--success`, `.alert--warning`, `.alert--error` | Mensajes | Implementado |
+| Panel | `.panel`, `.panel__title` | Bloques de contenido | Implementado |
+| Métrica | `.metrics`, `.metric`, `.metric__value` | Dashboard y portal | Implementado |
+| Lista de datos | `.data-list`, `.data-list__row` | Datos de sesión | Implementado |
+| Estado vacío | `.empty-state` | Listas sin datos | Implementado |
+| Tabla | `.table`, `.table--responsive` | Listados administrativos | Pendiente |
+| Modal | `.modal`, `.modal__dialog` | Confirmaciones | Pendiente |
+| Paginación | `.pagination` | Listados | Pendiente |
+| Cargando | `.spinner`, `.skeleton` | Peticiones | Pendiente |
+
+> La nomenclatura real usa `.btn` y `.form__field`; las clases `.button` y `.field` quedan descartadas.
 
 ## 5. Estados de interfaz
 

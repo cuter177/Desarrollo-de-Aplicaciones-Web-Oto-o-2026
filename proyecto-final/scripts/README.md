@@ -1,6 +1,6 @@
 # Scripts
 
-Utilidades previstas para desarrollo y entrega. En `0.1.0` solo existe esta documentación; los scripts se implementarán cuando el proyecto tenga código funcional.
+Utilidades previstas para desarrollo y entrega. En `0.2.0` la documentación sigue siendo la única pieza de esta carpeta; el único script implementado es `backEnd/scripts/crear-admin.php`.
 
 ## Scripts planeados
 
@@ -45,4 +45,4 @@ Excluir:
 
 ## Estado
 
-`0.1.0` — Pendiente de implementación.
+`0.2.0` — Pendiente de implementación; el alta de administrador vive en `backEnd/scripts/`.

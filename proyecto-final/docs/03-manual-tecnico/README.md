@@ -1,7 +1,7 @@
 # Manual técnico
 
 **Sistema:** `[Nombre de la empresa]` — sitio web, portal de clientes y panel administrativo
-**Versión:** 0.1.0 · **Última actualización:** 2026-11-13
+**Versión:** 0.2.0 · **Última actualización:** 2026-11-13
 
 > Documento en construcción. Este índice consolida la instalación, la arquitectura y la operación; el detalle de cada componente vive en `backEnd/docs` y `appWeb/docs`.
 
@@ -86,13 +86,25 @@ Verificar las extensiones de PHP:
 docker compose exec api php -m | grep -i sqlsrv
 ```
 
-Cargar el esquema:
+Cargar el esquema y los datos iniciales:
 
 ```bash
 docker compose exec -T mssql /bin/bash -c \
   '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
   < backEnd/database/schema.sql
+
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/seed.sql
 ```
+
+Crear el administrador inicial:
+
+```bash
+docker compose exec api php scripts/crear-admin.php
+```
+
+Entrar a <http://localhost:8080/pages/login.html> con `ADMIN_EMAIL` y `ADMIN_PASSWORD`.
 
 Detener el entorno:
 
@@ -110,15 +122,23 @@ Variables principales de `.env`:
 | `APP_ENV` | Entorno | `development` |
 | `APP_NAME` | Nombre visible | `[Nombre de la empresa]` |
 | `APP_URL` | URL base | `http://localhost:8080` |
+| `APP_TIMEZONE` | Zona horaria de PHP | `America/Mexico_City` |
 | `WEB_PORT` | Puerto del front | `8080` |
 | `DB_HOST` | Host de SQL Server | `mssql` |
 | `DB_PORT` | Puerto | `1433` |
 | `DB_NAME` | Base de datos | `DevStudioDB` |
 | `DB_USER` | Usuario | `sa` (solo desarrollo) |
 | `DB_PASSWORD` | Contraseña | `[secreto]` |
+| `DB_ENCRYPT` | Cifrado de la conexión | `true` |
+| `DB_TRUST_CERT` | Confiar en certificado | `true` solo en desarrollo |
 | `SESSION_NAME` | Nombre de cookie | `devstudio_session` |
 | `SESSION_SECURE` | Cookie solo HTTPS | `false` en desarrollo |
+| `SESSION_SAMESITE` | Política SameSite | `Lax` |
 | `API_PREFIX` | Prefijo de API | `/api/v1` |
+| `ADMIN_NAME` | Nombre del administrador inicial | `Administrador` |
+| `ADMIN_EMAIL` | Correo del administrador | `admin@devstudio.local` |
+| `ADMIN_PASSWORD` | Contraseña del administrador | `[secreto fuerte]` |
+| `RATE_LIMIT_DIR` | Carpeta del rate limit | `sys_get_temp_dir()/devstudio-rate-limit` |
 
 > Nunca versionar `.env`. En producción usar secretos del proveedor y `SESSION_SECURE=true`.
 
@@ -146,6 +166,20 @@ Conexión desde el host:
 - Autenticación: cookie de sesión + token CSRF.
 - Contrato completo: [`backEnd/docs/03-api.md`](../../backEnd/docs/03-api.md).
 
+Rutas implementadas en la versión 0.2.0:
+
+| Método | Ruta | Acceso |
+|---|---|---|
+| GET | `/api/v1` | Público |
+| GET | `/api/v1/health` | Público; consulta `SELECT 1` en SQL Server |
+| GET | `/api/v1/auth/csrf` | Público |
+| POST | `/api/v1/auth/login` | Público; rate limit 5/15 min por IP y correo |
+| POST | `/api/v1/auth/logout` | Autenticado |
+| GET | `/api/v1/auth/me` | Autenticado |
+| POST | `/api/v1/auth/registro` | Público; crea usuario `cliente` y empresa |
+| PATCH | `/api/v1/auth/password` | Autenticado |
+| GET | `/api/v1/admin/dashboard` | Solo `admin` |
+
 Ejemplo:
 
 ```bash
@@ -155,8 +189,10 @@ curl -i http://localhost:8080/api/v1/health
 ## 8. Frontend
 
 - Sitio estático servido por Nginx desde `appWeb/`.
-- CSS Mobile First con variables y breakpoints en 480, 768 y 1024 px.
-- JavaScript modular: `api.js`, `auth.js`, `ui.js` (pendientes de implementar).
+- CSS Mobile First con variables y breakpoints en 480, 768 y 1024 px. `main.css` contiene la base y `components.css` los formularios, botones, alertas y paneles.
+- JavaScript modular: `api.js` (fetch + CSRF), `auth.js` (sesión, roles y guardas), `ui.js` (header y alertas), `app.js` (arranque) y `pages/` (login, registro, portal y admin).
+- Páginas de la etapa: `/index.html`, `/pages/login.html`, `/pages/registro.html`, `/pages/portal/index.html` y `/pages/admin/dashboard.html`.
+- El front oculta enlaces por rol con `data-auth`, pero el backend siempre valida la sesión y el rol.
 - Documentación: [`appWeb/docs/`](../../appWeb/docs/).
 
 ## 9. Seguridad
@@ -197,6 +233,10 @@ docker compose cp mssql:/var/opt/mssql/backup/DevStudioDB.bak ./dist/
 | `502 Bad Gateway` en `/api` | El contenedor `api` no está listo | `docker compose logs api` y `docker compose ps` |
 | La web no carga estilos | Ruta o volumen incorrecto | Verificar el montaje de `appWeb` en `compose.yaml` |
 | Error de arquitectura de imagen | Host ARM | Usar un host `x86_64` o emulación |
+| `429 DEMASIADAS_PETICIONES` | Rate limit de login | Esperar 15 minutos o limpiar `devstudio-rate-limit` |
+| `403 CSRF_INVALIDO` | Token ausente o viejo | Volver a pedir `/api/v1/auth/csrf` y reenviar el header |
+| `health` con `database: error` | Falla la conexión PDO | Revisar `DB_*`, contenedor `mssql` y extensión `sqlsrv` |
+| El administrador no existe | No se ejecutó el script | `docker compose exec api php scripts/crear-admin.php` |
 
 ## 12. Referencias
 
@@ -213,3 +253,4 @@ docker compose cp mssql:/var/opt/mssql/backup/DevStudioDB.bak ./dist/
 | Versión | Fecha | Cambio |
 |---|---|---|
 | 0.1.0 | 2026-11-13 | Estructura inicial del manual técnico |
+| 0.2.0 | 2026-11-13 | Instalación de BD, alta de administrador, rutas de autenticación y solución de problemas de CSRF/rate limit |

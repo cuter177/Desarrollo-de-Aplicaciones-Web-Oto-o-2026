@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portal de clientes de [Nombre de la empresa].">
+  <title>Mi portal — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/portal.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name">[Nombre de la empresa]</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html" aria-current="page">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">
+            Cerrar sesión
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Portal del cliente</p>
+        <h1 class="page__title">Hola, <span data-portal-nombre>cliente</span></h1>
+        <p class="page__lead">
+          Este es el punto de partida de tu portal. En las siguientes etapas se
+          habilitarán los proyectos, solicitudes y datos de tu empresa.
+        </p>
+      </header>
+
+      <div class="alert alert--info" role="status">
+        Etapa 2: el acceso y la sesión ya funcionan. El contenido del portal es un
+        placeholder protegido por rol.
+      </div>
+
+      <section class="metrics" aria-label="Resumen de la cuenta">
+        <article class="metric">
+          <p class="metric__label">Cuenta</p>
+          <p class="metric__value" data-portal-empresa>—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Proyectos activos</p>
+          <p class="metric__value">0</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Solicitudes abiertas</p>
+          <p class="metric__value">0</p>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="portal-datos-title">
+        <h2 class="panel__title" id="portal-datos-title">Datos de la sesión</h2>
+        <dl class="data-list">
+          <div class="data-list__row">
+            <dt class="data-list__label">Nombre</dt>
+            <dd class="data-list__value" data-user-name>—</dd>
+          </div>
+          <div class="data-list__row">
+            <dt class="data-list__label">Correo</dt>
+            <dd class="data-list__value" data-user-email>—</dd>
+          </div>
+          <div class="data-list__row">
+            <dt class="data-list__label">Rol</dt>
+            <dd class="data-list__value" data-user-role>—</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="panel" aria-labelledby="portal-pendiente-title">
+        <h2 class="panel__title" id="portal-pendiente-title">Próximamente</h2>
+        <div class="empty-state">
+          Listado de proyectos, detalle de avances y seguimiento de solicitudes de
+          cotización.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -58,7 +58,7 @@ appWeb/
     └── fonts/
 ```
 
-Las rutas anteriores son la organización prevista; en `0.1.0` solo existe `index.html`.
+Las rutas de servicios, portafolio y CRUD son la organización prevista. En `0.2.0` existen `index.html`, `login.html`, `registro.html`, `portal/index.html` y `admin/dashboard.html`; `components.css`, `app.js` y los módulos de `pages/` ya están implementados.
 
 ## 3. Módulos JavaScript
 
@@ -66,51 +66,77 @@ Las rutas anteriores son la organización prevista; en `0.1.0` solo existe `inde
 |---|---|
 | `api.js` | `fetch` con base `/api/v1`, manejo de errores y CSRF |
 | `auth.js` | Login, logout, `me`, guardas de ruta y estado de sesión |
-| `ui.js` | Header dinámico, alertas, modales, estados de carga y vacíos |
-| `pages/*.js` | Lógica específica de cada página |
+| `ui.js` | Header dinámico por `data-auth`, alertas y estado de carga de botones |
+| `app.js` | Arranque común: obtiene la sesión y actualiza el header |
+| `pages/*.js` | Lógica específica de login, registro, portal y dashboard |
 
-### Contrato interno sugerido
+### Contrato interno implementado
 
 ```js
 // api.js
-export async function apiGet(path) { /* ... */ }
-export async function apiPost(path, body) { /* ... */ }
-export async function apiPatch(path, body) { /* ... */ }
-export async function apiDelete(path) { /* ... */ }
+export function setCsrfToken(token)
+export function getCsrfToken()
+export function apiGet(path)
+export function apiPost(path, body)
+export function apiPatch(path, body)
+export function apiDelete(path)
 
 // auth.js
-export async function iniciarSesion(credenciales) { /* ... */ }
-export async function cerrarSesion() { /* ... */ }
-export async function obtenerSesion() { /* ... */ }
-export function requerirRol(rol) { /* redirige si no coincide */ }
+export async function obtenerSesion()
+export async function obtenerCsrf()
+export async function iniciarSesion(email, password)
+export async function registrar(datos)
+export async function cerrarSesion()
+export async function cambiarPassword(datos)
+export function rutaPorRol(usuario)
+export function redirigirPorRol(usuario)
+export function protegerPagina(usuario, roles)
 ```
+
+`api.js` adjunta `X-CSRF-Token` en métodos distintos de `GET`/`HEAD` y normaliza los errores de la API en un objeto con `message`, `code`, `status` y `details`.
 
 ## 4. Flujo de sesión
 
-1. Al cargar una página protegida, `auth.js` llama `GET /api/v1/auth/me`.
-2. Si responde `401`, redirige a `/pages/login.html` con `?redirect=...`.
-3. Si el rol no coincide, muestra acceso denegado y ofrece volver al portal.
-4. El header se actualiza con el nombre del usuario y las opciones de su rol.
+1. `app.js` llama `obtenerSesion()` al cargar cualquier página; esta consulta `GET /api/v1/auth/me` y guarda el token CSRF.
+2. Si responde `401`, el header queda en estado de visitante.
+3. En páginas protegidas, `protegerPagina(usuario, roles)` redirige a `/pages/login.html?redirect=...` si no hay sesión.
+4. Si el rol no coincide, redirige a la página inicial de su rol (`portal` o `dashboard`).
+5. El header se actualiza con `data-auth` (`guest`, `session`, `admin`), el nombre del usuario y el botón de logout.
 
 > La guarda del front es solo experiencia de usuario. El backend vuelve a validar cada petición.
 
 ## 5. Consumo de la API
 
-```js
-export async function apiFetch(path, options = {}) {
-  const response = await fetch(`/api/v1${path}`, {
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers ?? {}),
-    },
-    ...options,
-  });
+Fragmento real de `api.js`:
 
+```js
+const API_BASE = '/api/v1';
+
+async function request(path, { method = 'GET', body, headers = {} } = {}) {
+  const options = {
+    method,
+    credentials: 'same-origin',
+    headers: { Accept: 'application/json', ...headers },
+  };
+
+  if (body !== undefined) {
+    options.headers['Content-Type'] = 'application/json';
+    options.body = JSON.stringify(body);
+  }
+
+  if (!['GET', 'HEAD'].includes(method) && csrfToken) {
+    options.headers['X-CSRF-Token'] = csrfToken;
+  }
+
+  const response = await fetch(`${API_BASE}${path}`, options);
   const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(payload?.error?.message ?? 'Error de comunicación');
+    const error = new Error(payload?.error?.message ?? 'Error de comunicación');
+    error.code = payload?.error?.code ?? 'ERROR';
+    error.status = response.status;
+    error.details = payload?.error?.details ?? {};
+    throw error;
   }
 
   return payload.data;
@@ -118,15 +144,15 @@ export async function apiFetch(path, options = {}) {
 ```
 
 - Siempre `credentials: 'same-origin'`.
-- Enviar `X-CSRF-Token` en mutaciones.
+- Pedir `GET /auth/csrf` antes de la primera mutación y enviar `X-CSRF-Token`.
 - Mostrar estados de carga, error y vacío.
 - No exponer mensajes técnicos al usuario.
 
 ## 6. Navegación
 
 - Cada página es un documento HTML independiente.
-- El encabezado y el pie se replican o se insertan con un pequeño include de JavaScript.
-- Los enlaces usan rutas relativas para funcionar en el contenedor.
+- El header se replica en cada página; los elementos con `data-auth` se muestran u ocultan desde `ui.js`.
+- Las páginas de `pages/` usan rutas absolutas (`/assets/...`, `/pages/...`) para que funcionen desde cualquier nivel de carpeta.
 - Las rutas protegidas se agrupan en `pages/portal/` y `pages/admin/`.
 - Los parámetros de recurso se leen con `URLSearchParams` (`?id=7`).
 
@@ -155,4 +181,4 @@ export async function apiFetch(path, options = {}) {
 
 ## 10. Estado actual
 
-`0.1.0` — Estructura y estilos base. No hay navegación ni consumo de API implementados.
+`0.2.0` — Navegación dinámica, login, registro, portal y dashboard implementados; consumo de API con CSRF y guardas por rol. El sitio público completo y los módulos de negocio siguen pendientes.

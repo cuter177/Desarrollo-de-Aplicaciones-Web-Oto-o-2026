@@ -2,22 +2,13 @@
  * Esquema de base de datos — DevStudioDB
  * SQL Server 2022
  *
- * Estado: esqueleto del andamiaje.
- * Las tablas se implementarán en la siguiente etapa siguiendo el modelo ER y
- * el diccionario de datos:
- *   docs/02-base-datos/01-modelo-er.md
- *   docs/02-base-datos/02-diccionario-datos.md
+ * Etapa 2: esquema completo del modelo ER.
+ * Referencias:
+ *   backEnd/docs/02-base-datos/01-modelo-er.md
+ *   backEnd/docs/02-base-datos/02-diccionario-datos.md
  *
- * Orden previsto de creación:
- *   1. Roles
- *   2. Usuarios
- *   3. Clientes
- *   4. Servicios
- *   5. Tecnologias
- *   6. Proyectos
- *   7. ProyectoTecnologia
- *   8. SolicitudesCotizacion
- *   9. MensajesContacto
+ * El script es idempotente: se puede ejecutar varias veces sin recrear
+ * objetos existentes.
  */
 
 IF DB_ID(N'DevStudioDB') IS NULL
@@ -29,15 +20,320 @@ GO
 USE [DevStudioDB];
 GO
 
--- TODO: crear las tablas con sus llaves, restricciones e índices.
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
 
-/*
-Ejemplo de la estructura esperada (no ejecutar todavía):
+/* ==========================================================================
+   1. Roles
+   ========================================================================== */
 
-CREATE TABLE Roles (
-    id          INT IDENTITY(1,1) NOT NULL CONSTRAINT PK_Roles PRIMARY KEY,
-    nombre      NVARCHAR(30)      NOT NULL CONSTRAINT UQ_Roles_Nombre UNIQUE,
-    descripcion NVARCHAR(200)     NULL,
-    creado_en   DATETIME2(0)      NOT NULL CONSTRAINT DF_Roles_Creado DEFAULT SYSUTCDATETIME()
-);
-*/
+IF OBJECT_ID(N'dbo.Roles', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Roles (
+        id          INT IDENTITY(1,1) NOT NULL,
+        nombre      NVARCHAR(30)      NOT NULL,
+        descripcion NVARCHAR(200)     NULL,
+        creado_en   DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Roles_Creado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Roles PRIMARY KEY (id),
+        CONSTRAINT UQ_Roles_Nombre UNIQUE (nombre)
+    );
+END
+GO
+
+/* ==========================================================================
+   2. Usuarios
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.Usuarios', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Usuarios (
+        id              INT IDENTITY(1,1) NOT NULL,
+        nombre          NVARCHAR(120)     NOT NULL,
+        email           NVARCHAR(254)     NOT NULL,
+        password_hash   NVARCHAR(255)     NOT NULL,
+        rol_id          INT               NOT NULL,
+        activo          BIT               NOT NULL
+            CONSTRAINT DF_Usuarios_Activo DEFAULT (1),
+        ultimo_acceso   DATETIME2(0)      NULL,
+        creado_en       DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Usuarios_Creado DEFAULT SYSUTCDATETIME(),
+        actualizado_en  DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Usuarios_Actualizado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Usuarios PRIMARY KEY (id),
+        CONSTRAINT UQ_Usuarios_Email UNIQUE (email),
+        CONSTRAINT FK_Usuarios_Roles FOREIGN KEY (rol_id)
+            REFERENCES dbo.Roles (id)
+    );
+END
+GO
+
+/* ==========================================================================
+   3. Clientes
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.Clientes', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Clientes (
+        id              INT IDENTITY(1,1) NOT NULL,
+        usuario_id      INT               NOT NULL,
+        empresa         NVARCHAR(150)     NOT NULL,
+        telefono        NVARCHAR(30)      NULL,
+        sitio_web       NVARCHAR(200)     NULL,
+        industria       NVARCHAR(100)     NULL,
+        creado_en       DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Clientes_Creado DEFAULT SYSUTCDATETIME(),
+        actualizado_en  DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Clientes_Actualizado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Clientes PRIMARY KEY (id),
+        CONSTRAINT UQ_Clientes_Usuario UNIQUE (usuario_id),
+        CONSTRAINT FK_Clientes_Usuarios FOREIGN KEY (usuario_id)
+            REFERENCES dbo.Usuarios (id)
+    );
+END
+GO
+
+/* ==========================================================================
+   4. Servicios
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.Servicios', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Servicios (
+        id              INT IDENTITY(1,1) NOT NULL,
+        slug            NVARCHAR(120)     NOT NULL,
+        nombre          NVARCHAR(120)     NOT NULL,
+        descripcion     NVARCHAR(MAX)     NOT NULL,
+        icono           NVARCHAR(80)      NULL,
+        activo          BIT               NOT NULL
+            CONSTRAINT DF_Servicios_Activo DEFAULT (1),
+        orden           INT               NOT NULL
+            CONSTRAINT DF_Servicios_Orden DEFAULT (0),
+        creado_en       DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Servicios_Creado DEFAULT SYSUTCDATETIME(),
+        actualizado_en  DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Servicios_Actualizado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Servicios PRIMARY KEY (id),
+        CONSTRAINT UQ_Servicios_Slug UNIQUE (slug)
+    );
+END
+GO
+
+/* ==========================================================================
+   5. Tecnologías
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.Tecnologias', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Tecnologias (
+        id          INT IDENTITY(1,1) NOT NULL,
+        nombre      NVARCHAR(80)      NOT NULL,
+        categoria   NVARCHAR(60)      NULL,
+        icono       NVARCHAR(80)      NULL,
+        activo      BIT               NOT NULL
+            CONSTRAINT DF_Tecnologias_Activo DEFAULT (1),
+        creado_en   DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Tecnologias_Creado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Tecnologias PRIMARY KEY (id),
+        CONSTRAINT UQ_Tecnologias_Nombre UNIQUE (nombre)
+    );
+END
+GO
+
+/* ==========================================================================
+   6. Proyectos
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.Proyectos', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Proyectos (
+        id              INT IDENTITY(1,1) NOT NULL,
+        cliente_id      INT               NOT NULL,
+        nombre          NVARCHAR(150)     NOT NULL,
+        slug            NVARCHAR(160)     NOT NULL,
+        descripcion     NVARCHAR(MAX)     NOT NULL,
+        estado          NVARCHAR(30)      NOT NULL
+            CONSTRAINT DF_Proyectos_Estado DEFAULT N'planificado',
+        fecha_inicio    DATE              NULL,
+        fecha_fin       DATE              NULL,
+        url_demo        NVARCHAR(300)     NULL,
+        publicado       BIT               NOT NULL
+            CONSTRAINT DF_Proyectos_Publicado DEFAULT (0),
+        destacado       BIT               NOT NULL
+            CONSTRAINT DF_Proyectos_Destacado DEFAULT (0),
+        creado_en       DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Proyectos_Creado DEFAULT SYSUTCDATETIME(),
+        actualizado_en  DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Proyectos_Actualizado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Proyectos PRIMARY KEY (id),
+        CONSTRAINT UQ_Proyectos_Slug UNIQUE (slug),
+        CONSTRAINT CK_Proyectos_Estado CHECK (
+            estado IN (
+                N'planificado',
+                N'en_progreso',
+                N'en_revision',
+                N'entregado',
+                N'pausado',
+                N'cancelado'
+            )
+        ),
+        CONSTRAINT FK_Proyectos_Clientes FOREIGN KEY (cliente_id)
+            REFERENCES dbo.Clientes (id)
+    );
+END
+GO
+
+/* ==========================================================================
+   7. ProyectoTecnologia (N:M)
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.ProyectoTecnologia', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.ProyectoTecnologia (
+        proyecto_id    INT NOT NULL,
+        tecnologia_id  INT NOT NULL,
+        CONSTRAINT PK_ProyectoTecnologia
+            PRIMARY KEY (proyecto_id, tecnologia_id),
+        CONSTRAINT FK_ProyectoTecnologia_Proyectos
+            FOREIGN KEY (proyecto_id) REFERENCES dbo.Proyectos (id)
+            ON DELETE CASCADE,
+        CONSTRAINT FK_ProyectoTecnologia_Tecnologias
+            FOREIGN KEY (tecnologia_id) REFERENCES dbo.Tecnologias (id)
+    );
+END
+GO
+
+/* ==========================================================================
+   8. SolicitudesCotizacion
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.SolicitudesCotizacion', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.SolicitudesCotizacion (
+        id                    INT IDENTITY(1,1) NOT NULL,
+        cliente_id            INT               NULL,
+        servicio_id           INT               NULL,
+        nombre_contacto       NVARCHAR(120)     NOT NULL,
+        email                 NVARCHAR(254)     NOT NULL,
+        empresa               NVARCHAR(150)     NULL,
+        telefono              NVARCHAR(30)      NULL,
+        descripcion           NVARCHAR(MAX)     NOT NULL,
+        presupuesto_estimado  DECIMAL(12,2)     NULL,
+        estado                NVARCHAR(30)      NOT NULL
+            CONSTRAINT DF_Solicitudes_Estado DEFAULT N'nueva',
+        origen                NVARCHAR(20)      NOT NULL
+            CONSTRAINT DF_Solicitudes_Origen DEFAULT N'publico',
+        creado_en             DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Solicitudes_Creado DEFAULT SYSUTCDATETIME(),
+        actualizado_en        DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Solicitudes_Actualizado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_SolicitudesCotizacion PRIMARY KEY (id),
+        CONSTRAINT CK_Solicitudes_Estado CHECK (
+            estado IN (
+                N'nueva',
+                N'en_revision',
+                N'cotizada',
+                N'aceptada',
+                N'rechazada'
+            )
+        ),
+        CONSTRAINT CK_Solicitudes_Origen CHECK (
+            origen IN (N'publico', N'portal')
+        ),
+        CONSTRAINT CK_Solicitudes_Presupuesto CHECK (
+            presupuesto_estimado IS NULL OR presupuesto_estimado >= 0
+        ),
+        CONSTRAINT FK_Solicitudes_Clientes FOREIGN KEY (cliente_id)
+            REFERENCES dbo.Clientes (id) ON DELETE SET NULL,
+        CONSTRAINT FK_Solicitudes_Servicios FOREIGN KEY (servicio_id)
+            REFERENCES dbo.Servicios (id) ON DELETE SET NULL
+    );
+END
+GO
+
+/* ==========================================================================
+   9. MensajesContacto
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.MensajesContacto', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.MensajesContacto (
+        id           INT IDENTITY(1,1) NOT NULL,
+        nombre       NVARCHAR(120)     NOT NULL,
+        email        NVARCHAR(254)     NOT NULL,
+        asunto       NVARCHAR(150)     NOT NULL,
+        mensaje      NVARCHAR(MAX)     NOT NULL,
+        estado       NVARCHAR(20)      NOT NULL
+            CONSTRAINT DF_Mensajes_Estado DEFAULT N'nuevo',
+        creado_en    DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Mensajes_Creado DEFAULT SYSUTCDATETIME(),
+        atendido_en  DATETIME2(0)      NULL,
+        CONSTRAINT PK_MensajesContacto PRIMARY KEY (id),
+        CONSTRAINT CK_Mensajes_Estado CHECK (
+            estado IN (N'nuevo', N'en_revision', N'atendido', N'archivado')
+        )
+    );
+END
+GO
+
+/* ==========================================================================
+   Índices de consulta
+   ========================================================================== */
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Proyectos_Cliente'
+      AND object_id = OBJECT_ID(N'dbo.Proyectos')
+)
+BEGIN
+    CREATE INDEX IX_Proyectos_Cliente ON dbo.Proyectos (cliente_id);
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Proyectos_Estado_Publicado'
+      AND object_id = OBJECT_ID(N'dbo.Proyectos')
+)
+BEGIN
+    CREATE INDEX IX_Proyectos_Estado_Publicado
+        ON dbo.Proyectos (estado, publicado);
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Solicitudes_Estado'
+      AND object_id = OBJECT_ID(N'dbo.SolicitudesCotizacion')
+)
+BEGIN
+    CREATE INDEX IX_Solicitudes_Estado
+        ON dbo.SolicitudesCotizacion (estado);
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Solicitudes_Email'
+      AND object_id = OBJECT_ID(N'dbo.SolicitudesCotizacion')
+)
+BEGIN
+    CREATE INDEX IX_Solicitudes_Email
+        ON dbo.SolicitudesCotizacion (email);
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Mensajes_Estado'
+      AND object_id = OBJECT_ID(N'dbo.MensajesContacto')
+)
+BEGIN
+    CREATE INDEX IX_Mensajes_Estado ON dbo.MensajesContacto (estado);
+END
+GO
+
+PRINT 'Esquema DevStudioDB creado o actualizado correctamente.';
+GO

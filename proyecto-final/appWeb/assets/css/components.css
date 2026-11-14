@@ -438,3 +438,603 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ==========================================================================
+   Etapa 3 — Diagnóstico público y gestión de proyectos
+   ========================================================================== */
+
+.section__lead {
+  max-width: 65ch;
+  margin-bottom: var(--space-5);
+  color: var(--color-muted);
+}
+
+.section-head {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+/* Planes
+   ========================================================================== */
+
+.plan-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.plan--featured {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.plan__title {
+  margin-bottom: 0;
+  font-size: 1.25rem;
+}
+
+.plan__subtitle {
+  margin-bottom: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.plan__price {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.plan__price span {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.plan__price small {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.plan__description {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.plan__features {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+.plan__audience {
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.plan .btn {
+  margin-top: auto;
+}
+
+/* Wizard de diagnóstico
+   ========================================================================== */
+
+.wizard {
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.wizard__progress {
+  height: 0.4rem;
+  margin-bottom: var(--space-4);
+  overflow: hidden;
+  background: var(--color-bg);
+  border-radius: 999px;
+}
+
+.wizard__bar {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: inherit;
+  transition: width 200ms ease;
+}
+
+.wizard__steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+
+.wizard__step {
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--color-bg);
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.wizard__step.is-active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.wizard__step.is-done {
+  background: rgb(30 125 79 / 12%);
+  color: var(--color-success);
+}
+
+.wizard__form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.wizard__panel {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.wizard__legend {
+  padding: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.wizard__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.form-row {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+.input-suffix {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.input-suffix__text {
+  font-weight: 700;
+}
+
+.service-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+
+.service-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.service-option:hover {
+  border-color: var(--color-primary);
+}
+
+.service-option input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.2rem;
+  accent-color: var(--color-primary);
+}
+
+.service-option span {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.service-option small {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+/* Resultado del diagnóstico
+   ========================================================================== */
+
+.result {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+
+.result__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+}
+
+.result__subtitle {
+  margin: 0;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.result__price {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.result__text {
+  margin: 0;
+}
+
+.result__impact {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.result__impact div {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.result__impact-label {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Navegación del panel
+   ========================================================================== */
+
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-nav__link {
+  color: var(--color-muted);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-nav__link:hover,
+.admin-nav__link.is-active {
+  color: var(--color-primary-dark);
+}
+
+.admin-nav__link.is-active {
+  text-decoration: underline;
+  text-underline-offset: 0.35rem;
+}
+
+.admin-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+.panel__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.panel__header .panel__title {
+  margin-bottom: 0;
+}
+
+.module-links {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+
+.module-link {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.module-link:hover {
+  border-color: var(--color-primary);
+}
+
+.module-link span {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+/* Bandeja de solicitudes
+   ========================================================================== */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.toolbar .form__field {
+  min-width: 10rem;
+}
+
+.toolbar__search {
+  flex: 1 1 14rem;
+}
+
+.lead-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.lead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lead:hover,
+.lead.is-active {
+  border-color: var(--color-primary);
+  background: rgb(31 94 255 / 4%);
+}
+
+.lead__main,
+.lead__side {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.lead__side {
+  justify-items: start;
+}
+
+.lead__title {
+  font-weight: 800;
+}
+
+.lead__company,
+.lead__meta,
+.lead__plan,
+.lead__money {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.lead__money {
+  font-weight: 700;
+}
+
+.status--nueva,
+.status--cotizada,
+.status--planificado {
+  background: rgb(31 94 255 / 10%);
+  color: var(--color-primary-dark);
+}
+
+.status--en_revision,
+.status--en_progreso,
+.status--pausado {
+  background: rgb(183 121 31 / 12%);
+  color: var(--color-warning);
+}
+
+.status--aceptada,
+.status--entregado {
+  background: rgb(30 125 79 / 12%);
+  color: var(--color-success);
+}
+
+.status--rechazada,
+.status--cancelado {
+  background: rgb(192 57 43 / 10%);
+  color: var(--color-danger);
+}
+
+/* Detalle de solicitud
+   ========================================================================== */
+
+.detail-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--space-5);
+}
+
+.detail-grid__item {
+  display: grid;
+  gap: var(--space-1);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detail-label {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  overflow-wrap: anywhere;
+}
+
+.detail-block {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.convert-box {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+
+/* Tablas
+   ========================================================================== */
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table__meta {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.table__actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Mejoras para tablet y escritorio
+   ========================================================================== */
+
+@media (min-width: 480px) {
+  .form-row,
+  .result__impact,
+  .detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .plan-grid,
+  .service-grid,
+  .module-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .section-head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+
+  .section-head .section__lead {
+    margin-bottom: 0;
+  }
+
+  .plan-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .detail-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lead__side {
+    justify-items: end;
+    text-align: right;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}

@@ -10,6 +10,12 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 - Seed de desarrollo con datos de demostración: cuentas `admin`/`cliente`, 3 clientes, 6 proyectos con tecnologías, 5 solicitudes de cotización y 4 mensajes de contacto. Sigue siendo idempotente.
 - Contraseñas demo documentadas para probar login, portal y dashboard (`admin@devstudio.local` / `Admin#2026`, `cliente@devstudio.local` / `Cliente#2026`).
+- Migración `001_planes_diagnostico.sql` con la tabla `Planes` y los campos del diagnóstico.
+- Catálogo de planes, servicios públicos y `POST /diagnostico` con recomendación de plan en el servidor.
+- Bandeja administrativa de solicitudes: filtros, detalle, notas, cambio de plan/cliente/estado y conversión a proyecto.
+- CRUD básico de proyectos con publicación y destacado.
+- Router con parámetros dinámicos para recursos `/admin/*/{id}`.
+- Datos demo de planes y diagnósticos en `seed.sql`.
 
 ## [0.2.0] - 2026-11-13
 

@@ -18,8 +18,8 @@ $prefixes = [
     'App\\Models\\' => BASE_PATH . '/app/models/',
     'App\\Helpers\\' => BASE_PATH . '/app/helpers/',
     'App\\Middleware\\' => BASE_PATH . '/app/middleware/',
-    'App\\Config\\' => BASE_PATH . '/app/config/',
-];
+    'App\\Services\\' => BASE_PATH . '/app/services/',
+    'App\\Config\\' => BASE_PATH . '/app/config/',];
 
 spl_autoload_register(static function (string $class) use ($prefixes): void {
     foreach ($prefixes as $prefix => $directory) {

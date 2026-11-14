@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gestión de proyectos del panel administrativo.">
+  <title>Proyectos — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin-proyectos.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name">[Nombre de la empresa]</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Administración</p>
+        <h1 class="page__title">Proyectos</h1>
+        <p class="page__lead">
+          Crea proyectos a partir de una solicitud o manualmente, actualiza su
+          estado y publica los casos que quieras mostrar en el portafolio.
+        </p>
+      </header>
+
+      <nav class="admin-nav" aria-label="Secciones del panel">
+        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link is-active" href="/pages/admin/proyectos.html" aria-current="page">Proyectos</a>
+      </nav>
+
+      <div class="alert" id="admin-alert" role="alert" hidden></div>
+
+      <div class="admin-grid">
+        <section class="panel" aria-labelledby="proyecto-form-title">
+          <h2 class="panel__title" id="proyecto-form-title">Nuevo proyecto</h2>
+
+          <form class="form" id="proyecto-form">
+            <input type="hidden" id="proyecto-id" value="">
+
+            <div class="form__field">
+              <label class="form__label" for="proyecto-cliente">Cliente</label>
+              <select class="form__select" id="proyecto-cliente" required>
+                <option value="">Selecciona un cliente</option>
+              </select>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="proyecto-nombre">Nombre</label>
+              <input class="form__input" id="proyecto-nombre" type="text" minlength="3" maxlength="150" required>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="proyecto-descripcion">Descripción</label>
+              <textarea class="form__textarea" id="proyecto-descripcion" minlength="10" maxlength="5000" required></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form__field">
+                <label class="form__label" for="proyecto-estado">Estado</label>
+                <select class="form__select" id="proyecto-estado">
+                  <option value="planificado">Planificado</option>
+                  <option value="en_progreso">En progreso</option>
+                  <option value="en_revision">En revisión</option>
+                  <option value="entregado">Entregado</option>
+                  <option value="pausado">Pausado</option>
+                  <option value="cancelado">Cancelado</option>
+                </select>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="proyecto-url">URL demo</label>
+                <input class="form__input" id="proyecto-url" type="url" maxlength="300" placeholder="https://…">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form__field">
+                <label class="form__label" for="proyecto-inicio">Fecha de inicio</label>
+                <input class="form__input" id="proyecto-inicio" type="date">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="proyecto-fin">Fecha de fin</label>
+                <input class="form__input" id="proyecto-fin" type="date">
+              </div>
+            </div>
+
+            <div class="form__check">
+              <input type="checkbox" id="proyecto-publicado">
+              <label for="proyecto-publicado">Publicar en el portafolio</label>
+            </div>
+            <div class="form__check">
+              <input type="checkbox" id="proyecto-destacado">
+              <label for="proyecto-destacado">Destacar en la página principal</label>
+            </div>
+
+            <div class="hero__actions">
+              <button class="btn" type="submit" id="proyecto-guardar">Crear proyecto</button>
+              <button class="btn btn--secondary" type="button" id="proyecto-cancelar" hidden>Cancelar edición</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel" aria-labelledby="proyectos-lista-title">
+          <h2 class="panel__title" id="proyectos-lista-title">Listado</h2>
+          <div id="proyectos-lista" aria-live="polite">
+            <div class="empty-state">Cargando proyectos…</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

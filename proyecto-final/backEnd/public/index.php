@@ -2,11 +2,54 @@
 
 declare(strict_types=1);
 
+use App\Controllers\AdminClienteController;
 use App\Controllers\AdminController;
+use App\Controllers\AdminProyectoController;
+use App\Controllers\AdminSolicitudController;
 use App\Controllers\AuthController;
+use App\Controllers\CatalogoController;
+use App\Controllers\DiagnosticoController;
 use App\Controllers\HealthController;
 use App\Helpers\Request;
 use App\Helpers\Response;
+
+/**
+ * @return array<string, int|string>|null
+ */
+function matchPath(string $pattern, string $path): ?array
+{
+    if ($pattern === $path) {
+        return [];
+    }
+
+    $patternParts = explode('/', trim($pattern, '/'));
+    $pathParts = explode('/', trim($path, '/'));
+
+    if (count($patternParts) !== count($pathParts)) {
+        return null;
+    }
+
+    $params = [];
+
+    foreach ($patternParts as $index => $part) {
+        if (preg_match('/^\{([a-zA-Z_][a-zA-Z0-9_]*)\}$/', $part, $matches) === 1) {
+            $value = $pathParts[$index];
+
+            if ($matches[1] === 'id' && !ctype_digit($value)) {
+                return null;
+            }
+
+            $params[$matches[1]] = $matches[1] === 'id' ? (int) $value : $value;
+            continue;
+        }
+
+        if ($part !== $pathParts[$index]) {
+            return null;
+        }
+    }
+
+    return $params;
+}
 
 try {
     require __DIR__ . '/../config/bootstrap.php';
@@ -17,6 +60,10 @@ try {
         'GET /api/v1' => [HealthController::class, 'info'],
         'GET /api/v1/health' => [HealthController::class, 'health'],
 
+        'GET /api/v1/planes' => [CatalogoController::class, 'planes'],
+        'GET /api/v1/servicios' => [CatalogoController::class, 'servicios'],
+        'POST /api/v1/diagnostico' => [DiagnosticoController::class, 'create'],
+
         'GET /api/v1/auth/csrf' => [AuthController::class, 'csrf'],
         'POST /api/v1/auth/login' => [AuthController::class, 'login'],
         'POST /api/v1/auth/logout' => [AuthController::class, 'logout'],
@@ -25,15 +72,35 @@ try {
         'PATCH /api/v1/auth/password' => [AuthController::class, 'changePassword'],
 
         'GET /api/v1/admin/dashboard' => [AdminController::class, 'dashboard'],
+        'GET /api/v1/admin/clientes' => [AdminClienteController::class, 'index'],
+        'GET /api/v1/admin/solicitudes' => [AdminSolicitudController::class, 'index'],
+        'GET /api/v1/admin/solicitudes/{id}' => [AdminSolicitudController::class, 'show'],
+        'PATCH /api/v1/admin/solicitudes/{id}' => [AdminSolicitudController::class, 'update'],
+        'POST /api/v1/admin/solicitudes/{id}/convertir' => [AdminSolicitudController::class, 'convertir'],
+        'GET /api/v1/admin/proyectos' => [AdminProyectoController::class, 'index'],
+        'GET /api/v1/admin/proyectos/{id}' => [AdminProyectoController::class, 'show'],
+        'POST /api/v1/admin/proyectos' => [AdminProyectoController::class, 'store'],
+        'PATCH /api/v1/admin/proyectos/{id}' => [AdminProyectoController::class, 'update'],
     ];
 
     $method = Request::method();
     $path = Request::path();
-    $routeKey = $method . ' ' . $path;
 
-    if (isset($routes[$routeKey])) {
-        [$controller, $action] = $routes[$routeKey];
-        (new $controller())->$action();
+    foreach ($routes as $key => $handler) {
+        [$routeMethod, $routePath] = explode(' ', $key, 2);
+
+        if ($routeMethod !== $method) {
+            continue;
+        }
+
+        $params = matchPath($routePath, $path);
+
+        if ($params === null) {
+            continue;
+        }
+
+        [$controller, $action] = $handler;
+        (new $controller())->$action(...array_values($params));
         exit;
     }
 
@@ -42,7 +109,7 @@ try {
     foreach ($routes as $key => $handler) {
         [$routeMethod, $routePath] = explode(' ', $key, 2);
 
-        if ($routePath === $path) {
+        if (matchPath($routePath, $path) !== null) {
             $allowed[] = $routeMethod;
         }
     }

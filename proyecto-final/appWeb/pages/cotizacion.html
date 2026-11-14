@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Diagnóstico digital y planes de [Nombre de la empresa] para hacer crecer tu negocio.">
+  <title>Diagnóstico y planes — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/cotizacion.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name">[Nombre de la empresa]</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li><a class="site-nav__link" href="/pages/cotizacion.html" aria-current="page">Diagnóstico</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">
+            Cerrar sesión
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero">
+      <div class="container">
+        <p class="hero__eyebrow">Diagnóstico y plan personalizado</p>
+        <h1 class="hero__title">Convirtamos tus objetivos en un plan de software</h1>
+        <p class="hero__lead">
+          Cuéntanos qué necesitas, cuánto quieres crecer y qué procesos quieres
+          eficientar. Te propondremos el plan que mejor se ajusta a tu etapa.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="#diagnostico">Iniciar diagnóstico</a>
+          <a class="btn btn--secondary" href="#planes">Ver planes</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="planes">
+      <div class="container">
+        <h2 class="section__title">Planes para cada etapa</h2>
+        <p class="section__lead">
+          Precios de referencia en MXN. El alcance final se define después del
+          diagnóstico.
+        </p>
+        <div class="plan-grid" id="planes-lista" aria-live="polite">
+          <div class="empty-state">Cargando planes…</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted" id="diagnostico">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="hero__eyebrow">Paso a paso</p>
+            <h2 class="section__title">Diagnóstico de tu proyecto</h2>
+          </div>
+          <p class="section__lead">
+            Toma menos de 5 minutos. No crea una cuenta y no compromete tu
+            presupuesto.
+          </p>
+        </div>
+
+        <div class="wizard">
+          <div class="wizard__progress" aria-hidden="true">
+            <span class="wizard__bar" data-wizard-bar></span>
+          </div>
+          <ol class="wizard__steps" aria-label="Pasos del diagnóstico">
+            <li class="wizard__step is-active" data-step-label="1">1. Contacto</li>
+            <li class="wizard__step" data-step-label="2">2. Necesidades</li>
+            <li class="wizard__step" data-step-label="3">3. Objetivos</li>
+            <li class="wizard__step" data-step-label="4">4. Resultado</li>
+          </ol>
+
+          <div class="alert" id="diagnostico-alert" role="alert" hidden></div>
+
+          <form class="form wizard__form" id="diagnostico-form" novalidate>
+            <fieldset class="wizard__panel" data-step="1">
+              <legend class="wizard__legend">Datos de contacto</legend>
+              <p class="form__hint">
+                Usaremos estos datos solo para dar seguimiento a tu diagnóstico.
+              </p>
+
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="nombre_contacto">Nombre completo</label>
+                  <input class="form__input" id="nombre_contacto" name="nombre_contacto" type="text" autocomplete="name" minlength="2" maxlength="120" required>
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="email">Correo electrónico</label>
+                  <input class="form__input" id="email" name="email" type="email" autocomplete="email" maxlength="254" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="empresa">Empresa</label>
+                  <input class="form__input" id="empresa" name="empresa" type="text" autocomplete="organization" minlength="2" maxlength="150" required>
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="giro">Giro o industria</label>
+                  <input class="form__input" id="giro" name="giro" type="text" maxlength="100" placeholder="Comercio, salud, educación…">
+                </div>
+              </div>
+
+              <div class="form__field">
+                <label class="form__label" for="telefono">Teléfono <span class="form__hint">(opcional)</span></label>
+                <input class="form__input" id="telefono" name="telefono" type="tel" autocomplete="tel" minlength="7" maxlength="30">
+              </div>
+            </fieldset>
+
+            <fieldset class="wizard__panel" data-step="2" hidden>
+              <legend class="wizard__legend">Tus necesidades</legend>
+              <p class="form__hint">Selecciona todo lo que aplique.</p>
+              <div class="service-grid" id="servicios-lista"></div>
+
+              <div class="form__field">
+                <label class="form__label" for="necesidades">¿Qué quieres resolver?</label>
+                <textarea class="form__textarea" id="necesidades" name="necesidades" minlength="10" maxlength="5000" required placeholder="Ej. Necesitamos un portal para que nuestros clientes consulten pedidos y un tablero de ventas."></textarea>
+              </div>
+
+              <div class="form__field">
+                <label class="form__label" for="procesos_automatizar">¿Qué procesos quieres eficientar? <span class="form__hint">(opcional)</span></label>
+                <textarea class="form__textarea" id="procesos_automatizar" name="procesos_automatizar" maxlength="5000" placeholder="Ej. Reportes manuales, seguimiento de prospectos, facturación."></textarea>
+              </div>
+            </fieldset>
+
+            <fieldset class="wizard__panel" data-step="3" hidden>
+              <legend class="wizard__legend">Objetivos y contexto</legend>
+
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="meta_crecimiento_pct">Crecimiento esperado en ventas o ganancias</label>
+                  <div class="input-suffix">
+                    <input class="form__input" id="meta_crecimiento_pct" name="meta_crecimiento_pct" type="number" min="0" max="1000" step="1" value="20" required>
+                    <span class="input-suffix__text">%</span>
+                  </div>
+                  <p class="form__hint">Es una meta, no una garantía de resultados.</p>
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="ahorro_horas_semana">Horas que esperas ahorrar por semana</label>
+                  <input class="form__input" id="ahorro_horas_semana" name="ahorro_horas_semana" type="number" min="0" max="168" step="1" value="8" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="presupuesto_estimado">Presupuesto estimado</label>
+                  <select class="form__select" id="presupuesto_estimado" name="presupuesto_estimado" required>
+                    <option value="">Selecciona un rango</option>
+                    <option value="18000">Hasta $18,000 MXN</option>
+                    <option value="45000">$18,000 – $45,000 MXN</option>
+                    <option value="95000">$45,000 – $95,000 MXN</option>
+                    <option value="150000">$95,000 – $150,000 MXN</option>
+                    <option value="250000">Más de $150,000 MXN</option>
+                  </select>
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="plazo_deseado">Plazo deseado</label>
+                  <select class="form__select" id="plazo_deseado" name="plazo_deseado" required>
+                    <option value="">Selecciona un plazo</option>
+                    <option value="1 a 2 meses">1 a 2 meses</option>
+                    <option value="1 a 3 meses">1 a 3 meses</option>
+                    <option value="2 a 4 meses">2 a 4 meses</option>
+                    <option value="3 a 6 meses">3 a 6 meses</option>
+                    <option value="más de 6 meses">Más de 6 meses</option>
+                    <option value="listo para iniciar">Listo para iniciar</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form__field">
+                <label class="form__label" for="etapa_decision">¿En qué etapa estás?</label>
+                <select class="form__select" id="etapa_decision" name="etapa_decision" required>
+                  <option value="">Selecciona una opción</option>
+                  <option value="explorando">Explorando opciones</option>
+                  <option value="evaluando">Evaluando necesidades</option>
+                  <option value="comparando opciones">Comparando proveedores</option>
+                  <option value="lista para iniciar">Lista para iniciar</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <fieldset class="wizard__panel" data-step="4" hidden>
+              <legend class="wizard__legend">Tu plan recomendado</legend>
+              <div id="resultado" aria-live="polite">
+                <div class="empty-state">
+                  Completa los pasos anteriores y envía el diagnóstico para ver tu
+                  recomendación.
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="wizard__nav">
+              <button class="btn btn--secondary" type="button" data-wizard-prev hidden>Anterior</button>
+              <button class="btn" type="button" data-wizard-next>Siguiente</button>
+              <button class="btn" type="submit" data-wizard-submit hidden>Enviar diagnóstico</button>
+              <a class="btn btn--ghost" href="/index.html" data-wizard-restart hidden>Volver al inicio</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

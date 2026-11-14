@@ -206,7 +206,44 @@ END
 GO
 
 /* ==========================================================================
-   8. SolicitudesCotizacion
+   8. Planes
+   ========================================================================== */
+
+IF OBJECT_ID(N'dbo.Planes', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Planes (
+        id              INT IDENTITY(1,1) NOT NULL,
+        slug            NVARCHAR(80)      NOT NULL,
+        nombre          NVARCHAR(120)     NOT NULL,
+        subtitulo       NVARCHAR(200)     NULL,
+        descripcion     NVARCHAR(MAX)     NOT NULL,
+        precio_desde    DECIMAL(12,2)     NOT NULL
+            CONSTRAINT DF_Planes_PrecioDesde DEFAULT (0),
+        precio_hasta    DECIMAL(12,2)     NULL,
+        caracteristicas NVARCHAR(MAX)     NULL,
+        dirigido_a      NVARCHAR(200)     NULL,
+        destacado       BIT               NOT NULL
+            CONSTRAINT DF_Planes_Destacado DEFAULT (0),
+        activo          BIT               NOT NULL
+            CONSTRAINT DF_Planes_Activo DEFAULT (1),
+        orden           INT               NOT NULL
+            CONSTRAINT DF_Planes_Orden DEFAULT (0),
+        creado_en       DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Planes_Creado DEFAULT SYSUTCDATETIME(),
+        actualizado_en  DATETIME2(0)      NOT NULL
+            CONSTRAINT DF_Planes_Actualizado DEFAULT SYSUTCDATETIME(),
+        CONSTRAINT PK_Planes PRIMARY KEY (id),
+        CONSTRAINT UQ_Planes_Slug UNIQUE (slug),
+        CONSTRAINT CK_Planes_Precios CHECK (
+            precio_desde >= 0
+            AND (precio_hasta IS NULL OR precio_hasta >= precio_desde)
+        )
+    );
+END
+GO
+
+/* ==========================================================================
+   9. SolicitudesCotizacion
    ========================================================================== */
 
 IF OBJECT_ID(N'dbo.SolicitudesCotizacion', N'U') IS NULL
@@ -215,11 +252,24 @@ BEGIN
         id                    INT IDENTITY(1,1) NOT NULL,
         cliente_id            INT               NULL,
         servicio_id           INT               NULL,
+        plan_id               INT               NULL,
+        proyecto_id           INT               NULL,
         nombre_contacto       NVARCHAR(120)     NOT NULL,
         email                 NVARCHAR(254)     NOT NULL,
         empresa               NVARCHAR(150)     NULL,
+        giro                  NVARCHAR(100)     NULL,
         telefono              NVARCHAR(30)      NULL,
         descripcion           NVARCHAR(MAX)     NOT NULL,
+        necesidades           NVARCHAR(MAX)     NULL,
+        servicios_interes     NVARCHAR(MAX)     NULL,
+        meta_crecimiento_pct  DECIMAL(5,2)      NULL,
+        ahorro_horas_semana   INT               NULL,
+        procesos_automatizar  NVARCHAR(MAX)     NULL,
+        plazo_deseado         NVARCHAR(50)      NULL,
+        etapa_decision        NVARCHAR(30)      NULL,
+        puntaje               INT               NULL,
+        recomendacion         NVARCHAR(MAX)     NULL,
+        notas_admin           NVARCHAR(MAX)     NULL,
         presupuesto_estimado  DECIMAL(12,2)     NULL,
         estado                NVARCHAR(30)      NOT NULL
             CONSTRAINT DF_Solicitudes_Estado DEFAULT N'nueva',
@@ -245,16 +295,31 @@ BEGIN
         CONSTRAINT CK_Solicitudes_Presupuesto CHECK (
             presupuesto_estimado IS NULL OR presupuesto_estimado >= 0
         ),
+        CONSTRAINT CK_Solicitudes_Meta CHECK (
+            meta_crecimiento_pct IS NULL
+            OR (meta_crecimiento_pct >= 0 AND meta_crecimiento_pct <= 1000)
+        ),
+        CONSTRAINT CK_Solicitudes_Ahorro CHECK (
+            ahorro_horas_semana IS NULL
+            OR (ahorro_horas_semana >= 0 AND ahorro_horas_semana <= 168)
+        ),
+        CONSTRAINT CK_Solicitudes_Puntaje CHECK (
+            puntaje IS NULL OR puntaje >= 0
+        ),
         CONSTRAINT FK_Solicitudes_Clientes FOREIGN KEY (cliente_id)
             REFERENCES dbo.Clientes (id) ON DELETE SET NULL,
         CONSTRAINT FK_Solicitudes_Servicios FOREIGN KEY (servicio_id)
-            REFERENCES dbo.Servicios (id) ON DELETE SET NULL
+            REFERENCES dbo.Servicios (id) ON DELETE SET NULL,
+        CONSTRAINT FK_Solicitudes_Planes FOREIGN KEY (plan_id)
+            REFERENCES dbo.Planes (id) ON DELETE SET NULL,
+        CONSTRAINT FK_Solicitudes_Proyectos FOREIGN KEY (proyecto_id)
+            REFERENCES dbo.Proyectos (id) ON DELETE SET NULL
     );
 END
 GO
 
 /* ==========================================================================
-   9. MensajesContacto
+   10. MensajesContacto
    ========================================================================== */
 
 IF OBJECT_ID(N'dbo.MensajesContacto', N'U') IS NULL
@@ -322,6 +387,17 @@ IF NOT EXISTS (
 BEGIN
     CREATE INDEX IX_Solicitudes_Email
         ON dbo.SolicitudesCotizacion (email);
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Solicitudes_Plan'
+      AND object_id = OBJECT_ID(N'dbo.SolicitudesCotizacion')
+)
+BEGIN
+    CREATE INDEX IX_Solicitudes_Plan
+        ON dbo.SolicitudesCotizacion (plan_id);
 END
 GO
 

@@ -86,7 +86,7 @@ Verificar las extensiones de PHP:
 docker compose exec api php -m | grep -i sqlsrv
 ```
 
-Cargar el esquema y los datos iniciales:
+Cargar el esquema y los datos iniciales (incluye cuentas y datos de demostración):
 
 ```bash
 docker compose exec -T mssql /bin/bash -c \
@@ -98,13 +98,15 @@ docker compose exec -T mssql /bin/bash -c \
   < backEnd/database/seed.sql
 ```
 
-Crear el administrador inicial:
+Cuentas de prueba: `admin@devstudio.local` / `Admin#2026` y `cliente@devstudio.local` / `Cliente#2026`.
+
+Crear el administrador inicial con tus propias variables (opcional; el seed ya crea un administrador):
 
 ```bash
 docker compose exec api php scripts/crear-admin.php
 ```
 
-Entrar a <http://localhost:8080/pages/login.html> con `ADMIN_EMAIL` y `ADMIN_PASSWORD`.
+Entrar a <http://localhost:8080/pages/login.html> con las credenciales de prueba o con `ADMIN_EMAIL` y `ADMIN_PASSWORD` si ejecutaste el script.
 
 Detener el entorno:
 

@@ -8,7 +8,8 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ### Added
 
-- Nada por ahora.
+- Seed de desarrollo con datos de demostración: cuentas `admin`/`cliente`, 3 clientes, 6 proyectos con tecnologías, 5 solicitudes de cotización y 4 mensajes de contacto. Sigue siendo idempotente.
+- Contraseñas demo documentadas para probar login, portal y dashboard (`admin@devstudio.local` / `Admin#2026`, `cliente@devstudio.local` / `Cliente#2026`).
 
 ## [0.2.0] - 2026-11-13
 

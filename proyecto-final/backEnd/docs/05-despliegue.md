@@ -100,6 +100,8 @@ docker compose exec -T mssql /bin/bash -c \
 
 ### 5.3 Crear el administrador inicial
 
+El `seed.sql` de desarrollo ya crea `admin@devstudio.local` con la contraseña temporal `Admin#2026`. Si prefieres usar tus propias variables `ADMIN_*`, ejecuta:
+
 ```bash
 docker compose exec api php scripts/crear-admin.php
 ```

@@ -24,7 +24,7 @@ Lineamientos obligatorios para la implementación del backend y del frontend.
 - Política mínima: 8 caracteres, una mayúscula, una minúscula y un número.
 - Nunca registrar contraseñas ni hashes en logs.
 - No devolver `password_hash` en ninguna respuesta.
-- El administrador inicial se crea con `scripts/crear-admin.php` usando `ADMIN_PASSWORD`; no hay contraseñas en `seed.sql`.
+- El administrador inicial se crea con `scripts/crear-admin.php` usando `ADMIN_PASSWORD`. El `seed.sql` de desarrollo incluye cuentas demo con hashes precalculados; no usar esas credenciales en producción.
 - Cambiar `ADMIN_PASSWORD` y la contraseña del administrador antes de desplegar.
 
 ## 3. Sesiones

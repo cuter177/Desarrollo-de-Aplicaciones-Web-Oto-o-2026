@@ -19,4 +19,6 @@ Variables leídas de `.env` (o del entorno del contenedor):
 
 El script es idempotente: si el correo ya existe, no lo modifica. Requiere haber ejecutado `seed.sql` para que exista el rol `admin`.
 
+> El `seed.sql` de desarrollo ya crea `admin@devstudio.local` / `Admin#2026` y tres clientes de prueba. El script resulta útil cuando quieres crear el administrador con tus propias variables `ADMIN_*` en lugar de usar la cuenta demo.
+
 > Cambiar la contraseña de ejemplo antes de cualquier despliegue real.

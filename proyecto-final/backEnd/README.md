@@ -28,7 +28,7 @@ backEnd/
 
 `0.2.0` — Base de datos y autenticación implementadas:
 
-- Esquema completo e idempotente en `database/schema.sql` y catálogos en `database/seed.sql`.
+- Esquema completo e idempotente en `database/schema.sql` y catálogos con datos de demostración en `database/seed.sql` (usuarios, clientes, proyectos, solicitudes y mensajes).
 - Router en `public/index.php` con rutas `/api/v1/*`.
 - Registro de clientes, login, logout, sesión por cookie, `GET /auth/me` y cambio de contraseña.
 - Roles `admin`/`cliente` verificados en el servidor; dashboard administrativo protegido.

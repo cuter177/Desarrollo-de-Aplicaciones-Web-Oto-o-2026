@@ -79,7 +79,7 @@ Servicios disponibles:
 | Health check | <http://localhost:8080/api/v1/health> |
 | SQL Server | `localhost:1433` |
 
-Cargar el esquema y los catálogos iniciales:
+Cargar el esquema y los datos iniciales (catálogos, cuentas y datos de demostración):
 
 ```bash
 docker compose exec -T mssql /bin/bash -c \
@@ -91,15 +91,23 @@ docker compose exec -T mssql /bin/bash -c \
   < backEnd/database/seed.sql
 ```
 
-Crear el administrador inicial (usa `ADMIN_*` de `.env`):
+El seed es idempotente e incluye cuentas de prueba:
 
-```bash
-docker compose exec api php scripts/crear-admin.php
-```
+| Rol | Correo | Contraseña |
+|---|---|---|
+| `admin` | `admin@devstudio.local` | `Admin#2026` |
+| `cliente` | `cliente@devstudio.local` | `Cliente#2026` |
+| `cliente` | `carlos.ruiz@innovatech.mx` | `Cliente#2026` |
+| `cliente` | `ana.torres@nexoclinica.com` | `Cliente#2026` |
+
+> Las contraseñas del seed son solo para desarrollo; cámbialas antes de cualquier despliegue.
+> Si prefieres crear el administrador con tus propias variables `ADMIN_*`, ejecuta
+> `docker compose exec api php scripts/crear-admin.php` después del seed. El script no modifica
+> una cuenta existente.
 
 > Si tu instalación usa la ruta antigua de las herramientas, cambia `/opt/mssql-tools18/bin/sqlcmd` por `/opt/mssql-tools/bin/sqlcmd`.
 
-Abrir <http://localhost:8080/pages/login.html> e iniciar sesión con el correo y la contraseña definidos en `ADMIN_EMAIL` y `ADMIN_PASSWORD`.
+Abrir <http://localhost:8080/pages/login.html> e iniciar sesión con alguna de las cuentas de prueba.
 
 Los pasos completos, la conexión desde Azure Data Studio o DBeaver y la solución de problemas están en el [manual técnico](docs/03-manual-tecnico/README.md).
 

@@ -6,12 +6,16 @@ Interfaz del proyecto: sitio público, portal de cliente y panel administrativo.
 
 ```text
 appWeb/
-├── index.html                 # Inicio con navegación dinámica
+├── index.html                 # Inicio, propuesta de valor y acceso al diagnóstico
 ├── pages/
+│   ├── cotizacion.html        # Planes y wizard de diagnóstico
 │   ├── login.html             # Inicio de sesión
 │   ├── registro.html          # Registro de cliente
 │   ├── portal/index.html      # Portal del cliente (protegido)
-│   └── admin/dashboard.html   # Dashboard administrativo (protegido)
+│   └── admin/
+│       ├── dashboard.html     # Métricas y solicitudes recientes
+│       ├── solicitudes.html   # Bandeja y detalle de solicitudes
+│       └── proyectos.html     # Alta y edición de proyectos
 ├── assets/
 │   ├── css/                   # main.css (base) y components.css (UI)
 │   ├── js/                    # api.js, auth.js, ui.js, app.js y pages/
@@ -24,14 +28,18 @@ appWeb/
 
 ## Estado actual
 
-`0.2.0` — Autenticación conectada a la API:
+`0.3.0` — Diagnóstico público y gestión de proyectos:
 
-- Login, registro de cliente y cierre de sesión.
-- Restauración de sesión con `GET /auth/me` y header dinámico por rol.
-- Portal de cliente y dashboard administrativo protegidos en el front y en el backend.
+- Página pública de planes con los planes Esencial, Crecimiento y Transformación.
+- Wizard de diagnóstico en cuatro pasos con validación por paso y resultado recomendado.
+- Dashboard administrativo con pipeline, conversión, crecimiento promedio y leads recientes.
+- Bandeja de solicitudes con filtros, detalle, notas, cambio de plan/cliente/estado y conversión a proyecto.
+- Gestión de proyectos con alta, edición, estado, fechas y publicación.
+- Login, registro, cierre de sesión y header dinámico por rol.
+- Portal de cliente y panel administrativo protegidos en el front y en el backend.
 - Manejo de CSRF, errores de validación y estados de carga.
 
-El sitio público completo y los módulos de negocio siguen pendientes.
+Los catálogos públicos completos, el detalle del portal y los CRUD restantes siguen pendientes.
 
 ## Desarrollo
 
@@ -49,6 +57,7 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 ## Integración con la API
 
 - Base: `/api/v1` (mismo origen).
+- El wizard público consume `GET /planes`, `GET /servicios` y `POST /diagnostico`.
 - Las peticiones incluyen cookies: `fetch(url, { credentials: 'same-origin' })`.
 - Antes de una mutación se obtiene el token con `GET /auth/csrf`; después del login se usa el `csrf_token` devuelto.
 - Las mutaciones envían `X-CSRF-Token` y el backend responde `403 CSRF_INVALIDO` si falta o no coincide.
@@ -61,10 +70,13 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 | Página | Ruta | Acceso |
 |---|---|---|
 | Inicio | `/index.html` | Público |
+| Diagnóstico y planes | `/pages/cotizacion.html` | Público |
 | Login | `/pages/login.html` | Público; redirige si hay sesión |
 | Registro | `/pages/registro.html` | Público; redirige si hay sesión |
 | Portal | `/pages/portal/index.html` | `cliente` y `admin` |
 | Dashboard | `/pages/admin/dashboard.html` | Solo `admin` |
+| Solicitudes | `/pages/admin/solicitudes.html` | Solo `admin` |
+| Proyectos | `/pages/admin/proyectos.html` | Solo `admin` |
 
 ## Convenciones
 
@@ -87,8 +99,8 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 
 ## Páginas previstas
 
-- Públicas: inicio, servicios, detalle de servicio, portafolio, detalle de caso, nosotros, contacto, cotización, login y registro.
-- Cliente: resumen, proyectos, detalle de proyecto, solicitudes, detalle de solicitud y perfil.
-- Admin: dashboard, usuarios, clientes, servicios, proyectos, tecnologías, solicitudes y mensajes.
+- Públicas pendientes: servicios, detalle de servicio, portafolio, detalle de caso, nosotros y contacto.
+- Cliente pendientes: resumen completo, proyectos, detalle de proyecto, solicitudes, detalle de solicitud y perfil.
+- Admin pendientes: usuarios, clientes, servicios, tecnologías y mensajes.
 
 El detalle está en [`docs/02-paginas-y-componentes.md`](docs/02-paginas-y-componentes.md).

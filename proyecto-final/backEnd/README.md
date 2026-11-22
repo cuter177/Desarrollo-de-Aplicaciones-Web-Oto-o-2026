@@ -26,7 +26,7 @@ backEnd/
 
 ## Estado actual
 
-`0.4.0` — Sitio público completo y bandeja de mensajes:
+`0.5.0` — Portal `/mi/*` y CRUD de usuarios, clientes, servicios y tecnologías:
 
 - Esquema completo e idempotente en `database/schema.sql`, migraciones incrementales en `database/migrations/` y datos de demostración en `database/seed.sql`.
 - Catálogo de planes (`Planes`) y campos de diagnóstico en `SolicitudesCotizacion`.
@@ -36,11 +36,12 @@ backEnd/
 - Bandeja administrativa de solicitudes con filtros, detalle, notas, cambio de plan/cliente/estado y conversión a proyecto.
 - Gestión administrativa de proyectos con alta, edición, estado, publicación y contenido de caso.
 - Bandeja administrativa de mensajes con filtros, detalle y cambio de estado.
-- Router con parámetros dinámicos (`/admin/solicitudes/{id}`, `/admin/proyectos/{id}`, `/admin/mensajes/{id}`, `/portafolio/{slug}`).
+- Router con parámetros dinámicos para recursos públicos y administrativos.
 - Registro de clientes, login, logout, sesión por cookie, roles, CSRF, rate limit y health check real.
+- Portal `/mi/*` con resumen, proyectos, solicitudes y perfil aislados por la sesión.
+- CRUD administrativo de usuarios, clientes, servicios y tecnologías, con desactivación lógica.
 - Script `scripts/crear-admin.php` para el administrador inicial.
-
-El portal `/mi/*` y los CRUD de usuarios/servicios/tecnologías siguen pendientes.
+- Verificación de portal, roles y CRUD con `../scripts/probar-api.sh`.
 
 ## Documentación
 

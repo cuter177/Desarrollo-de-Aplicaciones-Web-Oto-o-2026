@@ -19,7 +19,7 @@ Aplicación web para una empresa desarrolladora de software dedicada a sitios we
 
 ## Estado actual
 
-`0.4.0` — Sitio público completo y bandeja de mensajes.
+`0.5.0` — Portal del cliente y CRUD administrativo de usuarios, clientes, servicios y tecnologías.
 
 | Experiencia | Estado |
 |---|---|

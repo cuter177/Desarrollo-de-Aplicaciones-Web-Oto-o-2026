@@ -6,12 +6,16 @@ use App\Controllers\AdminClienteController;
 use App\Controllers\AdminController;
 use App\Controllers\AdminMensajeController;
 use App\Controllers\AdminProyectoController;
+use App\Controllers\AdminServicioController;
 use App\Controllers\AdminSolicitudController;
+use App\Controllers\AdminTecnologiaController;
+use App\Controllers\AdminUsuarioController;
 use App\Controllers\AuthController;
 use App\Controllers\CatalogoController;
 use App\Controllers\ContactoController;
 use App\Controllers\DiagnosticoController;
 use App\Controllers\HealthController;
+use App\Controllers\PortalController;
 use App\Helpers\Request;
 use App\Helpers\Response;
 
@@ -79,8 +83,35 @@ try {
         'POST /api/v1/auth/registro' => [AuthController::class, 'register'],
         'PATCH /api/v1/auth/password' => [AuthController::class, 'changePassword'],
 
+        'GET /api/v1/mi/resumen' => [PortalController::class, 'resumen'],
+        'GET /api/v1/mi/proyectos' => [PortalController::class, 'proyectos'],
+        'GET /api/v1/mi/proyectos/{id}' => [PortalController::class, 'proyecto'],
+        'GET /api/v1/mi/solicitudes' => [PortalController::class, 'solicitudes'],
+        'GET /api/v1/mi/solicitudes/{id}' => [PortalController::class, 'solicitud'],
+        'POST /api/v1/mi/solicitudes' => [PortalController::class, 'crearSolicitud'],
+        'GET /api/v1/mi/perfil' => [PortalController::class, 'perfil'],
+        'PATCH /api/v1/mi/perfil' => [PortalController::class, 'actualizarPerfil'],
+
         'GET /api/v1/admin/dashboard' => [AdminController::class, 'dashboard'],
+        'GET /api/v1/admin/roles' => [AdminUsuarioController::class, 'roles'],
+        'GET /api/v1/admin/usuarios' => [AdminUsuarioController::class, 'index'],
+        'POST /api/v1/admin/usuarios' => [AdminUsuarioController::class, 'store'],
+        'GET /api/v1/admin/usuarios/{id}' => [AdminUsuarioController::class, 'show'],
+        'PATCH /api/v1/admin/usuarios/{id}' => [AdminUsuarioController::class, 'update'],
+        'PATCH /api/v1/admin/usuarios/{id}/estado' => [AdminUsuarioController::class, 'estado'],
         'GET /api/v1/admin/clientes' => [AdminClienteController::class, 'index'],
+        'POST /api/v1/admin/clientes' => [AdminClienteController::class, 'store'],
+        'GET /api/v1/admin/clientes/{id}' => [AdminClienteController::class, 'show'],
+        'PATCH /api/v1/admin/clientes/{id}' => [AdminClienteController::class, 'update'],
+        'GET /api/v1/admin/servicios' => [AdminServicioController::class, 'index'],
+        'POST /api/v1/admin/servicios' => [AdminServicioController::class, 'store'],
+        'GET /api/v1/admin/servicios/{id}' => [AdminServicioController::class, 'show'],
+        'PATCH /api/v1/admin/servicios/{id}' => [AdminServicioController::class, 'update'],
+        'DELETE /api/v1/admin/servicios/{id}' => [AdminServicioController::class, 'destroy'],
+        'GET /api/v1/admin/tecnologias' => [AdminTecnologiaController::class, 'index'],
+        'POST /api/v1/admin/tecnologias' => [AdminTecnologiaController::class, 'store'],
+        'PATCH /api/v1/admin/tecnologias/{id}' => [AdminTecnologiaController::class, 'update'],
+        'DELETE /api/v1/admin/tecnologias/{id}' => [AdminTecnologiaController::class, 'destroy'],
         'GET /api/v1/admin/solicitudes' => [AdminSolicitudController::class, 'index'],
         'GET /api/v1/admin/solicitudes/{id}' => [AdminSolicitudController::class, 'show'],
         'PATCH /api/v1/admin/solicitudes/{id}' => [AdminSolicitudController::class, 'update'],

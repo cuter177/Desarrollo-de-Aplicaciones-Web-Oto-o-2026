@@ -26,10 +26,18 @@ final class Request
 
     public static function json(): array
     {
+        static $cached = null;
+
+        if (is_array($cached)) {
+            return $cached;
+        }
+
         $raw = file_get_contents('php://input');
 
         if ($raw === false || trim($raw) === '') {
-            return [];
+            $cached = [];
+
+            return $cached;
         }
 
         $data = json_decode($raw, true);
@@ -42,7 +50,22 @@ final class Request
             );
         }
 
-        return $data;
+        $cached = $data;
+
+        return $cached;
+    }
+
+    public static function query(string $key): ?string
+    {
+        $value = $_GET[$key] ?? null;
+
+        if (!is_string($value)) {
+            return null;
+        }
+
+        $value = trim($value);
+
+        return $value === '' ? null : $value;
     }
 
     public static function header(string $name): ?string

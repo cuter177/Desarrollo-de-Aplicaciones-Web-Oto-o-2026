@@ -22,7 +22,7 @@ final class SiteConfig
         ], static fn (?string $value): bool => $value !== null);
 
         return [
-            'nombre' => self::text('APP_NAME', '[Nombre de la empresa]'),
+            'nombre' => self::text('APP_NAME', 'DevStudio'),
             'tagline' => self::text('COMPANY_TAGLINE', 'Software que hace crecer tu negocio'),
             'descripcion' => self::text(
                 'COMPANY_DESCRIPTION',

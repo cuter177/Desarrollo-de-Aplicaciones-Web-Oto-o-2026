@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Sitio web de [Nombre de la empresa], desarrollo de software web, dashboards y aplicaciones móviles.">
-  <title>[Nombre de la empresa] — Desarrollo de software</title>
+  <meta name="description" content="Sitio web de DevStudio, desarrollo de software web, dashboards y aplicaciones móviles.">
+  <title>DevStudio — Desarrollo de software</title>
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <script type="module" src="assets/js/main.js" defer></script>
@@ -15,9 +15,9 @@
 
   <header class="site-header">
     <div class="container site-header__inner">
-      <a class="brand" href="index.html" aria-label="[Nombre de la empresa], inicio">
+      <a class="brand" href="index.html" aria-label="DevStudio, inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
 
       <nav class="site-nav" aria-label="Navegación principal">
@@ -64,32 +64,35 @@
       <div class="container">
         <h2 class="section__title">Cómo te ayudamos</h2>
         <div class="grid">
-          <article class="card">
+          <a class="card card--link" href="/pages/servicio-detalle.html?slug=desarrollo-web">
             <h3 class="card__title">Presencia digital</h3>
             <p class="card__body">
               Sitios corporativos y portales que presentan tu negocio, captan
               prospectos y funcionan en cualquier dispositivo.
             </p>
             <span class="badge badge--success">Plan Esencial</span>
-          </article>
+            <span class="card__link">Conocer servicio →</span>
+          </a>
 
-          <article class="card">
+          <a class="card card--link" href="/pages/servicio-detalle.html?slug=dashboards">
             <h3 class="card__title">Datos para decidir</h3>
             <p class="card__body">
               Dashboards, reportes automatizados e integraciones para medir
               ventas, operación y crecimiento en tiempo real.
             </p>
             <span class="badge badge--info">Plan Crecimiento</span>
-          </article>
+            <span class="card__link">Conocer servicio →</span>
+          </a>
 
-          <article class="card">
+          <a class="card card--link" href="/pages/servicio-detalle.html?slug=apps-moviles">
             <h3 class="card__title">Software a la medida</h3>
             <p class="card__body">
               Aplicaciones web y móviles, consultoría y acompañamiento para
               transformar procesos críticos de tu empresa.
             </p>
             <span class="badge badge--warning">Plan Transformación</span>
-          </article>
+            <span class="card__link">Conocer servicio →</span>
+          </a>
         </div>
         <div class="hero__actions">
           <a class="btn" href="pages/cotizacion.html">Descubrir mi plan</a>
@@ -99,36 +102,22 @@
       </div>
     </section>
 
-    <section class="section section--muted">
-      <div class="container">
-        <h2 class="section__title">Estado del proyecto</h2>
-        <p>
-          Versión <strong>0.4.0</strong>: sitio público completo con servicios,
-          portafolio, nosotros, contacto y diagnóstico; además de la bandeja de
-          solicitudes, la gestión de proyectos y los mensajes de contacto.
-        </p>
-        <p>
-          <span class="badge badge--success">Health check real</span>
-          <span class="badge badge--success">Login y registro</span>
-          <span class="badge badge--success">Diagnóstico público</span>
-          <span class="badge badge--success">Portafolio y contacto</span>
-          <span class="badge badge--info">Panel administrativo</span>
-        </p>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container site-footer__inner">
-      <p><strong data-config="nombre">[Nombre de la empresa]</strong> · Proyecto académico 2026</p>
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="pages/servicios.html">Servicios</a>
-        <a href="pages/portafolio.html">Portafolio</a>
-        <a href="pages/nosotros.html">Nosotros</a>
-        <a href="pages/contacto.html">Contacto</a>
-        <a href="pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/servicios.html">Servicios</a>
+        <a href="/pages/portafolio.html">Portafolio</a>
+        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Diagnóstico</a>
       </nav>
-      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+      </p>
     </div>
   </footer>
 </body>

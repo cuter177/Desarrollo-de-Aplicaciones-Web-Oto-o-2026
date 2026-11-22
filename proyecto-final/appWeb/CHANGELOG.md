@@ -8,6 +8,18 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y 
 
 ### Added
 
+- Portal del cliente con resumen, proyectos, detalle, solicitudes, alta y perfil con cambio de contraseña.
+- Páginas administrativas de usuarios, clientes, servicios y tecnologías.
+- Enlaces de esos módulos en la navegación y el dashboard del panel.
+
+### Changed
+
+- El portal deja de ser un placeholder y solo admite el rol `cliente`.
+
+## [0.4.0] - 2026-11-15
+
+### Added
+
 - Páginas públicas `pages/servicios.html`, `pages/servicio-detalle.html`, `pages/portafolio.html`, `pages/caso-detalle.html`, `pages/nosotros.html` y `pages/contacto.html`.
 - Bandeja administrativa `pages/admin/mensajes.html` con filtros, detalle y cambio de estado.
 - `assets/js/public.js` con configuración de la empresa, formateo de fechas, badges, tarjetas de caso, iconos SVG y estados vacíos.

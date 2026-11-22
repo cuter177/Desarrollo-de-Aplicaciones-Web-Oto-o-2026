@@ -8,6 +8,39 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ### Added
 
+- Migración `002_portafolio_publico.sql`: campos de caso de éxito en `Proyectos` (`reto`, `solucion`, `resultados`, `mostrar_cliente`), `beneficios` en `Servicios` e índice `IX_Proyectos_Publicado`.
+- Contenido demo de beneficios y casos de éxito en `seed.sql`, con actualizaciones idempotentes.
+- `SiteConfig` y `GET /config` con los datos públicos de la empresa desde variables `COMPANY_*`.
+- Endpoints públicos `GET /servicios/{slug}`, `GET /tecnologias`, `GET /portafolio` y `GET /portafolio/{slug}`.
+- Proyección pública del portafolio sin `cliente_id`, correos ni teléfonos; los no publicados responden `404`.
+- `POST /contacto` con validación, CSRF, honeypot, aceptación de privacidad y rate limit de 5 por hora por IP.
+- Modelo `Mensaje`, modelo `Tecnologia` y bandeja administrativa `GET/PATCH /admin/mensajes`.
+- Campos de caso de éxito en el alta y edición de proyectos del panel.
+
+### Changed
+
+- `Proyecto` incorpora la proyección pública, tecnologías por proyecto y los campos de caso.
+- `Servicio` expone `beneficios` como arreglo.
+- `.env.example` y `compose.yaml` incluyen las variables `COMPANY_*`.
+- El seed anonimiza dos casos demo con `mostrar_cliente = 0` para ejercitar la proyección pública.
+- Contrato de API actualizado a `0.4.0`.
+
+### Fixed
+
+- Filtros `q` de mensajes y solicitudes usan un parámetro por columna, porque `PDO_SQLSRV` no permite reutilizar un parámetro con nombre.
+- `GET /` y `GET /health` reportan la versión `0.4.0`.
+
+### Verified
+
+- Migración `002` aplicada sobre la base existente y sobre una base limpia; `schema.sql` y `seed.sql` idempotentes.
+- `php -l` sin errores en todos los archivos PHP.
+- 40 pruebas de API con `curl`: catálogo, portafolio público, contacto, rate limit, roles y bandeja de mensajes.
+- `POST /diagnostico` con recomendación de plan verificada.
+
+## [0.3.0] - 2026-11-13
+
+### Added
+
 - Seed de desarrollo con datos de demostración: cuentas `admin`/`cliente`, 3 clientes, 6 proyectos con tecnologías, 5 solicitudes de cotización y 4 mensajes de contacto. Sigue siendo idempotente.
 - Contraseñas demo documentadas para probar login, portal y dashboard (`admin@devstudio.local` / `Admin#2026`, `cliente@devstudio.local` / `Cliente#2026`).
 - Migración `001_planes_diagnostico.sql` con la tabla `Planes` y los campos del diagnóstico.

@@ -60,7 +60,7 @@ proyecto-final/
 │   ├── database/
 │   │   ├── schema.sql             # Esquema de SQL Server
 │   │   ├── seed.sql               # Datos iniciales
-│   │   └── migrations/            # Cambios incrementales
+│   │   └── migrations/            # 001_planes_diagnostico.sql y 002_portafolio_publico.sql
 │   ├── scripts/                   # Utilidades CLI (crear-admin.php)
 │   └── tests/
 │
@@ -73,7 +73,19 @@ proyecto-final/
 │   │   ├── 03-guia-estilos.md
 │   │   └── 04-accesibilidad.md
 │   ├── index.html
-│   ├── pages/                     # Páginas internas
+│   ├── 404.html                  # Página no encontrada
+│   ├── pages/                    # Páginas internas
+│   │   ├── servicios.html
+│   │   ├── servicio-detalle.html
+│   │   ├── portafolio.html
+│   │   ├── caso-detalle.html
+│   │   ├── nosotros.html
+│   │   ├── contacto.html
+│   │   ├── cotizacion.html
+│   │   ├── login.html
+│   │   ├── registro.html
+│   │   ├── portal/
+│   │   └── admin/                # dashboard, solicitudes, proyectos y mensajes
 │   └── assets/
 │       ├── css/
 │       ├── js/

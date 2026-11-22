@@ -2,7 +2,7 @@
 
 Estructura de páginas y rutas del sistema. El front es estático y consume la API; las rutas protegidas se validan en el servidor.
 
-> Las rutas mostradas son las URLs públicas objetivo. En el andamiaje los archivos viven en `appWeb/pages/` y Nginx podrá mapear las URLs limpias cuando se implemente la navegación.
+> Las rutas mostradas son las URLs públicas objetivo. En la implementación actual el front es estático: las páginas viven en `appWeb/pages/` con extensión `.html` y los detalles usan `?slug=`. Nginx sirve los archivos directamente y devuelve `404.html` para rutas inexistentes; las URLs limpias quedan como mejora futura.
 
 ## 1. Árbol de navegación
 

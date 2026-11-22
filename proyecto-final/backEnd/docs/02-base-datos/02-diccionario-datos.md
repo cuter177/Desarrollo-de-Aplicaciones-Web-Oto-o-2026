@@ -60,13 +60,14 @@ Catálogo público de servicios.
 | `slug` | `NVARCHAR(120)` | No | UNIQUE | Identificador para URL |
 | `nombre` | `NVARCHAR(120)` | No | — | Nombre del servicio |
 | `descripcion` | `NVARCHAR(MAX)` | No | — | Descripción completa |
+| `beneficios` | `NVARCHAR(MAX)` | Sí | — | Beneficios, uno por línea |
 | `icono` | `NVARCHAR(80)` | Sí | — | Nombre o ruta del icono |
 | `activo` | `BIT` | No | DEFAULT `1` | Visible en el sitio |
 | `orden` | `INT` | No | DEFAULT `0` | Orden de presentación |
 | `creado_en` | `DATETIME2(0)` | No | DEFAULT `SYSUTCDATETIME()` | Fecha de alta |
 | `actualizado_en` | `DATETIME2(0)` | No | DEFAULT `SYSUTCDATETIME()` | Última modificación |
 
-**Reglas:** el `slug` solo contiene minúsculas, números y guiones; cambiarlo altera la URL pública.
+**Reglas:** el `slug` solo contiene minúsculas, números y guiones; cambiarlo altera la URL pública. `beneficios` se guarda como texto separado por saltos de línea y la API lo devuelve como arreglo.
 
 ## 5. Tecnologías
 
@@ -92,6 +93,10 @@ Proyectos de clientes y casos de portafolio.
 | `nombre` | `NVARCHAR(150)` | No | — | Nombre del proyecto |
 | `slug` | `NVARCHAR(160)` | No | UNIQUE | Identificador para URL pública |
 | `descripcion` | `NVARCHAR(MAX)` | No | — | Descripción |
+| `reto` | `NVARCHAR(MAX)` | Sí | — | Contexto o problema del caso |
+| `solucion` | `NVARCHAR(MAX)` | Sí | — | Solución construida |
+| `resultados` | `NVARCHAR(MAX)` | Sí | — | Impacto del proyecto |
+| `mostrar_cliente` | `BIT` | No | DEFAULT `0` | Expone el nombre del cliente |
 | `estado` | `NVARCHAR(30)` | No | CHECK | `planificado`, `en_progreso`, `en_revision`, `entregado`, `pausado`, `cancelado` |
 | `fecha_inicio` | `DATE` | Sí | — | Inicio del proyecto |
 | `fecha_fin` | `DATE` | Sí | — | Fin estimado o real |
@@ -101,7 +106,7 @@ Proyectos de clientes y casos de portafolio.
 | `creado_en` | `DATETIME2(0)` | No | DEFAULT `SYSUTCDATETIME()` | Fecha de alta |
 | `actualizado_en` | `DATETIME2(0)` | No | DEFAULT `SYSUTCDATETIME()` | Última modificación |
 
-**Reglas:** solo los proyectos `publicado = 1` aparecen en el sitio público; un proyecto cancelado no puede publicarse sin autorización.
+**Reglas:** solo los proyectos `publicado = 1` aparecen en el sitio público; un proyecto cancelado no puede publicarse sin autorización. La API pública omite `cliente_id` y solo incluye `cliente` cuando `mostrar_cliente = 1`.
 
 ## 7. ProyectoTecnologia
 
@@ -165,6 +170,7 @@ Mensajes del formulario público.
 | `CK_Solicitudes_Presupuesto` | `SolicitudesCotizacion` | `presupuesto_estimado IS NULL OR presupuesto_estimado >= 0` |
 | `CK_Mensajes_Estado` | `MensajesContacto` | Lista de estados permitidos |
 | `FK_ProyectoTecnologia_Proyecto` | `ProyectoTecnologia` | `ON DELETE CASCADE` |
+| `IX_Proyectos_Publicado` | `Proyectos` | Índice no único `(publicado, destacado, fecha_inicio)` |
 
 ## 11. Datos iniciales
 

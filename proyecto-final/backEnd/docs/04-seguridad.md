@@ -111,9 +111,20 @@ $stmt->execute([':email' => $email]);
 Estado:
 
 - **Login (implementado):** 5 intentos por IP y por correo cada 15 minutos. Devuelve `429` con `Retry-After` y `details.retry_after`; el contador del correo se limpia tras un login exitoso.
-- **Registro, contacto y cotizaciones (pendiente):** 3 por IP cada hora.
+- **Registro (pendiente):** 3 por IP cada hora.
+- **Contacto (implementado):** 5 por IP cada hora, con honeypot `website`.
+- **Diagnóstico (implementado):** 10 por IP cada hora.
+- **Cotizaciones (pendiente):** endpoint sustituido por el diagnóstico.
 
 El login usa `app/helpers/RateLimiter.php` con archivos JSON en `sys_get_temp_dir()`, endurecido con `LOCK_EX` y nombres hasheados. Para varios nodos, reemplazar por Redis o una tabla de la base de datos.
+
+## 9.1 Exposición de datos públicos
+
+- `GET /portafolio` y `GET /portafolio/{slug}` usan una proyección que omite `cliente_id`, correos y teléfonos.
+- El nombre del cliente solo se incluye con `mostrar_cliente = 1`.
+- Los proyectos con `publicado = 0` responden `404` aunque se conozca el `slug`.
+- `GET /config` publica únicamente los datos comerciales definidos en `COMPANY_*`.
+- `POST /contacto` no devuelve datos de otros mensajes ni permite listar la bandeja.
 
 ## 10. Cabeceras HTTP
 
@@ -173,8 +184,10 @@ Evitar `db_owner` y `sysadmin` para la aplicación.
 - [x] CSRF en mutaciones.
 - [x] Roles y propiedad validados en el servidor para las rutas implementadas.
 - [x] Entradas validadas y salidas escapadas con `textContent`.
-- [x] Rate limit en login.
-- [ ] Rate limit en registro y formularios públicos.
+- [x] Rate limit en login, contacto y diagnóstico.
+- [ ] Rate limit en registro.
+- [x] Proyección pública sin datos privados de clientes.
+- [x] Honeypot y aviso de privacidad en contacto.
 - [x] Cabeceras de seguridad base en la API.
 - [x] `.env` fuera de Git.
 - [ ] Usuario de BD con permisos mínimos.

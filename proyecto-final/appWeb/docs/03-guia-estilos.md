@@ -125,6 +125,23 @@ Estados: `:hover`, `:focus-visible`, `:disabled`. El estado de carga se aplica c
 - Icono o texto que refuerce el significado.
 - `role="status"` o `role="alert"` según urgencia.
 
+### Sitio público (etapa 4)
+
+- `.service-cards` / `.service-card`: catálogo con icono SVG, título, texto y enlace.
+- `.case-grid` / `.case-card`: portafolio con portada degradada e iniciales; nunca imágenes binarias.
+- `.filters` / `.filter-chip`: filtros con `aria-pressed` y estado `.is-active`.
+- `.tech-list` / `.tech`: etiquetas de tecnologías.
+- `.check-list`: beneficios del servicio con marca `✓` generada por CSS.
+- `.stats` / `.stat`: métricas de la página Nosotros.
+- `.steps` / `.step`: proceso de trabajo numerado.
+- `.team-grid` / `.team-card` / `.avatar`: equipo con avatar de iniciales.
+- `.contact-grid` / `.contact-card` / `.contact-list`: datos y formulario de contacto.
+- `.cta-band`: cierre de sección con degradado y acciones.
+- `.honeypot`: campo oculto fuera de pantalla para anti-spam; no usar `display: none`.
+
+Las portadas y avatares usan degradados CSS, por lo que el sitio no depende de imágenes
+binarias nuevas.
+
 ## 6. Convención de clases
 
 BEM:

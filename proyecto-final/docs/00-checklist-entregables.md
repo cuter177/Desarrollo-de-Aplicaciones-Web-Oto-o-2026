@@ -18,22 +18,22 @@ Seguimiento de los requisitos de la materia. Actualizar el estado conforme avanc
 
 | # | Entregable | Ruta | Estado | Observaciones |
 |---|---|---|---|---|
-| 2.1 | HTML + CSS Mobile First | `appWeb/` | En progreso | Inicio, login, registro, portal y dashboard con `components.css` |
-| 2.2 | JavaScript: usuarios, login y restricciones | `appWeb/assets/js/` | Listo | Sesión, CSRF, roles y guardas implementados |
-| 2.3 | Backend PHP (API REST) | `backEnd/` | En progreso | Router, auth, admin y health; faltan catálogos y CRUD |
+| 2.1 | HTML + CSS Mobile First | `appWeb/` | Listo | Sitio público completo, login, registro, portal y panel; validado en 375, 768 y 1280 px |
+| 2.2 | JavaScript: usuarios, login y restricciones | `appWeb/assets/js/` | Listo | Sesión, CSRF, roles, guardas y módulos públicos implementados |
+| 2.3 | Backend PHP (API REST) | `backEnd/` | En progreso | Router, auth, catálogo público, portafolio, contacto y panel; faltan CRUD restantes |
 | 2.4 | Diseño de la base de datos | [`backEnd/docs/02-base-datos/`](../backEnd/docs/02-base-datos/) | Listo | Modelo ER, diccionario y esquema alineados |
-| 2.5 | Scripts SQL | `backEnd/database/` | Listo | `schema.sql` y `seed.sql` idempotentes |
+| 2.5 | Scripts SQL | `backEnd/database/` | Listo | `schema.sql` y `seed.sql` idempotentes, verificados en base limpia |
 | 2.6 | Autenticación y roles | `backEnd/app/` | Listo | Login, registro, sesión, CSRF, rate limit y roles |
-| 2.7 | Pruebas | `backEnd/tests/` | Pendiente | Sin pruebas automatizadas; Docker/PHP no disponibles en el equipo |
+| 2.7 | Pruebas | `backEnd/tests/` | En progreso | 40 pruebas manuales de API con `curl`; falta suite automatizada |
 
 ## 3. Documentación
 
 | # | Entregable | Ruta | Estado | Observaciones |
 |---|---|---|---|---|
-| 3.1 | Manual de usuario | [`02-manual-usuario/README.md`](02-manual-usuario/README.md) | En progreso | Registro, login, portal y dashboard documentados; faltan capturas |
-| 3.2 | Manual técnico | [`03-manual-tecnico/README.md`](03-manual-tecnico/README.md) | En progreso | Instalación, BD, API y seguridad de la etapa 2 |
-| 3.3 | Documentación del backend | [`../backEnd/docs/`](../backEnd/docs/) | En progreso | API, seguridad y despliegue actualizados a 0.2.0 |
-| 3.4 | Documentación del frontend | [`../appWeb/docs/`](../appWeb/docs/) | En progreso | Base técnica; falta documentar las páginas nuevas |
+| 3.1 | Manual de usuario | [`02-manual-usuario/README.md`](02-manual-usuario/README.md) | En progreso | Sitio público, registro, login, portal y panel documentados; faltan capturas |
+| 3.2 | Manual técnico | [`03-manual-tecnico/README.md`](03-manual-tecnico/README.md) | En progreso | Instalación, BD, API y seguridad actualizados a 0.4.0 |
+| 3.3 | Documentación del backend | [`../backEnd/docs/`](../backEnd/docs/) | En progreso | API, seguridad y despliegue actualizados a 0.4.0 |
+| 3.4 | Documentación del frontend | [`../appWeb/docs/`](../appWeb/docs/) | En progreso | Páginas públicas, estilos y accesibilidad de la etapa 4 documentados |
 | 3.5 | Changelogs | `docs/CHANGELOG.md`, `backEnd/CHANGELOG.md`, `appWeb/CHANGELOG.md` | Listo | Formato Keep a Changelog |
 | 3.6 | PDFs en LaTeX | [`latex/`](latex/) | Pendiente | Proyecto LaTeX por crear |
 
@@ -51,19 +51,21 @@ Seguimiento de los requisitos de la materia. Actualizar el estado conforme avanc
 | 5.1 | Código fuente en ZIP | `dist/` | Pendiente | Crear script de empaquetado |
 | 5.2 | Documentación en PDF | `docs/latex/build/` | Pendiente | Compilar con `latexmk` |
 | 5.3 | Verificación de `.env` fuera del ZIP | — | Pendiente | Excluir secretos y `.git` |
-| 5.4 | Prueba de instalación desde cero | — | Pendiente | Docker y PHP no están instalados en el equipo de desarrollo |
+| 5.4 | Prueba de instalación desde cero | — | En progreso | `schema.sql` y `seed.sql` verificados en base limpia; falta reconstruir los contenedores desde cero |
 
 ## Criterios de aceptación globales
 
-- [ ] El sitio funciona en móvil, tablet y escritorio.
-- [ ] Un visitante puede enviar contacto y solicitud de cotización.
+- [x] El sitio funciona en móvil, tablet y escritorio.
+- [x] Un visitante puede enviar contacto y solicitud de cotización.
+  - [x] Contacto y diagnóstico probados con `curl` sobre Docker.
 - [ ] Un cliente puede registrarse, iniciar sesión y ver solo sus proyectos.
-  - [x] Registro, login y sesión implementados en código.
+  - [x] Registro, login y sesión implementados y probados.
   - [ ] Listado de proyectos propios (etapa siguiente).
 - [ ] Un administrador puede gestionar el contenido y los usuarios.
   - [x] Dashboard con métricas reales y acceso restringido a `admin`.
-  - [ ] CRUD de usuarios, clientes, servicios, proyectos, tecnologías, solicitudes y mensajes.
+  - [x] Bandeja de solicitudes, proyectos y mensajes.
+  - [ ] CRUD de usuarios, clientes, servicios y tecnologías.
 - [x] El backend rechaza accesos no autorizados aunque se manipule el front.
-- [ ] La base de datos se crea desde `schema.sql` sin errores (pendiente de ejecutar en Docker).
+- [x] La base de datos se crea desde `schema.sql` sin errores en una base limpia.
 - [ ] Los manuales permiten instalar y usar el sistema sin ayuda externa.
 - [ ] El ZIP y los PDFs cumplen el formato de entrega.

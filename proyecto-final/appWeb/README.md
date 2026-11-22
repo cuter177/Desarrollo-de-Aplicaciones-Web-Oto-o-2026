@@ -7,7 +7,14 @@ Interfaz del proyecto: sitio público, portal de cliente y panel administrativo.
 ```text
 appWeb/
 ├── index.html                 # Inicio, propuesta de valor y acceso al diagnóstico
+├── 404.html                   # Página no encontrada
 ├── pages/
+│   ├── servicios.html         # Catálogo de servicios
+│   ├── servicio-detalle.html  # Detalle de servicio por slug
+│   ├── portafolio.html        # Casos publicados con filtros
+│   ├── caso-detalle.html      # Detalle de caso por slug
+│   ├── nosotros.html          # Proceso, equipo y propuesta
+│   ├── contacto.html          # Formulario y datos de contacto
 │   ├── cotizacion.html        # Planes y wizard de diagnóstico
 │   ├── login.html             # Inicio de sesión
 │   ├── registro.html          # Registro de cliente
@@ -15,10 +22,11 @@ appWeb/
 │   └── admin/
 │       ├── dashboard.html     # Métricas y solicitudes recientes
 │       ├── solicitudes.html   # Bandeja y detalle de solicitudes
-│       └── proyectos.html     # Alta y edición de proyectos
+│       ├── proyectos.html     # Alta y edición de proyectos
+│       └── mensajes.html      # Bandeja de mensajes de contacto
 ├── assets/
 │   ├── css/                   # main.css (base) y components.css (UI)
-│   ├── js/                    # api.js, auth.js, ui.js, app.js y pages/
+│   ├── js/                    # api.js, auth.js, ui.js, app.js, public.js y pages/
 │   ├── img/                   # Imágenes y logotipos
 │   └── fonts/                 # Tipografías locales
 ├── docs/                      # Arquitectura, páginas, estilos y accesibilidad
@@ -28,18 +36,21 @@ appWeb/
 
 ## Estado actual
 
-`0.3.0` — Diagnóstico público y gestión de proyectos:
+`0.4.0` — Sitio público completo y bandeja de mensajes:
 
+- Inicio, servicios y detalle, portafolio con filtros y detalle de caso, nosotros y contacto.
 - Página pública de planes con los planes Esencial, Crecimiento y Transformación.
 - Wizard de diagnóstico en cuatro pasos con validación por paso y resultado recomendado.
+- Formulario de contacto con validación, honeypot, aviso de privacidad y mensajes accesibles.
 - Dashboard administrativo con pipeline, conversión, crecimiento promedio y leads recientes.
 - Bandeja de solicitudes con filtros, detalle, notas, cambio de plan/cliente/estado y conversión a proyecto.
-- Gestión de proyectos con alta, edición, estado, fechas y publicación.
+- Gestión de proyectos con alta, edición, estado, fechas, publicación y contenido de caso.
+- Bandeja de mensajes con filtros, detalle y cambio de estado.
 - Login, registro, cierre de sesión y header dinámico por rol.
 - Portal de cliente y panel administrativo protegidos en el front y en el backend.
 - Manejo de CSRF, errores de validación y estados de carga.
 
-Los catálogos públicos completos, el detalle del portal y los CRUD restantes siguen pendientes.
+El detalle del portal y los CRUD restantes siguen pendientes.
 
 ## Desarrollo
 
@@ -58,6 +69,8 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 
 - Base: `/api/v1` (mismo origen).
 - El wizard público consume `GET /planes`, `GET /servicios` y `POST /diagnostico`.
+- El sitio público consume `GET /config`, `GET /servicios`, `GET /servicios/{slug}`, `GET /tecnologias`, `GET /portafolio`, `GET /portafolio/{slug}` y `POST /contacto`.
+- `assets/js/public.js` centraliza la configuración de la empresa, el formateo de fechas, los badges y las tarjetas de caso.
 - Las peticiones incluyen cookies: `fetch(url, { credentials: 'same-origin' })`.
 - Antes de una mutación se obtiene el token con `GET /auth/csrf`; después del login se usa el `csrf_token` devuelto.
 - Las mutaciones envían `X-CSRF-Token` y el backend responde `403 CSRF_INVALIDO` si falta o no coincide.
@@ -70,6 +83,12 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 | Página | Ruta | Acceso |
 |---|---|---|
 | Inicio | `/index.html` | Público |
+| Servicios | `/pages/servicios.html` | Público |
+| Detalle de servicio | `/pages/servicio-detalle.html?slug=...` | Público |
+| Portafolio | `/pages/portafolio.html` | Público |
+| Detalle de caso | `/pages/caso-detalle.html?slug=...` | Público |
+| Nosotros | `/pages/nosotros.html` | Público |
+| Contacto | `/pages/contacto.html` | Público |
 | Diagnóstico y planes | `/pages/cotizacion.html` | Público |
 | Login | `/pages/login.html` | Público; redirige si hay sesión |
 | Registro | `/pages/registro.html` | Público; redirige si hay sesión |
@@ -77,6 +96,8 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 | Dashboard | `/pages/admin/dashboard.html` | Solo `admin` |
 | Solicitudes | `/pages/admin/solicitudes.html` | Solo `admin` |
 | Proyectos | `/pages/admin/proyectos.html` | Solo `admin` |
+| Mensajes | `/pages/admin/mensajes.html` | Solo `admin` |
+| No encontrado | `/404.html` | Público |
 
 ## Convenciones
 
@@ -99,8 +120,7 @@ Como los archivos se montan como volumen de solo lectura, los cambios en HTML, C
 
 ## Páginas previstas
 
-- Públicas pendientes: servicios, detalle de servicio, portafolio, detalle de caso, nosotros y contacto.
 - Cliente pendientes: resumen completo, proyectos, detalle de proyecto, solicitudes, detalle de solicitud y perfil.
-- Admin pendientes: usuarios, clientes, servicios, tecnologías y mensajes.
+- Admin pendientes: usuarios, clientes, servicios y tecnologías.
 
 El detalle está en [`docs/02-paginas-y-componentes.md`](docs/02-paginas-y-componentes.md).

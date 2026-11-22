@@ -3,7 +3,7 @@
 **Base URL:** `http://localhost:8080/api/v1`
 **Formato:** JSON UTF-8
 **Autenticación:** cookie de sesión + token CSRF
-**Versión:** 0.3.0 (autenticación, diagnóstico público, solicitudes y proyectos implementados)
+**Versión:** 0.4.0 (sitio público completo, mensajes de contacto y portafolio publicado)
 
 ## 1. Convenciones
 
@@ -220,13 +220,46 @@ Respuesta `204` sin cuerpo.
 | GET | `/planes` | Planes activos con precios y características |
 | GET | `/servicios` | Servicios activos |
 | POST | `/diagnostico` | Diagnóstico público y plan recomendado |
-| GET | `/config` | Datos de la empresa, redes y textos *(pendiente)* |
-| GET | `/servicios/{slug}` | Detalle por `slug` *(pendiente)* |
-| GET | `/tecnologias` | Catálogo activo *(pendiente)* |
-| GET | `/portafolio` | Proyectos publicados *(pendiente)* |
-| GET | `/portafolio/{slug}` | Detalle de caso publicado *(pendiente)* |
-| POST | `/contacto` | Envía mensaje de contacto *(pendiente)* |
+| GET | `/config` | Datos públicos de la empresa desde variables `COMPANY_*` |
+| GET | `/servicios/{slug}` | Detalle de servicio activo y casos publicados destacados |
+| GET | `/tecnologias` | Catálogo activo de tecnologías |
+| GET | `/portafolio` | Proyectos publicados con proyección pública |
+| GET | `/portafolio/{slug}` | Detalle de caso publicado |
+| POST | `/contacto` | Envía mensaje de contacto |
 | POST | `/cotizaciones` | Solicitud de cotización simple *(sustituida por `/diagnostico`)* |
+
+### Proyección pública del portafolio
+
+`GET /portafolio` y `GET /portafolio/{slug}` **no** devuelven `cliente_id`,
+correos ni teléfonos. Solo exponen los campos del caso:
+
+```json
+{
+  "id": 3,
+  "slug": "dashboard-innovatech",
+  "nombre": "Dashboard comercial Innovatech",
+  "resumen": "Tablero de ventas por sucursal…",
+  "reto": "…",
+  "solucion": "…",
+  "resultados": "…",
+  "sector": "Comercio",
+  "cliente": "Innovatech",
+  "estado": "entregado",
+  "fecha_inicio": "2026-02-10",
+  "fecha_fin": "2026-03-02",
+  "url_demo": "https://demo.devstudio.local/dashboard",
+  "destacado": true,
+  "tecnologias": ["CSS", "HTML", "JavaScript"]
+}
+```
+
+`cliente` solo se incluye si el proyecto tiene `mostrar_cliente = 1`. Los
+proyectos con `publicado = 0` responden `404 NO_ENCONTRADO` aunque se conozca el
+`slug`.
+
+`GET /servicios/{slug}` devuelve `{ "servicio": {…}, "casos": [...] }`; los casos
+son los primeros tres proyectos publicados. Un servicio inactivo o inexistente
+responde `404`.
 
 ### Ejemplo: contacto
 
@@ -451,10 +484,14 @@ La conversión requiere que la solicitud tenga un `cliente_id`; si no, responde
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/admin/mensajes` | Lista con filtros `estado`, `q` |
+| GET | `/admin/mensajes` | Lista con filtros `estado`, `q` y `meta.conteos` |
 | GET | `/admin/mensajes/{id}` | Detalle |
-| PATCH | `/admin/mensajes/{id}/estado` | Marca como atendido o archivado |
-| DELETE | `/admin/mensajes/{id}` | Elimina spam |
+| PATCH | `/admin/mensajes/{id}` | Actualiza `estado` |
+
+`PATCH /admin/mensajes/{id}` recibe `{ "estado": "en_revision" }` y devuelve el
+mensaje actualizado junto con `conteos`. Los estados permitidos son `nuevo`,
+`en_revision`, `atendido` y `archivado`. Al pasar a `atendido` se registra
+`atendido_en` la primera vez.
 
 ## 6. Transiciones de estado
 
@@ -505,8 +542,9 @@ nuevo → en_revision → atendido → archivado
 |---|---|---|
 | `POST /auth/login` | 5 intentos por IP **y** por correo cada 15 minutos | Implementado |
 | `POST /auth/registro` | 3 por IP cada hora | Pendiente |
-| `POST /contacto` | 3 por IP cada hora | Pendiente |
-| `POST /cotizaciones` | 3 por IP cada hora | Pendiente |
+| `POST /contacto` | 5 por IP cada hora | Implementado |
+| `POST /diagnostico` | 10 por IP cada hora | Implementado |
+| `POST /cotizaciones` | 3 por IP cada hora | Pendiente (endpoint sustituido) |
 
 El contador de login se guarda en archivos temporales (`sys_get_temp_dir()/devstudio-rate-limit`, configurable con `RATE_LIMIT_DIR`) y se limpia al iniciar sesión correctamente. En un despliegue con varios nodos conviene moverlo a Redis o a la base de datos.
 
@@ -529,6 +567,10 @@ Respuesta `429`:
 - Los identificadores de otros clientes no se exponen en mensajes de error.
 - Los listados administrativos respetan paginación y filtros.
 - El token CSRF se renueva al iniciar sesión.
+- Los endpoints públicos del portafolio usan una proyección sin `cliente_id`,
+  correos ni teléfonos; el nombre del cliente es opcional (`mostrar_cliente`).
+- `POST /contacto` usa un campo honeypot (`website`) y exige aceptación del
+  aviso de privacidad.
 
 ## 10. Estado de implementación
 
@@ -537,11 +579,12 @@ Respuesta `429`:
 | Health check | Implementado (`GET /health` consulta la base de datos) |
 | Autenticación | Implementado (csrf, login, logout, me, registro y cambio de contraseña) |
 | Dashboard administrativo | Implementado (métricas de leads, pipeline y conversión) |
-| Públicos | Implementado `GET /planes`, `GET /servicios` y `POST /diagnostico`; el resto sigue pendiente |
+| Públicos | Implementado `GET /planes`, `/config`, `/servicios`, `/servicios/{slug}`, `/tecnologias`, `/portafolio`, `/portafolio/{slug}`, `POST /diagnostico` y `POST /contacto` |
 | Panel de solicitudes | Implementado (bandeja, detalle, actualización y conversión a proyecto) |
-| Panel de proyectos | Implementado (listado, alta, edición y publicación) |
+| Panel de proyectos | Implementado (listado, alta, edición, publicación y contenido de caso) |
+| Panel de mensajes | Implementado (bandeja, filtros, detalle y cambio de estado) |
 | Portal del cliente (`/mi/*`) | Pendiente |
-| CRUD administrativos restantes | Pendiente (usuarios, servicios, tecnologías y mensajes) |
+| CRUD administrativos restantes | Pendiente (usuarios, servicios y tecnologías) |
 | Recuperación de contraseña | Pendiente (opcional) |
 
 La implementación debe respetar este contrato o actualizarlo junto con el changelog del backend.
@@ -558,3 +601,8 @@ La implementación debe respetar este contrato o actualizarlo junto con el chang
 | `password_confirmacion` | Debe coincidir con `password` |
 | `acepta_terminos` | Debe ser `true` en el registro |
 | `password_actual` / `password_nueva` | Obligatorios y válidos en el cambio de contraseña |
+| `nombre` (contacto) | 2–120 caracteres |
+| `asunto` | 3–150 caracteres |
+| `mensaje` | 10–5000 caracteres |
+| `acepta_privacidad` | Debe ser `true` en el contacto; `false` responde `422` |
+| `reto` / `solucion` / `resultados` | Opcionales, máximo 5000 caracteres |

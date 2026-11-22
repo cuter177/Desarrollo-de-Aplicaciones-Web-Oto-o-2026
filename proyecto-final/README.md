@@ -19,14 +19,14 @@ Aplicación web para una empresa desarrolladora de software dedicada a sitios we
 
 ## Estado actual
 
-`0.3.0` — Diagnóstico público y gestión de proyectos.
+`0.4.0` — Sitio público completo y bandeja de mensajes.
 
 | Experiencia | Estado |
 |---|---|
-| Sitio público | Inicio y diagnóstico con planes implementados; servicios, portafolio, nosotros y contacto pendientes. |
+| Sitio público | Inicio, servicios y detalle, portafolio y detalle de caso, nosotros, contacto y diagnóstico implementados. |
 | Portal del cliente | Registro, login y acceso protegido; vistas de proyectos, solicitudes y perfil pendientes. |
-| Panel administrativo | Dashboard, bandeja de solicitudes y gestión de proyectos implementados; usuarios, clientes, servicios, tecnologías y mensajes pendientes. |
-| API y base de datos | Autenticación, planes, diagnóstico, solicitudes, proyectos y seed de demostración implementados. |
+| Panel administrativo | Dashboard, solicitudes, proyectos y mensajes implementados; usuarios, clientes, servicios y tecnologías pendientes. |
+| API y base de datos | Autenticación, catálogo público, portafolio, diagnóstico, contacto, solicitudes, proyectos y seed de demostración implementados. |
 
 ## Alcance
 
@@ -51,6 +51,10 @@ La arquitectura es **desacoplada**: `appWeb` es un front estático (HTML + CSS +
 ### Captación y diagnóstico público
 
 - Página de presentación con los planes **Esencial**, **Crecimiento** y **Transformación**.
+- Catálogo de servicios con página de detalle por `slug` y beneficios.
+- Portafolio de casos publicados con filtros por tecnología y detalle por `slug`.
+- Página **Nosotros** con proceso de trabajo y datos del equipo.
+- Página **Contacto** con datos de la empresa y formulario conectado a la bandeja administrativa.
 - Wizard de diagnóstico en cuatro pasos: contacto, necesidades, objetivos y resultado.
 - Preguntas de negocio: crecimiento esperado, horas a ahorrar, procesos a eficientar, presupuesto, plazo y etapa de decisión.
 - Recomendación de plan calculada en el servidor con un puntaje de prioridad.
@@ -62,7 +66,8 @@ La arquitectura es **desacoplada**: `appWeb` es un front estático (HTML + CSS +
 - Bandeja de solicitudes con filtros por estado, plan y búsqueda.
 - Detalle del diagnóstico, notas internas, cambio de estado, plan propuesto y cliente vinculado.
 - Conversión de una solicitud en proyecto.
-- Gestión de proyectos: alta, edición, estado, fechas, URL demo, publicación y destacado.
+- Gestión de proyectos: alta, edición, estado, fechas, URL demo, publicación, destacado y contenido de caso (`reto`, `solución`, `resultados`, `mostrar_cliente`).
+- Bandeja de mensajes de contacto con filtros por estado, búsqueda, detalle y cambio de estado.
 
 ### Datos de demostración
 
@@ -187,20 +192,30 @@ Los pasos completos, la conexión desde Azure Data Studio o DBeaver y la soluci�
 
 ## Cómo probar el flujo completo
 
-1. Abrir <http://localhost:8080/pages/cotizacion.html>.
-2. Revisar los planes y completar el wizard con datos de prueba.
-3. Enviar el diagnóstico y revisar el plan recomendado.
-4. Iniciar sesión como `admin@devstudio.local` / `Admin#2026`.
-5. Entrar a <http://localhost:8080/pages/admin/solicitudes.html>.
-6. Abrir la solicitud, vincular un cliente y usar **Crear proyecto**.
-7. Entrar a <http://localhost:8080/pages/admin/proyectos.html> y verificar el proyecto creado.
-8. Volver al dashboard y comprobar las métricas actualizadas.
+1. Abrir <http://localhost:8080/pages/servicios.html> y revisar el catálogo y un detalle.
+2. Abrir <http://localhost:8080/pages/portafolio.html>, filtrar por tecnología y abrir un caso.
+3. Abrir <http://localhost:8080/pages/contacto.html> y enviar un mensaje de prueba.
+4. Abrir <http://localhost:8080/pages/cotizacion.html>.
+5. Revisar los planes y completar el wizard con datos de prueba.
+6. Enviar el diagnóstico y revisar el plan recomendado.
+7. Iniciar sesión como `admin@devstudio.local` / `Admin#2026`.
+8. Entrar a <http://localhost:8080/pages/admin/mensajes.html> y cambiar el estado del mensaje recibido.
+9. Entrar a <http://localhost:8080/pages/admin/solicitudes.html>.
+10. Abrir la solicitud, vincular un cliente y usar **Crear proyecto**.
+11. Entrar a <http://localhost:8080/pages/admin/proyectos.html> y verificar el proyecto creado.
+12. Volver al dashboard y comprobar las métricas actualizadas.
 
 ## Rutas del front
 
 | Página | Ruta | Acceso |
 |---|---|---|
 | Inicio | `/index.html` | Público |
+| Servicios | `/pages/servicios.html` | Público |
+| Detalle de servicio | `/pages/servicio-detalle.html?slug=...` | Público |
+| Portafolio | `/pages/portafolio.html` | Público |
+| Detalle de caso | `/pages/caso-detalle.html?slug=...` | Público |
+| Nosotros | `/pages/nosotros.html` | Público |
+| Contacto | `/pages/contacto.html` | Público |
 | Diagnóstico y planes | `/pages/cotizacion.html` | Público |
 | Login | `/pages/login.html` | Público; redirige si hay sesión |
 | Registro | `/pages/registro.html` | Público; redirige si hay sesión |
@@ -208,6 +223,8 @@ Los pasos completos, la conexión desde Azure Data Studio o DBeaver y la soluci�
 | Dashboard | `/pages/admin/dashboard.html` | Solo `admin` |
 | Solicitudes | `/pages/admin/solicitudes.html` | Solo `admin` |
 | Proyectos | `/pages/admin/proyectos.html` | Solo `admin` |
+| Mensajes | `/pages/admin/mensajes.html` | Solo `admin` |
+| No encontrado | `/404.html` | Público |
 
 ## API implementada
 
@@ -217,8 +234,14 @@ Base: `/api/v1`.
 |---|---|---|
 | GET | `/health` | Público |
 | GET | `/planes` | Público |
+| GET | `/config` | Público |
 | GET | `/servicios` | Público |
+| GET | `/servicios/{slug}` | Público |
+| GET | `/tecnologias` | Público |
+| GET | `/portafolio` | Público |
+| GET | `/portafolio/{slug}` | Público |
 | POST | `/diagnostico` | Público + CSRF |
+| POST | `/contacto` | Público + CSRF |
 | GET | `/auth/csrf` | Público |
 | POST | `/auth/login` | Público |
 | POST | `/auth/logout` | Autenticado |
@@ -235,6 +258,9 @@ Base: `/api/v1`.
 | GET | `/admin/proyectos/{id}` | Solo `admin` |
 | POST | `/admin/proyectos` | Solo `admin` |
 | PATCH | `/admin/proyectos/{id}` | Solo `admin` |
+| GET | `/admin/mensajes` | Solo `admin` |
+| GET | `/admin/mensajes/{id}` | Solo `admin` |
+| PATCH | `/admin/mensajes/{id}` | Solo `admin` |
 
 El contrato completo está en [`backEnd/docs/03-api.md`](backEnd/docs/03-api.md).
 
@@ -251,6 +277,7 @@ Scripts:
 | `backEnd/database/schema.sql` | Esquema completo e idempotente |
 | `backEnd/database/seed.sql` | Catálogos, cuentas y datos de demostración |
 | `backEnd/database/migrations/001_planes_diagnostico.sql` | Planes y campos del diagnóstico para bases existentes |
+| `backEnd/database/migrations/002_portafolio_publico.sql` | Casos de éxito, beneficios de servicios e índice de portafolio |
 
 El modelo y el diccionario están en [`backEnd/docs/02-base-datos/`](backEnd/docs/02-base-datos/).
 
@@ -308,19 +335,22 @@ El modelo y el diccionario están en [`backEnd/docs/02-base-datos/`](backEnd/doc
 
 ## Verificación realizada
 
-- Esquema y migración aplicados sobre SQL Server 2022 en Docker.
-- Seed ejecutado dos veces sin duplicar registros.
-- `php -l` sin errores en los archivos nuevos y modificados.
-- Pruebas de API con `curl`: diagnóstico público, dashboard, bandeja, actualización y conversión.
-- Prueba en Chromium headless: planes y servicios públicos, métricas del dashboard, bandeja con detalle y listado de proyectos.
+- Etapas 1–3: esquema y migración aplicados sobre SQL Server 2022 en Docker, seed ejecutado dos veces sin duplicar registros, `php -l` sin errores y pruebas de API con `curl`.
+- Etapa 4 (2026-11-22):
+  - Migración `002` aplicada sobre la base existente y sobre una base limpia `DevStudioDB_test`.
+  - `schema.sql` y `seed.sql` ejecutados dos veces en la base limpia sin duplicar registros (2 roles, 4 usuarios, 4 servicios, 9 tecnologías, 3 planes, 6 proyectos, 5 solicitudes y 4 mensajes).
+  - `php -l` sin errores en todos los archivos PHP y `node --check` sin errores en los módulos JS.
+  - 40 pruebas de API con `curl`: catálogo público, portafolio sin datos privados, contacto con CSRF/validación/rate limit, login por rol, `403` de cliente en rutas admin y bandeja de mensajes.
+  - `POST /diagnostico` verificado con recomendación de plan.
+  - Validación visual con Chromium headless en 375, 768 y 1280 px; páginas públicas y `404` renderizadas sin errores de consola.
 
 ## Pendientes
 
-- Catálogos públicos de servicios, portafolio, nosotros y contacto.
 - Portal del cliente con proyectos y solicitudes propias.
-- CRUD de usuarios, clientes, servicios, tecnologías y mensajes.
+- CRUD de usuarios, clientes, servicios y tecnologías.
+- Suite de pruebas automatizadas para la API.
 - Recuperación de contraseña (opcional).
-- Capturas y validación visual final en navegador.
+- Capturas de pantalla para los manuales.
 - Documentos PDF en LaTeX.
 
 ## Licencia

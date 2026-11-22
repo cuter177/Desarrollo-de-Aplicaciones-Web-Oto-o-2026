@@ -94,6 +94,9 @@ Criterios para que el sitio sea usable con teclado, lectores de pantalla y difer
 - `aria-expanded` y `aria-controls` en menús desplegables.
 - `role="alert"` para errores urgentes y `role="status"` para confirmaciones.
 - No usar `aria-hidden` en elementos enfocables.
+- Los filtros del portafolio usan `aria-pressed` para comunicar el estado activo.
+- Las portadas e iniciales de los casos son decorativas (`aria-hidden="true"`); el enlace y el texto llevan la información.
+- El campo honeypot se oculta fuera de pantalla y queda fuera del orden de tabulación con `tabindex="-1"`.
 
 ## 8. Tablas
 

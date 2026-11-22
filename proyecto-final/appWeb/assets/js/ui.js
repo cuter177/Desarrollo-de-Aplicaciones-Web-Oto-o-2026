@@ -48,6 +48,23 @@ export function actualizarHeader(usuario) {
   });
 }
 
+export function escapar(texto) {
+  return String(texto ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+export function mensajeError(error) {
+  const detalles = error?.details && typeof error.details === 'object'
+    ? Object.values(error.details).filter((item) => typeof item === 'string')
+    : [];
+
+  return detalles[0] || error?.message || 'No se pudo completar la operación.';
+}
+
 export function mostrarAlerta(elemento, tipo, mensaje) {
   if (!elemento) {
     return;

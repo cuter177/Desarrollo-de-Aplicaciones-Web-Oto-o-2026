@@ -120,7 +120,7 @@ Solo aparecen los proyectos publicados por el administrador.
 
 ## 5. Portal del cliente
 
-> **Estado 0.4.0:** el sitio público está completo. El portal ya valida la sesión y muestra el nombre, correo, rol y empresa del cliente; los listados de proyectos y solicitudes propias siguen pendientes.
+El cliente entra con su cuenta y consulta solo sus proyectos y solicitudes. Cambiar un identificador en la dirección no muestra datos de otra empresa.
 
 ### 5.1 Resumen
 
@@ -150,7 +150,7 @@ Permite actualizar nombre, teléfono, empresa y contraseña. El correo electrón
 
 ## 6. Panel de administración
 
-> **Estado 0.4.0:** el dashboard, las solicitudes, los proyectos y los mensajes son funcionales y accesibles solo con rol `admin`. Usuarios, clientes, servicios y tecnologías siguen pendientes.
+El panel admite el rol `admin`. Desde ahí se gestionan solicitudes, proyectos, mensajes, usuarios, clientes, servicios y tecnologías. Un cliente que abre estas páginas vuelve a su portal; la API responde `403`.
 
 ### 6.1 Dashboard
 

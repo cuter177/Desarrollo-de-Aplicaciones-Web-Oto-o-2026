@@ -37,7 +37,7 @@ function mostrarNoEncontrado() {
   contenido.hidden = true;
   cta.hidden = true;
   noEncontrado.hidden = false;
-  document.title = 'Caso no encontrado — [Nombre de la empresa]';
+  document.title = 'Caso no encontrado — DevStudio';
 }
 
 function renderTecnologias(lista) {
@@ -68,7 +68,7 @@ async function cargar() {
   try {
     const proyecto = await apiGet(`/portafolio/${encodeURIComponent(slug)}`);
 
-    document.title = `${proyecto.nombre} — [Nombre de la empresa]`;
+    document.title = `${proyecto.nombre} — DevStudio`;
     sector.textContent = proyecto.sector ?? 'Caso de éxito';
     titulo.textContent = proyecto.nombre;
 

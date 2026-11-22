@@ -36,7 +36,7 @@ appWeb/
 
 ## Estado actual
 
-`0.4.0` — Sitio público completo y bandeja de mensajes:
+`0.5.0` — Portal del cliente y módulos administrativos restantes:
 
 - Inicio, servicios y detalle, portafolio con filtros y detalle de caso, nosotros y contacto.
 - Página pública de planes con los planes Esencial, Crecimiento y Transformación.
@@ -47,10 +47,9 @@ appWeb/
 - Gestión de proyectos con alta, edición, estado, fechas, publicación y contenido de caso.
 - Bandeja de mensajes con filtros, detalle y cambio de estado.
 - Login, registro, cierre de sesión y header dinámico por rol.
-- Portal de cliente y panel administrativo protegidos en el front y en el backend.
+- Portal del cliente con resumen, proyectos, solicitudes, alta y perfil.
+- Administración de usuarios, clientes, servicios y tecnologías.
 - Manejo de CSRF, errores de validación y estados de carga.
-
-El detalle del portal y los CRUD restantes siguen pendientes.
 
 ## Desarrollo
 

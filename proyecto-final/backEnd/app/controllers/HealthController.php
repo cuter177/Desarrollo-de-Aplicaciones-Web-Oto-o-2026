@@ -14,7 +14,7 @@ final class HealthController
     {
         Response::data([
             'name' => 'API Proyecto Final',
-            'version' => '0.4.0',
+            'version' => '0.5.0',
             'status' => 'ready',
             'docs' => 'backEnd/docs/03-api.md',
         ]);
@@ -38,7 +38,7 @@ final class HealthController
         Response::data([
             'status' => $status,
             'database' => $database,
-            'version' => '0.4.0',
+            'version' => '0.5.0',
             'timestamp' => gmdate('c'),
         ], $httpStatus);
     }

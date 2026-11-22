@@ -1,6 +1,6 @@
 # Scripts
 
-Utilidades previstas para desarrollo y entrega. En `0.4.0` la documentación sigue siendo la única pieza de esta carpeta; el único script implementado es `backEnd/scripts/crear-admin.php`.
+Utilidades de desarrollo y entrega. `probar-api.sh` verifica la API local. El alta de administrador sigue en `backEnd/scripts/crear-admin.php`.
 
 ## Scripts planeados
 
@@ -45,4 +45,4 @@ Excluir:
 
 ## Estado
 
-`0.4.0` — Pendiente de implementación; el alta de administrador vive en `backEnd/scripts/`.
+`0.5.0` — `probar-api.sh` verifica el portal, el aislamiento entre clientes y el CRUD administrativo contra la API local. El alta de administrador sigue en `backEnd/scripts/crear-admin.php`.

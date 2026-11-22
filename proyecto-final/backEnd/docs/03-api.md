@@ -3,7 +3,7 @@
 **Base URL:** `http://localhost:8080/api/v1`
 **Formato:** JSON UTF-8
 **Autenticación:** cookie de sesión + token CSRF
-**Versión:** 0.4.0 (sitio público completo, mensajes de contacto y portafolio publicado)
+**Versión:** 0.5.0 (portal del cliente y CRUD administrativo de usuarios, clientes, servicios y tecnologías)
 
 ## 1. Convenciones
 
@@ -338,16 +338,16 @@ El endpoint exige CSRF, aplica rate limit por IP y guarda la solicitud con
 
 | Método | Ruta | Descripción |
 |---|---|---|
+| GET | `/mi/resumen` | Métricas y actividad reciente del cliente autenticado |
 | GET | `/mi/perfil` | Perfil del cliente autenticado |
-| PATCH | `/mi/perfil` | Actualiza nombre, empresa, teléfono y sitio |
-| GET | `/mi/proyectos` | Proyectos del cliente |
+| PATCH | `/mi/perfil` | Actualiza nombre, empresa, teléfono, sitio e industria |
+| GET | `/mi/proyectos` | Proyectos del cliente, con tecnologías |
 | GET | `/mi/proyectos/{id}` | Detalle validando propiedad |
 | GET | `/mi/solicitudes` | Solicitudes del cliente |
-| POST | `/mi/solicitudes` | Nueva solicitud desde el portal |
+| POST | `/mi/solicitudes` | Nueva solicitud desde el portal (`origen: portal`) |
 | GET | `/mi/solicitudes/{id}` | Detalle validando propiedad |
-| DELETE | `/mi/solicitudes/{id}` | Cancela una solicitud en estado `nueva` |
 
-**Regla:** todas las consultas incluyen `cliente_id = <cliente de la sesión>` en el `WHERE`. Un `id` de otro cliente devuelve `403` o `404` sin filtrar información.
+**Regla:** el `cliente_id` sale de la sesión, nunca de la URL ni del cuerpo. Un `id` de otro cliente responde `404`. El rol `admin` recibe `403` en todo `/mi/*`; su panel sigue en `/admin/*`. `POST` y `PATCH` exigen CSRF. `POST /mi/solicitudes` limita 10 envíos por hora y por usuario. El correo no se cambia desde el perfil; el cambio de contraseña sigue en `PATCH /auth/password`.
 
 ### Ejemplo: mis proyectos
 
@@ -583,8 +583,10 @@ Respuesta `429`:
 | Panel de solicitudes | Implementado (bandeja, detalle, actualización y conversión a proyecto) |
 | Panel de proyectos | Implementado (listado, alta, edición, publicación y contenido de caso) |
 | Panel de mensajes | Implementado (bandeja, filtros, detalle y cambio de estado) |
-| Portal del cliente (`/mi/*`) | Pendiente |
-| CRUD administrativos restantes | Pendiente (usuarios, servicios y tecnologías) |
+| Portal del cliente (`/mi/*`) | Implementado (resumen, proyectos, solicitudes, perfil y aislamiento por sesión) |
+| CRUD de usuarios | Implementado (alta, edición de nombre, correo, rol y estado; sin `password_hash`) |
+| CRUD de clientes | Implementado (alta vinculada a un usuario, edición y detalle con proyectos y solicitudes) |
+| CRUD de servicios y tecnologías | Implementado (alta, edición y desactivación lógica con `activo = 0`) |
 | Recuperación de contraseña | Pendiente (opcional) |
 
 La implementación debe respetar este contrato o actualizarlo junto con el changelog del backend.

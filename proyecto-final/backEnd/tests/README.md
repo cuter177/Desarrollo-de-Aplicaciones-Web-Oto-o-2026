@@ -20,4 +20,4 @@ Carpeta reservada para las pruebas de la API.
 
 ## Estado
 
-`0.4.0` — Sin pruebas automatizadas. El sitio público, la autenticación y el panel están implementados, pero no se pudieron ejecutar en Docker/PHP desde el equipo de desarrollo.
+`0.5.0` — `scripts/probar-api.sh` ejercita autenticación, roles, aislamiento entre clientes, CSRF y el CRUD de tecnologías y servicios contra la API en ejecución.

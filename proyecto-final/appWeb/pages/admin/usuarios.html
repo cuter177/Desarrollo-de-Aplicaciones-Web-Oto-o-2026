@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Gestión de usuarios del panel administrativo.">
+  <title>Usuarios — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin-usuarios.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html" aria-current="page">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Administración</p>
+        <h1 class="page__title">Usuarios</h1>
+        <p class="page__lead">Crea cuentas, cambia el rol y activa o desactiva el acceso. Las contraseñas no se muestran.</p>
+      </header>
+      <nav class="admin-nav" aria-label="Secciones del panel">
+        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+        <a class="admin-nav__link is-active" href="/pages/admin/usuarios.html" aria-current="page">Usuarios</a>
+        <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
+        <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
+        <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+      </nav>
+      <div class="alert" id="admin-alert" role="alert" hidden></div>
+      <div class="admin-grid">
+        <section class="panel" aria-labelledby="usuario-form-title">
+          <h2 class="panel__title" id="usuario-form-title">Nuevo usuario</h2>
+          <form class="form" id="usuario-form">
+            <input type="hidden" id="usuario-id" value="">
+            <div class="form__field">
+              <label class="form__label" for="usuario-nombre">Nombre</label>
+              <input class="form__input" id="usuario-nombre" type="text" minlength="2" maxlength="120" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="usuario-email">Correo</label>
+              <input class="form__input" id="usuario-email" type="email" maxlength="254" required>
+            </div>
+            <div class="form__field" id="usuario-password-campo">
+              <label class="form__label" for="usuario-password">Contraseña</label>
+              <input class="form__input" id="usuario-password" type="password" autocomplete="new-password" minlength="8">
+              <p class="form__hint">Mínimo 8 caracteres, con mayúscula, minúscula y número.</p>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="usuario-rol">Rol</label>
+              <select class="form__select" id="usuario-rol" required>
+                <option value="cliente">Cliente</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+            <div id="usuario-empresa-campos">
+              <div class="form__field">
+                <label class="form__label" for="usuario-empresa">Empresa</label>
+                <input class="form__input" id="usuario-empresa" type="text" maxlength="150">
+                <p class="form__hint">Opcional. Si la indicas, se crea el cliente vinculado.</p>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="usuario-telefono">Teléfono</label>
+                <input class="form__input" id="usuario-telefono" type="tel" maxlength="30">
+              </div>
+            </div>
+            <label class="form__check">
+              <input id="usuario-activo" type="checkbox" checked>
+              Cuenta activa
+            </label>
+            <div class="form__actions">
+              <button class="btn" id="usuario-guardar" type="submit">Crear usuario</button>
+              <button class="btn btn--ghost" id="usuario-cancelar" type="button" hidden>Cancelar</button>
+            </div>
+          </form>
+        </section>
+        <section class="panel" aria-labelledby="usuarios-title">
+          <div class="panel__header">
+            <h2 class="panel__title" id="usuarios-title">Listado</h2>
+          </div>
+          <div class="form__field">
+            <label class="form__label" for="usuario-buscar">Buscar</label>
+            <input class="form__input" id="usuario-buscar" type="search" placeholder="Nombre o correo">
+          </div>
+          <div id="usuarios-lista" aria-live="polite"><div class="empty-state">Cargando usuarios…</div></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

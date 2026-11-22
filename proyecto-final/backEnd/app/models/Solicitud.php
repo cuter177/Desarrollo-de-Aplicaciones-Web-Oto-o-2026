@@ -94,6 +94,36 @@ final class Solicitud
     }
 
     /**
+     * @return list<array<string, mixed>>
+     */
+    public static function allForCliente(int $clienteId): array
+    {
+        $stmt = Database::connection()->prepare(
+            self::selectSql() . ' WHERE s.cliente_id = :cliente_id ORDER BY s.creado_en DESC, s.id DESC'
+        );
+        $stmt->execute([':cliente_id' => $clienteId]);
+
+        return array_map(
+            static fn (array $row): array => self::mapRow($row),
+            $stmt->fetchAll(PDO::FETCH_ASSOC)
+        );
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public static function findForCliente(int $id, int $clienteId): ?array
+    {
+        $stmt = Database::connection()->prepare(
+            self::selectSql() . ' WHERE s.id = :id AND s.cliente_id = :cliente_id'
+        );
+        $stmt->execute([':id' => $id, ':cliente_id' => $clienteId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row === false ? null : self::mapRow($row);
+    }
+
+    /**
      * @param array<string, mixed> $data
      */
     public static function update(int $id, array $data): void

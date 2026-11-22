@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Gestión de clientes del panel administrativo.">
+  <title>Clientes — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin-clientes.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html" aria-current="page">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Administración</p>
+        <h1 class="page__title">Clientes</h1>
+        <p class="page__lead">Vincula una empresa con un usuario cliente y consulta sus proyectos y solicitudes.</p>
+      </header>
+      <nav class="admin-nav" aria-label="Secciones del panel">
+        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+        <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+        <a class="admin-nav__link is-active" href="/pages/admin/clientes.html" aria-current="page">Clientes</a>
+        <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
+        <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+      </nav>
+      <div class="alert" id="admin-alert" role="alert" hidden></div>
+      <div class="admin-grid">
+        <section class="panel" aria-labelledby="cliente-form-title">
+          <h2 class="panel__title" id="cliente-form-title">Vincular cliente</h2>
+          <form class="form" id="cliente-form">
+            <input type="hidden" id="cliente-id" value="">
+            <div class="form__field" id="cliente-usuario-campo">
+              <label class="form__label" for="cliente-usuario">Usuario cliente</label>
+              <select class="form__select" id="cliente-usuario" required>
+                <option value="">Selecciona un usuario</option>
+              </select>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="cliente-empresa">Empresa</label>
+              <input class="form__input" id="cliente-empresa" type="text" minlength="2" maxlength="150" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="cliente-telefono">Teléfono</label>
+              <input class="form__input" id="cliente-telefono" type="tel" maxlength="30">
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="cliente-sitio">Sitio web</label>
+              <input class="form__input" id="cliente-sitio" type="url" maxlength="200" placeholder="https://">
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="cliente-industria">Industria</label>
+              <input class="form__input" id="cliente-industria" type="text" maxlength="100">
+            </div>
+            <div class="form__actions">
+              <button class="btn" id="cliente-guardar" type="submit">Crear cliente</button>
+              <button class="btn btn--ghost" id="cliente-cancelar" type="button" hidden>Cancelar</button>
+            </div>
+          </form>
+        </section>
+        <section class="panel">
+          <h2 class="panel__title">Listado</h2>
+          <div id="clientes-lista" aria-live="polite"><div class="empty-state">Cargando clientes…</div></div>
+        </section>
+      </div>
+      <section class="panel" aria-live="polite">
+        <div id="cliente-detalle"><div class="empty-state">Selecciona “Ver” para consultar proyectos y solicitudes.</div></div>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

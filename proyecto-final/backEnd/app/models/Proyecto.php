@@ -64,6 +64,45 @@ final class Proyecto
     }
 
     /**
+     * @return list<array<string, mixed>>
+     */
+    public static function allForCliente(int $clienteId): array
+    {
+        $stmt = Database::connection()->prepare(
+            'SELECT ' . self::SELECT_ADMIN . '
+             FROM dbo.Proyectos p
+             INNER JOIN dbo.Clientes c ON c.id = p.cliente_id
+             WHERE p.cliente_id = :cliente_id
+             ORDER BY p.creado_en DESC, p.id DESC'
+        );
+        $stmt->execute([':cliente_id' => $clienteId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return self::withTechnologies($rows);
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public static function findForCliente(int $id, int $clienteId): ?array
+    {
+        $stmt = Database::connection()->prepare(
+            'SELECT ' . self::SELECT_ADMIN . '
+             FROM dbo.Proyectos p
+             INNER JOIN dbo.Clientes c ON c.id = p.cliente_id
+             WHERE p.id = :id AND p.cliente_id = :cliente_id'
+        );
+        $stmt->execute([':id' => $id, ':cliente_id' => $clienteId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row === false) {
+            return null;
+        }
+
+        return self::withTechnologies([$row])[0];
+    }
+
+    /**
      * Proyectos visibles en el portafolio público.
      *
      * @return list<array<string, mixed>>
@@ -216,6 +255,27 @@ final class Proyecto
         $stmt->execute([':slug' => $slug]);
 
         return (int) $stmt->fetchColumn() > 0;
+    }
+
+    /**
+     * @param list<array<string, mixed>> $rows
+     * @return list<array<string, mixed>>
+     */
+    private static function withTechnologies(array $rows): array
+    {
+        $tecnologias = self::technologiesForProjects(
+            array_map(static fn (array $row): int => (int) $row['id'], $rows)
+        );
+
+        return array_map(
+            static function (array $row) use ($tecnologias): array {
+                $proyecto = self::mapRow($row);
+                $proyecto['tecnologias'] = $tecnologias[(int) $row['id']] ?? [];
+
+                return $proyecto;
+            },
+            $rows
+        );
     }
 
     /**

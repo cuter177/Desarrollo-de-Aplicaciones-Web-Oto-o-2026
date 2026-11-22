@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <meta name="description" content="Bandeja de mensajes de contacto del panel administrativo.">
-  <title>Mensajes — [Nombre de la empresa]</title>
+  <title>Mensajes — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/admin-mensajes.js" defer></script>
@@ -15,9 +15,9 @@
 
   <header class="site-header">
     <div class="container site-header__inner">
-      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
@@ -49,6 +49,10 @@
         <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
         <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
         <a class="admin-nav__link is-active" href="/pages/admin/mensajes.html" aria-current="page">Mensajes</a>
+        <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+        <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
+        <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
+        <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
       </nav>
 
       <div class="alert" id="admin-alert" role="alert" hidden></div>
@@ -91,8 +95,18 @@
 
   <footer class="site-footer">
     <div class="container site-footer__inner">
-      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
-      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Servicios</a>
+        <a href="/pages/portafolio.html">Portafolio</a>
+        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Diagnóstico</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+      </p>
     </div>
   </footer>
 </body>

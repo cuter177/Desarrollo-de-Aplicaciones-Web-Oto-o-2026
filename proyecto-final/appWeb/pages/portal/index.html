@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Portal de clientes de [Nombre de la empresa].">
-  <title>Mi portal — [Nombre de la empresa]</title>
+  <meta name="description" content="Resumen del portal de clientes de DevStudio.">
+  <title>Mi portal — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/portal.js" defer></script>
@@ -15,9 +15,9 @@
 
   <header class="site-header">
     <div class="container site-header__inner">
-      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
 
       <nav class="site-nav" aria-label="Navegación principal">
@@ -47,54 +47,46 @@
         <p class="hero__eyebrow">Portal del cliente</p>
         <h1 class="page__title">Hola, <span data-portal-nombre>cliente</span></h1>
         <p class="page__lead">
-          Este es el punto de partida de tu portal. En las siguientes etapas se
-          habilitarán los proyectos, solicitudes y datos de tu empresa.
+          Consulta el avance de tus proyectos, el estado de tus solicitudes y los
+          datos de <span data-portal-empresa>tu empresa</span>.
         </p>
       </header>
 
-      <div class="alert alert--info" role="status">
-        Etapa 2: el acceso y la sesión ya funcionan. El contenido del portal es un
-        placeholder protegido por rol.
-      </div>
+      <nav class="admin-nav" aria-label="Secciones del portal">
+        <a class="admin-nav__link is-active" href="/pages/portal/index.html" aria-current="page">Resumen</a>
+        <a class="admin-nav__link" href="/pages/portal/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/portal/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/portal/perfil.html">Perfil</a>
+      </nav>
+
+      <div class="alert" id="portal-alert" role="alert" hidden></div>
 
       <section class="metrics" aria-label="Resumen de la cuenta">
         <article class="metric">
-          <p class="metric__label">Cuenta</p>
+          <p class="metric__label">Empresa</p>
           <p class="metric__value" data-portal-empresa>—</p>
         </article>
         <article class="metric">
           <p class="metric__label">Proyectos activos</p>
-          <p class="metric__value">0</p>
+          <p class="metric__value" data-metric="proyectos_activos">—</p>
         </article>
         <article class="metric">
           <p class="metric__label">Solicitudes abiertas</p>
-          <p class="metric__value">0</p>
+          <p class="metric__value" data-metric="solicitudes_abiertas">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Proyectos en total</p>
+          <p class="metric__value" data-metric="proyectos_total">—</p>
         </article>
       </section>
 
-      <section class="panel" aria-labelledby="portal-datos-title">
-        <h2 class="panel__title" id="portal-datos-title">Datos de la sesión</h2>
-        <dl class="data-list">
-          <div class="data-list__row">
-            <dt class="data-list__label">Nombre</dt>
-            <dd class="data-list__value" data-user-name>—</dd>
-          </div>
-          <div class="data-list__row">
-            <dt class="data-list__label">Correo</dt>
-            <dd class="data-list__value" data-user-email>—</dd>
-          </div>
-          <div class="data-list__row">
-            <dt class="data-list__label">Rol</dt>
-            <dd class="data-list__value" data-user-role>—</dd>
-          </div>
-        </dl>
-      </section>
-
-      <section class="panel" aria-labelledby="portal-pendiente-title">
-        <h2 class="panel__title" id="portal-pendiente-title">Próximamente</h2>
-        <div class="empty-state">
-          Listado de proyectos, detalle de avances y seguimiento de solicitudes de
-          cotización.
+      <section class="panel" aria-labelledby="portal-actividad-title">
+        <div class="panel__header">
+          <h2 class="panel__title" id="portal-actividad-title">Actividad reciente</h2>
+          <a class="btn btn--ghost" href="/pages/portal/proyectos.html">Ver proyectos</a>
+        </div>
+        <div id="portal-actividad" aria-live="polite">
+          <div class="empty-state">Cargando actividad…</div>
         </div>
       </section>
     </div>
@@ -102,8 +94,18 @@
 
   <footer class="site-footer">
     <div class="container site-footer__inner">
-      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
-      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Servicios</a>
+        <a href="/pages/portafolio.html">Portafolio</a>
+        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Diagnóstico</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+      </p>
     </div>
   </footer>
 </body>

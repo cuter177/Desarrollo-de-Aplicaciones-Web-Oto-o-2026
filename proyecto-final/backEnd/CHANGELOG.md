@@ -8,6 +8,20 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ### Added
 
+- Portal del cliente: `GET /mi/resumen`, proyectos, solicitudes y perfil, con `cliente_id` tomado de la sesión.
+- `POST /mi/solicitudes` crea una solicitud con origen `portal`, CSRF y límite de 10 por hora.
+- CRUD administrativo de usuarios, clientes, servicios y tecnologías, con desactivación lógica y sin exponer `password_hash`.
+- `scripts/probar-api.sh` cubre roles, aislamiento entre clientes, CSRF y el alta administrativa.
+
+### Changed
+
+- La API reporta la versión `0.5.0`.
+- Un recurso de otro cliente en `/mi/*` responde `404`. El administrador recibe `403` en `/mi/*`.
+
+## [0.4.0] - 2026-11-15
+
+### Added
+
 - Migración `002_portafolio_publico.sql`: campos de caso de éxito en `Proyectos` (`reto`, `solucion`, `resultados`, `mostrar_cliente`), `beneficios` en `Servicios` e índice `IX_Proyectos_Publicado`.
 - Contenido demo de beneficios y casos de éxito en `seed.sql`, con actualizaciones idempotentes.
 - `SiteConfig` y `GET /config` con los datos públicos de la empresa desde variables `COMPANY_*`.

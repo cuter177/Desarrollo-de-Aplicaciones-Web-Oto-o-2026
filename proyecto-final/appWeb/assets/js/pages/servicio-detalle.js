@@ -24,7 +24,7 @@ function mostrarNoEncontrado() {
   contenido.hidden = true;
   cta.hidden = true;
   noEncontrado.hidden = false;
-  document.title = 'Servicio no encontrado — [Nombre de la empresa]';
+  document.title = 'Servicio no encontrado — DevStudio';
 }
 
 function renderBeneficios(lista) {
@@ -65,7 +65,7 @@ async function cargar() {
 
     titulo.textContent = servicio.nombre;
     descripcion.textContent = servicio.descripcion;
-    document.title = `${servicio.nombre} — [Nombre de la empresa]`;
+    document.title = `${servicio.nombre} — DevStudio`;
 
     renderBeneficios(Array.isArray(servicio.beneficios) ? servicio.beneficios : []);
     renderCasos(data.casos);

@@ -184,8 +184,11 @@ final class Solicitud
         $q = trim((string) ($filters['q'] ?? ''));
 
         if ($q !== '') {
-            $conditions[] = '(s.nombre_contacto LIKE :q OR s.email LIKE :q OR s.empresa LIKE :q)';
-            $params[':q'] = '%' . $q . '%';
+            $conditions[] = '(s.nombre_contacto LIKE :q1 OR s.email LIKE :q2 OR s.empresa LIKE :q3)';
+            $like = '%' . $q . '%';
+            $params[':q1'] = $like;
+            $params[':q2'] = $like;
+            $params[':q3'] = $like;
         }
 
         return [

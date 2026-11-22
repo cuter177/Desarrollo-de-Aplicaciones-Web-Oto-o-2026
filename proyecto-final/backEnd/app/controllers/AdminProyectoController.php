@@ -60,6 +60,12 @@ final class AdminProyectoController
             $errors['estado'] = 'Selecciona un estado válido.';
         }
 
+        foreach (['reto', 'solucion', 'resultados'] as $campo) {
+            if (strlen(trim((string) ($data[$campo] ?? ''))) > 5000) {
+                $errors[$campo] = 'El texto no puede superar los 5000 caracteres.';
+            }
+        }
+
         if ($errors !== []) {
             Response::error('VALIDACION', 'Revisa los datos del proyecto.', 422, $errors);
         }
@@ -78,6 +84,10 @@ final class AdminProyectoController
             'nombre' => $nombre,
             'slug' => $slug,
             'descripcion' => $descripcion,
+            'reto' => self::nullableString($data['reto'] ?? null),
+            'solucion' => self::nullableString($data['solucion'] ?? null),
+            'resultados' => self::nullableString($data['resultados'] ?? null),
+            'mostrar_cliente' => !empty($data['mostrar_cliente']) ? 1 : 0,
             'estado' => $estado,
             'fecha_inicio' => self::nullableDate($data['fecha_inicio'] ?? null),
             'fecha_fin' => self::nullableDate($data['fecha_fin'] ?? null),
@@ -161,6 +171,29 @@ final class AdminProyectoController
             }
 
             $cambios['estado'] = $estado;
+        }
+
+        foreach (['reto', 'solucion', 'resultados'] as $campo) {
+            if (!array_key_exists($campo, $data)) {
+                continue;
+            }
+
+            $texto = trim((string) ($data[$campo] ?? ''));
+
+            if (strlen($texto) > 5000) {
+                Response::error(
+                    'VALIDACION',
+                    'El contenido del caso es demasiado largo.',
+                    422,
+                    [$campo => 'Máximo 5000 caracteres.']
+                );
+            }
+
+            $cambios[$campo] = $texto !== '' ? $texto : null;
+        }
+
+        if (array_key_exists('mostrar_cliente', $data)) {
+            $cambios['mostrar_cliente'] = !empty($data['mostrar_cliente']) ? 1 : 0;
         }
 
         foreach (['fecha_inicio', 'fecha_fin'] as $campo) {

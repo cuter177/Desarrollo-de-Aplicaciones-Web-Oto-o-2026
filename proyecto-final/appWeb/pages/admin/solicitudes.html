@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <meta name="description" content="Bandeja de solicitudes del panel administrativo.">
   <title>Solicitudes — [Nombre de la empresa]</title>
   <link rel="stylesheet" href="/assets/css/main.css">
@@ -16,7 +17,7 @@
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
       </a>
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
@@ -47,6 +48,7 @@
         <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
         <a class="admin-nav__link is-active" href="/pages/admin/solicitudes.html" aria-current="page">Solicitudes</a>
         <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
       </nav>
 
       <div class="alert" id="admin-alert" role="alert" hidden></div>

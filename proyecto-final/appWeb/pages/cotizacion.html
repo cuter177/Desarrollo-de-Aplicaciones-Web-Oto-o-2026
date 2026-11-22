@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <meta name="description" content="Diagnóstico digital y planes de [Nombre de la empresa] para hacer crecer tu negocio.">
   <title>Diagnóstico y planes — [Nombre de la empresa]</title>
   <link rel="stylesheet" href="/assets/css/main.css">
@@ -16,12 +17,16 @@
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
       </a>
 
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
           <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
           <li><a class="site-nav__link" href="/pages/cotizacion.html" aria-current="page">Diagnóstico</a></li>
           <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
           <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
@@ -224,7 +229,14 @@
 
   <footer class="site-footer">
     <div class="container site-footer__inner">
-      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p><strong data-config="nombre">[Nombre de la empresa]</strong> · Proyecto académico 2026</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Servicios</a>
+        <a href="/pages/portafolio.html">Portafolio</a>
+        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Diagnóstico</a>
+      </nav>
       <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
     </div>
   </footer>

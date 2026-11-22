@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Bandeja de mensajes de contacto del panel administrativo.">
+  <title>Mensajes — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin-mensajes.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Administración</p>
+        <h1 class="page__title">Mensajes de contacto</h1>
+        <p class="page__lead">
+          Atiende las consultas que llegan desde el formulario público. Marca
+          cada mensaje como en revisión, atendido o archivado.
+        </p>
+      </header>
+
+      <nav class="admin-nav" aria-label="Secciones del panel">
+        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link is-active" href="/pages/admin/mensajes.html" aria-current="page">Mensajes</a>
+      </nav>
+
+      <div class="alert" id="admin-alert" role="alert" hidden></div>
+
+      <section class="panel" aria-labelledby="bandeja-title">
+        <h2 class="panel__title" id="bandeja-title">Bandeja</h2>
+
+        <div class="toolbar">
+          <div class="form__field">
+            <label class="form__label" for="filtro-estado">Estado</label>
+            <select class="form__select" id="filtro-estado">
+              <option value="">Todos</option>
+              <option value="nuevo">Nuevo</option>
+              <option value="en_revision">En revisión</option>
+              <option value="atendido">Atendido</option>
+              <option value="archivado">Archivado</option>
+            </select>
+          </div>
+          <div class="form__field toolbar__search">
+            <label class="form__label" for="filtro-q">Buscar</label>
+            <input class="form__input" id="filtro-q" type="search" placeholder="Nombre, correo o asunto">
+          </div>
+          <button class="btn" type="button" id="filtro-aplicar">Filtrar</button>
+        </div>
+
+        <div class="lead-list" id="mensajes-lista" aria-live="polite">
+          <div class="empty-state">Cargando mensajes…</div>
+        </div>
+      </section>
+
+      <section class="panel" id="mensaje-detalle" aria-labelledby="detalle-title" hidden>
+        <div class="panel__header">
+          <h2 class="panel__title" id="detalle-title">Detalle del mensaje</h2>
+          <button class="btn btn--ghost" type="button" id="detalle-cerrar">Cerrar</button>
+        </div>
+        <div id="detalle-contenido"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>[Nombre de la empresa] · Proyecto académico 2026</p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

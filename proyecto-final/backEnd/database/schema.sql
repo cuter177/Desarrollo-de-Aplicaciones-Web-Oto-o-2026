@@ -106,6 +106,7 @@ BEGIN
         slug            NVARCHAR(120)     NOT NULL,
         nombre          NVARCHAR(120)     NOT NULL,
         descripcion     NVARCHAR(MAX)     NOT NULL,
+        beneficios      NVARCHAR(MAX)     NULL,
         icono           NVARCHAR(80)      NULL,
         activo          BIT               NOT NULL
             CONSTRAINT DF_Servicios_Activo DEFAULT (1),
@@ -154,6 +155,11 @@ BEGIN
         nombre          NVARCHAR(150)     NOT NULL,
         slug            NVARCHAR(160)     NOT NULL,
         descripcion     NVARCHAR(MAX)     NOT NULL,
+        reto            NVARCHAR(MAX)     NULL,
+        solucion        NVARCHAR(MAX)     NULL,
+        resultados      NVARCHAR(MAX)     NULL,
+        mostrar_cliente BIT               NOT NULL
+            CONSTRAINT DF_Proyectos_MostrarCliente DEFAULT (0),
         estado          NVARCHAR(30)      NOT NULL
             CONSTRAINT DF_Proyectos_Estado DEFAULT N'planificado',
         fecha_inicio    DATE              NULL,
@@ -408,6 +414,17 @@ IF NOT EXISTS (
 )
 BEGIN
     CREATE INDEX IX_Mensajes_Estado ON dbo.MensajesContacto (estado);
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes
+    WHERE name = N'IX_Proyectos_Publicado'
+      AND object_id = OBJECT_ID(N'dbo.Proyectos')
+)
+BEGIN
+    CREATE INDEX IX_Proyectos_Publicado
+        ON dbo.Proyectos (publicado, destacado, fecha_inicio);
 END
 GO
 

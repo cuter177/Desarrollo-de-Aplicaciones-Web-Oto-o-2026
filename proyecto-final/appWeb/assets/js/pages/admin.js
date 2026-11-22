@@ -1,6 +1,7 @@
 import { apiGet } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { protegerPagina } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 import { mostrarAlerta } from '../ui.js';
 
 const alerta = document.querySelector('#admin-alert');
@@ -87,6 +88,7 @@ function renderRecientes(solicitudes) {
 
 async function init() {
   const usuario = await iniciarPagina();
+  aplicarConfig();
 
   if (!protegerPagina(usuario, ['admin'])) {
     return;

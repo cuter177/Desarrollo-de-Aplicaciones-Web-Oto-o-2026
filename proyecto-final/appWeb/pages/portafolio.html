@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Casos de éxito y proyectos publicados por [Nombre de la empresa].">
+  <title>Portafolio — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/portafolio.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html" aria-current="page">Portafolio</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero">
+      <div class="container">
+        <p class="hero__eyebrow">Portafolio</p>
+        <h1 class="hero__title">Proyectos que ya están trabajando</h1>
+        <p class="hero__lead">
+          Casos reales de sitios, dashboards y aplicaciones construidos para
+          empresas que necesitaban vender más o reducir trabajo manual.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="/pages/cotizacion.html">Quiero algo similar</a>
+          <a class="btn btn--secondary" href="/pages/servicios.html">Ver servicios</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="hero__eyebrow">Casos publicados</p>
+            <h2 class="section__title">Resultados, no solo pantallas</h2>
+          </div>
+          <p class="section__lead">
+            Filtra por tecnología para encontrar proyectos parecidos al que
+            tienes en mente.
+          </p>
+        </div>
+
+        <div class="filters" id="portafolio-filtros" aria-label="Filtrar por tecnología"></div>
+
+        <div class="case-grid" id="portafolio-lista" aria-live="polite">
+          <div class="empty-state">Cargando proyectos…</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Tu proyecto puede ser el próximo caso</h2>
+            <p>
+              Empecemos con un diagnóstico de tus necesidades, objetivos de
+              crecimiento y procesos que quieres eficientar.
+            </p>
+          </div>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Hablar con el equipo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">[Nombre de la empresa]</strong> · Proyecto académico 2026</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Servicios</a>
+        <a href="/pages/portafolio.html">Portafolio</a>
+        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Diagnóstico</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <span data-config="telefono">+52 55 0000 0000</span>
+      </p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <meta name="description" content="Portal de clientes de [Nombre de la empresa].">
   <title>Mi portal — [Nombre de la empresa]</title>
   <link rel="stylesheet" href="/assets/css/main.css">
@@ -16,12 +17,17 @@
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
       </a>
 
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
           <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
           <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html" aria-current="page">Mi portal</a></li>
           <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
         </ul>

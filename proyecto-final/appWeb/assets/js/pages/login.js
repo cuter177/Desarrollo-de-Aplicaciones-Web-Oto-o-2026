@@ -1,5 +1,6 @@
 import { iniciarPagina } from '../app.js';
 import { iniciarSesion, redirigirPorRol } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 import { mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const form = document.querySelector('#login-form');
@@ -9,6 +10,7 @@ const params = new URLSearchParams(window.location.search);
 
 async function init() {
   const usuario = await iniciarPagina();
+  aplicarConfig();
 
   if (usuario) {
     redirigirPorRol(usuario);

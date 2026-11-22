@@ -1,6 +1,7 @@
 import { apiGet, apiPatch, apiPost } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { protegerPagina } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 import { mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const alerta = document.querySelector('#admin-alert');
@@ -356,6 +357,7 @@ async function convertirSolicitud() {
 
 async function init() {
   const usuario = await iniciarPagina();
+  aplicarConfig();
 
   if (!protegerPagina(usuario, ['admin'])) {
     return;

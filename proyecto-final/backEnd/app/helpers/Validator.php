@@ -187,6 +187,40 @@ final class Validator
         return $errors;
     }
 
+    /**
+     * @return array<string, string>
+     */
+    public static function contacto(array $data): array
+    {
+        $errors = [];
+        $nombre = self::text($data, 'nombre');
+        $email = self::text($data, 'email');
+        $asunto = self::text($data, 'asunto');
+        $mensaje = self::text($data, 'mensaje');
+
+        if (strlen($nombre) < 2 || strlen($nombre) > 120) {
+            $errors['nombre'] = 'El nombre debe tener entre 2 y 120 caracteres.';
+        }
+
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) {
+            $errors['email'] = 'Ingresa un correo electrónico válido.';
+        }
+
+        if (strlen($asunto) < 3 || strlen($asunto) > 150) {
+            $errors['asunto'] = 'El asunto debe tener entre 3 y 150 caracteres.';
+        }
+
+        if (strlen($mensaje) < 10 || strlen($mensaje) > 5000) {
+            $errors['mensaje'] = 'El mensaje debe tener entre 10 y 5000 caracteres.';
+        }
+
+        if (($data['acepta_privacidad'] ?? false) !== true) {
+            $errors['acepta_privacidad'] = 'Debes aceptar el aviso de privacidad.';
+        }
+
+        return $errors;
+    }
+
     public static function password(string $password): ?string
     {
         if (strlen($password) < 8) {

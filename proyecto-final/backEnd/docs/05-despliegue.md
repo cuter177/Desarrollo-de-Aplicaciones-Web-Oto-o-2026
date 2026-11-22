@@ -33,6 +33,16 @@ APP_NAME="[Nombre de la empresa]"
 APP_URL=http://localhost:8080
 APP_TIMEZONE=America/Mexico_City
 WEB_PORT=8080
+COMPANY_TAGLINE="Software que hace crecer tu negocio"
+COMPANY_DESCRIPTION="Diseñamos sitios web, dashboards y aplicaciones móviles."
+COMPANY_EMAIL=contacto@devstudio.local
+COMPANY_PHONE="+52 55 0000 0000"
+COMPANY_WHATSAPP=
+COMPANY_ADDRESS="Ciudad de México, México"
+COMPANY_HOURS="Lunes a viernes, 9:00 a 18:00"
+COMPANY_LINKEDIN=
+COMPANY_GITHUB=
+COMPANY_INSTAGRAM=
 DB_NAME=DevStudioDB
 DB_USER=sa
 DB_PASSWORD="UnaClaveSegura#2026"
@@ -98,7 +108,22 @@ docker compose exec -T mssql /bin/bash -c \
   < backEnd/database/seed.sql
 ```
 
-### 5.3 Crear el administrador inicial
+### 5.3 Aplicar migraciones
+
+```bash
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/migrations/001_planes_diagnostico.sql
+
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/migrations/002_portafolio_publico.sql
+```
+
+Las migraciones son idempotentes. En una base recién creada, `schema.sql` ya incluye
+las columnas e índices, por lo que aplicarlas no duplica estructuras.
+
+### 5.4 Crear el administrador inicial
 
 El `seed.sql` de desarrollo ya crea `admin@devstudio.local` con la contraseña temporal `Admin#2026`. Si prefieres usar tus propias variables `ADMIN_*`, ejecuta:
 
@@ -119,7 +144,7 @@ curl -b cookies.txt -c cookies.txt -X POST http://localhost:8080/api/v1/auth/log
   -d '{"email":"admin@devstudio.local","password":"Admin#2026"}'
 ```
 
-### 5.4 Conexión desde el host
+### 5.5 Conexión desde el host
 
 | Parámetro | Valor |
 |---|---|
@@ -162,6 +187,7 @@ Checklist mínimo:
 - [ ] `SESSION_SECURE=true` y HTTPS con certificado válido.
 - [ ] `DB_TRUST_CERT=false` con certificado válido y `DB_ENCRYPT=true`.
 - [ ] Usuario de SQL Server distinto de `sa`, con permisos mínimos.
+- [ ] `COMPANY_*` con los datos reales de la empresa (se publican en `GET /config`).
 - [ ] `ADMIN_PASSWORD` fuerte y contraseña del administrador cambiada tras el primer acceso.
 - [ ] `RATE_LIMIT_DIR` en un volumen persistente o rate limit migrado a Redis/BD.
 - [ ] Contraseñas y secretos en un gestor seguro.

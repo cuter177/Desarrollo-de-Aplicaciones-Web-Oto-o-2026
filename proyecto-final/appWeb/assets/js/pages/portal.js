@@ -1,8 +1,10 @@
 import { iniciarPagina } from '../app.js';
 import { protegerPagina } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 
 async function init() {
   const usuario = await iniciarPagina();
+  aplicarConfig();
 
   if (!protegerPagina(usuario, ['cliente', 'admin'])) {
     return;

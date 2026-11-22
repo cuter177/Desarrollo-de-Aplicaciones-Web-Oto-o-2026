@@ -1,6 +1,7 @@
 import { apiGet, apiPatch, apiPost } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { protegerPagina } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 import { mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const alerta = document.querySelector('#admin-alert');
@@ -10,12 +11,16 @@ const idInput = document.querySelector('#proyecto-id');
 const clienteSelect = document.querySelector('#proyecto-cliente');
 const nombreInput = document.querySelector('#proyecto-nombre');
 const descripcionInput = document.querySelector('#proyecto-descripcion');
+const retoInput = document.querySelector('#proyecto-reto');
+const solucionInput = document.querySelector('#proyecto-solucion');
+const resultadosInput = document.querySelector('#proyecto-resultados');
 const estadoSelect = document.querySelector('#proyecto-estado');
 const urlInput = document.querySelector('#proyecto-url');
 const inicioInput = document.querySelector('#proyecto-inicio');
 const finInput = document.querySelector('#proyecto-fin');
 const publicadoInput = document.querySelector('#proyecto-publicado');
 const destacadoInput = document.querySelector('#proyecto-destacado');
+const mostrarClienteInput = document.querySelector('#proyecto-mostrar-cliente');
 const guardarBoton = document.querySelector('#proyecto-guardar');
 const cancelarBoton = document.querySelector('#proyecto-cancelar');
 const tituloFormulario = document.querySelector('#proyecto-form-title');
@@ -125,12 +130,16 @@ function editarProyecto(id) {
   clienteSelect.value = String(proyecto.cliente_id);
   nombreInput.value = proyecto.nombre;
   descripcionInput.value = proyecto.descripcion;
+  retoInput.value = proyecto.reto ?? '';
+  solucionInput.value = proyecto.solucion ?? '';
+  resultadosInput.value = proyecto.resultados ?? '';
   estadoSelect.value = proyecto.estado;
   urlInput.value = proyecto.url_demo ?? '';
   inicioInput.value = proyecto.fecha_inicio ? proyecto.fecha_inicio.slice(0, 10) : '';
   finInput.value = proyecto.fecha_fin ? proyecto.fecha_fin.slice(0, 10) : '';
   publicadoInput.checked = proyecto.publicado;
   destacadoInput.checked = proyecto.destacado;
+  mostrarClienteInput.checked = proyecto.mostrar_cliente;
 
   tituloFormulario.textContent = 'Editar proyecto';
   guardarBoton.textContent = 'Guardar cambios';
@@ -151,12 +160,16 @@ async function guardarProyecto(event) {
     cliente_id: Number(clienteSelect.value),
     nombre: nombreInput.value.trim(),
     descripcion: descripcionInput.value.trim(),
+    reto: retoInput.value.trim(),
+    solucion: solucionInput.value.trim(),
+    resultados: resultadosInput.value.trim(),
     estado: estadoSelect.value,
     url_demo: urlInput.value.trim(),
     fecha_inicio: inicioInput.value,
     fecha_fin: finInput.value,
     publicado: publicadoInput.checked,
     destacado: destacadoInput.checked,
+    mostrar_cliente: mostrarClienteInput.checked,
   };
 
   setBotonCargando(guardarBoton, true, id ? 'Guardando…' : 'Creando…');
@@ -180,6 +193,7 @@ async function guardarProyecto(event) {
 
 async function init() {
   const usuario = await iniciarPagina();
+  aplicarConfig();
 
   if (!protegerPagina(usuario, ['admin'])) {
     return;

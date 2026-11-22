@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 use App\Controllers\AdminClienteController;
 use App\Controllers\AdminController;
+use App\Controllers\AdminMensajeController;
 use App\Controllers\AdminProyectoController;
 use App\Controllers\AdminSolicitudController;
 use App\Controllers\AuthController;
 use App\Controllers\CatalogoController;
+use App\Controllers\ContactoController;
 use App\Controllers\DiagnosticoController;
 use App\Controllers\HealthController;
 use App\Helpers\Request;
@@ -61,8 +63,14 @@ try {
         'GET /api/v1/health' => [HealthController::class, 'health'],
 
         'GET /api/v1/planes' => [CatalogoController::class, 'planes'],
+        'GET /api/v1/config' => [CatalogoController::class, 'config'],
         'GET /api/v1/servicios' => [CatalogoController::class, 'servicios'],
+        'GET /api/v1/servicios/{slug}' => [CatalogoController::class, 'servicio'],
+        'GET /api/v1/tecnologias' => [CatalogoController::class, 'tecnologias'],
+        'GET /api/v1/portafolio' => [CatalogoController::class, 'portafolio'],
+        'GET /api/v1/portafolio/{slug}' => [CatalogoController::class, 'caso'],
         'POST /api/v1/diagnostico' => [DiagnosticoController::class, 'create'],
+        'POST /api/v1/contacto' => [ContactoController::class, 'create'],
 
         'GET /api/v1/auth/csrf' => [AuthController::class, 'csrf'],
         'POST /api/v1/auth/login' => [AuthController::class, 'login'],
@@ -81,6 +89,10 @@ try {
         'GET /api/v1/admin/proyectos/{id}' => [AdminProyectoController::class, 'show'],
         'POST /api/v1/admin/proyectos' => [AdminProyectoController::class, 'store'],
         'PATCH /api/v1/admin/proyectos/{id}' => [AdminProyectoController::class, 'update'],
+
+        'GET /api/v1/admin/mensajes' => [AdminMensajeController::class, 'index'],
+        'GET /api/v1/admin/mensajes/{id}' => [AdminMensajeController::class, 'show'],
+        'PATCH /api/v1/admin/mensajes/{id}' => [AdminMensajeController::class, 'update'],
     ];
 
     $method = Request::method();

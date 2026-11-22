@@ -26,19 +26,21 @@ backEnd/
 
 ## Estado actual
 
-`0.3.0` — Diagnóstico público y gestión de proyectos:
+`0.4.0` — Sitio público completo y bandeja de mensajes:
 
-- Esquema completo e idempotente en `database/schema.sql`, migración incremental en `database/migrations/` y datos de demostración en `database/seed.sql`.
+- Esquema completo e idempotente en `database/schema.sql`, migraciones incrementales en `database/migrations/` y datos de demostración en `database/seed.sql`.
 - Catálogo de planes (`Planes`) y campos de diagnóstico en `SolicitudesCotizacion`.
-- Endpoints públicos `GET /planes`, `GET /servicios` y `POST /diagnostico`.
+- Endpoints públicos `GET /config`, `/planes`, `/servicios`, `/servicios/{slug}`, `/tecnologias`, `/portafolio`, `/portafolio/{slug}`, `POST /diagnostico` y `POST /contacto`.
+- Proyección pública del portafolio sin datos privados; los proyectos no publicados responden `404`.
 - Recomendación de plan calculada en el servidor (`PlanRecommender`).
 - Bandeja administrativa de solicitudes con filtros, detalle, notas, cambio de plan/cliente/estado y conversión a proyecto.
-- Gestión administrativa de proyectos con alta, edición, estado y publicación.
-- Router con parámetros dinámicos (`/admin/solicitudes/{id}`, `/admin/proyectos/{id}`).
+- Gestión administrativa de proyectos con alta, edición, estado, publicación y contenido de caso.
+- Bandeja administrativa de mensajes con filtros, detalle y cambio de estado.
+- Router con parámetros dinámicos (`/admin/solicitudes/{id}`, `/admin/proyectos/{id}`, `/admin/mensajes/{id}`, `/portafolio/{slug}`).
 - Registro de clientes, login, logout, sesión por cookie, roles, CSRF, rate limit y health check real.
 - Script `scripts/crear-admin.php` para el administrador inicial.
 
-El portal `/mi/*`, los mensajes de contacto y los CRUD de usuarios/servicios/tecnologías siguen pendientes.
+El portal `/mi/*` y los CRUD de usuarios/servicios/tecnologías siguen pendientes.
 
 ## Documentación
 
@@ -90,8 +92,14 @@ curl -i http://localhost:8080/api/v1/health
 | GET | `/api/v1` | Público |
 | GET | `/api/v1/health` | Público |
 | GET | `/api/v1/planes` | Público |
+| GET | `/api/v1/config` | Público |
 | GET | `/api/v1/servicios` | Público |
+| GET | `/api/v1/servicios/{slug}` | Público |
+| GET | `/api/v1/tecnologias` | Público |
+| GET | `/api/v1/portafolio` | Público |
+| GET | `/api/v1/portafolio/{slug}` | Público |
 | POST | `/api/v1/diagnostico` | Público + CSRF |
+| POST | `/api/v1/contacto` | Público + CSRF |
 | GET | `/api/v1/auth/csrf` | Público |
 | POST | `/api/v1/auth/login` | Público |
 | POST | `/api/v1/auth/logout` | Autenticado |
@@ -108,3 +116,6 @@ curl -i http://localhost:8080/api/v1/health
 | GET | `/api/v1/admin/proyectos/{id}` | Solo `admin` |
 | POST | `/api/v1/admin/proyectos` | Solo `admin` |
 | PATCH | `/api/v1/admin/proyectos/{id}` | Solo `admin` |
+| GET | `/api/v1/admin/mensajes` | Solo `admin` |
+| GET | `/api/v1/admin/mensajes/{id}` | Solo `admin` |
+| PATCH | `/api/v1/admin/mensajes/{id}` | Solo `admin` |

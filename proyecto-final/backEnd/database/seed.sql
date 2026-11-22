@@ -98,6 +98,44 @@ BEGIN
 END
 GO
 
+/* Beneficios de los servicios (solo si aún no tienen contenido). */
+
+UPDATE dbo.Servicios
+SET beneficios = N'Diseño responsive y Mobile First
+Carga rápida y buenas prácticas de accesibilidad
+Formularios conectados a tu operación
+Base preparada para crecer por etapas'
+WHERE slug = N'desarrollo-web'
+  AND (beneficios IS NULL OR LTRIM(RTRIM(beneficios)) = N'');
+GO
+
+UPDATE dbo.Servicios
+SET beneficios = N'Indicadores de ventas, operación y crecimiento
+Reportes automáticos y exportación de datos
+Filtros por sucursal, periodo y responsable
+Acceso seguro desde cualquier dispositivo'
+WHERE slug = N'dashboards'
+  AND (beneficios IS NULL OR LTRIM(RTRIM(beneficios)) = N'');
+GO
+
+UPDATE dbo.Servicios
+SET beneficios = N'Experiencia para iOS y Android
+Notificaciones y recordatorios
+Integración con tus sistemas actuales
+Publicación y acompañamiento posterior'
+WHERE slug = N'apps-moviles'
+  AND (beneficios IS NULL OR LTRIM(RTRIM(beneficios)) = N'');
+GO
+
+UPDATE dbo.Servicios
+SET beneficios = N'Diagnóstico de procesos y oportunidades
+Priorización por impacto y esfuerzo
+Acompañamiento técnico para tu equipo
+Plan de modernización por etapas'
+WHERE slug = N'consultoria'
+  AND (beneficios IS NULL OR LTRIM(RTRIM(beneficios)) = N'');
+GO
+
 /* ==========================================================================
    3. Tecnologías
    ========================================================================== */
@@ -461,6 +499,68 @@ BEGIN
     INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id
     WHERE u.email = N'carlos.ruiz@innovatech.mx';
 END
+GO
+
+/* Contenido de caso de éxito (solo si aún no tiene detalle). */
+
+UPDATE dbo.Proyectos
+SET
+    reto = N'El equipo comercial y los clientes dependían de correos y hojas de cálculo para consultar pedidos, facturas y fechas de entrega.',
+    solucion = N'Portal autenticado con consulta de pedidos, descarga de facturas, seguimiento de entregas y un tablero de indicadores para el equipo interno.',
+    resultados = N'Los clientes consultan su información sin intermediarios y el equipo comercial redujo el seguimiento manual de cada pedido.',
+    mostrar_cliente = 1
+WHERE slug = N'portal-comercial-andina'
+  AND reto IS NULL;
+GO
+
+UPDATE dbo.Proyectos
+SET
+    reto = N'Las ventas por sucursal se consolidaban manualmente cada semana y no había una visión común de metas.',
+    solucion = N'Tablero con indicadores de venta, comparación contra meta, filtros por sucursal y exportación a CSV, alimentado por un proceso diario.',
+    resultados = N'El reporte semanal pasó a consultarse en tiempo real y las decisiones de surtido se tomaron con datos comparables.',
+    mostrar_cliente = 1
+WHERE slug = N'dashboard-innovatech'
+  AND reto IS NULL;
+GO
+
+UPDATE dbo.Proyectos
+SET
+    reto = N'Los pacientes agendaban citas por teléfono y los recordatorios dependían del personal de recepción.',
+    solucion = N'Aplicación móvil para agendar citas, recibir recordatorios y consultar resultados, con integración al sistema interno de la clínica.',
+    resultados = N'Menos llamadas para agendar y recordatorios automáticos para los pacientes.',
+    mostrar_cliente = 0
+WHERE slug = N'app-movil-nexo-clinica'
+  AND reto IS NULL;
+GO
+
+UPDATE dbo.Proyectos
+SET
+    reto = N'El catálogo vivía en redes sociales y los pedidos se cerraban por mensaje, sin control de inventario.',
+    solucion = N'Tienda en línea con catálogo, carrito, pago con pasarela e integración al inventario existente.',
+    resultados = N'El proceso de compra quedó centralizado y el inventario se actualiza con cada pedido.',
+    mostrar_cliente = 1
+WHERE slug = N'tienda-linea-andina'
+  AND reto IS NULL;
+GO
+
+UPDATE dbo.Proyectos
+SET
+    reto = N'La agenda médica se administraba en hojas de cálculo separadas por consultorio.',
+    solucion = N'Plataforma interna con agenda, expedientes y notificaciones para el personal de la clínica.',
+    resultados = N'Una sola agenda para todos los consultorios y menos errores de duplicidad.',
+    mostrar_cliente = 0
+WHERE slug = N'sistema-citas-nexo'
+  AND reto IS NULL;
+GO
+
+UPDATE dbo.Proyectos
+SET
+    reto = N'El lanzamiento de la nueva línea de servicios en la nube necesitaba una página clara y medible.',
+    solucion = N'Landing page con propuesta de valor, secciones de servicio y formulario de contacto conectado al equipo comercial.',
+    resultados = N'Campaña de lanzamiento con una ruta directa de contacto y medición de conversiones.',
+    mostrar_cliente = 1
+WHERE slug = N'landing-innovatech'
+  AND reto IS NULL;
 GO
 
 /* ==========================================================================

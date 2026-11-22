@@ -58,7 +58,7 @@ appWeb/
     └── fonts/
 ```
 
-Las rutas de servicios, portafolio y CRUD son la organización prevista. En `0.2.0` existen `index.html`, `login.html`, `registro.html`, `portal/index.html` y `admin/dashboard.html`; `components.css`, `app.js` y los módulos de `pages/` ya están implementados.
+Las páginas de portal y algunos CRUD administrativos siguen siendo la organización prevista. En `0.4.0` existen las páginas públicas (`index.html`, servicios, portafolio, nosotros, contacto, cotización, login, registro y `404.html`), el portal y las páginas administrativas de dashboard, solicitudes, proyectos y mensajes. `components.css`, `app.js`, `public.js` y los módulos de `pages/` están implementados.
 
 ## 3. Módulos JavaScript
 
@@ -68,7 +68,8 @@ Las rutas de servicios, portafolio y CRUD son la organización prevista. En `0.2
 | `auth.js` | Login, logout, `me`, guardas de ruta y estado de sesión |
 | `ui.js` | Header dinámico por `data-auth`, alertas y estado de carga de botones |
 | `app.js` | Arranque común: obtiene la sesión y actualiza el header |
-| `pages/*.js` | Lógica específica de login, registro, portal y dashboard |
+| `public.js` | Configuración de la empresa, fechas, badges, tarjetas de caso e iconos del sitio público |
+| `pages/*.js` | Lógica específica de cada página pública y del panel |
 
 ### Contrato interno implementado
 
@@ -181,4 +182,4 @@ async function request(path, { method = 'GET', body, headers = {} } = {}) {
 
 ## 10. Estado actual
 
-`0.2.0` — Navegación dinámica, login, registro, portal y dashboard implementados; consumo de API con CSRF y guardas por rol. El sitio público completo y los módulos de negocio siguen pendientes.
+`0.4.0` — Sitio público completo (servicios, portafolio, nosotros, contacto y diagnóstico), navegación dinámica, login, registro, portal y panel administrativo con solicitudes, proyectos y mensajes. Los módulos de negocio del portal y los CRUD administrativos restantes siguen pendientes.

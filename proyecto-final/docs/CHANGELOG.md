@@ -8,7 +8,17 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y 
 
 ### Added
 
-- Nada por ahora.
+- Documentación de la etapa 4: sitios públicos de servicios, portafolio, nosotros y contacto; bandeja de mensajes.
+- Endpoints públicos y proyección privada del portafolio en `backEnd/docs/03-api.md`.
+- Variables `COMPANY_*` documentadas en el manual técnico y `.env.example`.
+- Migración `002_portafolio_publico.sql` y columnas de caso de éxito en el diccionario de datos.
+- Rutas del front y páginas implementadas en el mapa de sitio y la estructura de archivos.
+
+### Changed
+
+- README raíz, READMEs de `appWeb` y `backEnd`, manuales de usuario/técnico, guía de estilos y checklist actualizados a `0.4.0`.
+- Changelogs de `appWeb` y `backEnd` reflejan la etapa 4.
+- README y checklist documentan la verificación real: migración y seed en base limpia, 40 pruebas de API, `php -l`, `node --check` y validación visual responsive.
 
 ## [0.2.0] - 2026-11-13
 

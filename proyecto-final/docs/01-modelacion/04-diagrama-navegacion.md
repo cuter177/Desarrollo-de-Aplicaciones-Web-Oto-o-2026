@@ -2,6 +2,8 @@
 
 Flujos de navegación y restricciones de acceso. Las flechas representan transiciones visibles para el usuario; la autorización real se valida en el backend.
 
+> En la implementación estática actual las rutas equivalen a archivos `.html` y los detalles usan `?slug=`: `/pages/servicios.html`, `/pages/servicio-detalle.html?slug=...`, `/pages/portafolio.html` y `/pages/caso-detalle.html?slug=...`. Las rutas limpias quedan como mejora futura.
+
 ## 1. Navegación pública
 
 ```mermaid

@@ -148,4 +148,4 @@ El archivo `.env` no se versiona. `.env.example` documenta las variables.
 
 ## 10. Estado actual
 
-`0.2.0` — Implementados el router, la conexión PDO, los modelos base, la autenticación con sesión/CSRF/roles, el rate limit de login, el health check real y el dashboard administrativo. Los catálogos públicos, el portal `/mi/*` y los CRUD siguen pendientes.
+`0.4.0` — Implementados el router, la conexión PDO, los modelos base, la autenticación con sesión/CSRF/roles, el rate limit, el health check real, el catálogo público, el portafolio, el contacto, el dashboard administrativo y las bandejas de solicitudes, proyectos y mensajes. El portal `/mi/*` y los CRUD de usuarios, clientes, servicios y tecnologías siguen pendientes.

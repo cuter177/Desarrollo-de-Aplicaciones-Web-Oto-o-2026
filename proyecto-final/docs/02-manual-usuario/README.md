@@ -1,9 +1,9 @@
 # Manual de usuario
 
 **Sistema:** `[Nombre de la empresa]` — sitio web, portal de clientes y panel administrativo
-**Versión:** 0.2.0 · **Última actualización:** 2026-11-13
+**Versión:** 0.4.0 · **Última actualización:** 2026-11-15
 
-> Este manual está en construcción. La versión 0.2.0 ya permite registrarse, iniciar sesión y entrar al portal o al dashboard según el rol. Las secciones de proyectos, solicitudes, catálogos y CRUD describen el comportamiento previsto y se completarán en las siguientes etapas.
+> Este manual está en construcción. La versión 0.4.0 permite navegar el sitio público completo, enviar mensajes de contacto y solicitar un diagnóstico. Las secciones del portal de proyectos/solicitudes y de los CRUD administrativos restantes describen el comportamiento previsto y se completarán en las siguientes etapas.
 
 ## Contenido
 
@@ -82,25 +82,30 @@ Presenta la propuesta de valor, servicios destacados y casos de éxito. Desde aq
 ### 4.2 Servicios
 
 1. Abrir **Servicios** en el menú.
-2. Seleccionar un servicio para ver su descripción, beneficios y tecnologías.
-3. Pulsar **Solicitar cotización** para iniciar una solicitud.
+2. Seleccionar un servicio para ver su descripción, beneficios y casos relacionados.
+3. Pulsar **Hacer mi diagnóstico** o **Solicitar diagnóstico** para iniciar una solicitud.
 
 ### 4.3 Portafolio
 
-Muestra proyectos publicados por el administrador. Cada caso incluye reto, solución, tecnologías y resultados.
+1. Abrir **Portafolio** en el menú.
+2. Filtrar por tecnología con los botones superiores.
+3. Seleccionar un caso para ver reto, solución, resultados y tecnologías.
+
+Solo aparecen los proyectos publicados por el administrador.
 
 ### 4.4 Contacto
 
 1. Abrir **Contacto**.
 2. Capturar nombre, correo, asunto y mensaje.
-3. Pulsar **Enviar mensaje**.
-4. Verificar el mensaje de confirmación.
+3. Aceptar el aviso de privacidad.
+4. Pulsar **Enviar mensaje**.
+5. Verificar el mensaje de confirmación.
 
 ### 4.5 Solicitud de cotización
 
-1. Abrir **Cotización**.
-2. Capturar datos de contacto, servicio de interés, descripción y presupuesto estimado.
-3. Pulsar **Enviar solicitud**.
+1. Abrir **Diagnóstico**.
+2. Capturar datos de contacto y responder el cuestionario en cuatro pasos.
+3. Pulsar **Enviar diagnóstico**.
 4. El equipo administrativo revisará la solicitud y dará seguimiento.
 
 **Errores frecuentes:**
@@ -111,11 +116,11 @@ Muestra proyectos publicados por el administrador. Cada caso incluye reto, soluc
 | “Campo obligatorio” | Falta información | Completar el campo marcado |
 | “Demasiados intentos” | Límite de envíos | Esperar unos minutos |
 
-> **Capturas pendientes:** inicio, servicios, portafolio, contacto y cotización.
+> **Capturas pendientes:** inicio, servicios, portafolio, contacto y diagnóstico.
 
 ## 5. Portal del cliente
 
-> **Estado 0.2.0:** el portal ya valida la sesión y muestra el nombre, correo, rol y empresa del cliente. Los listados de proyectos y solicitudes son placeholders hasta la siguiente etapa.
+> **Estado 0.4.0:** el sitio público está completo. El portal ya valida la sesión y muestra el nombre, correo, rol y empresa del cliente; los listados de proyectos y solicitudes propias siguen pendientes.
 
 ### 5.1 Resumen
 
@@ -145,7 +150,7 @@ Permite actualizar nombre, teléfono, empresa y contraseña. El correo electrón
 
 ## 6. Panel de administración
 
-> **Estado 0.2.0:** el dashboard ya es accesible solo con rol `admin` y muestra conteos reales de usuarios activos, clientes, proyectos, solicitudes nuevas y mensajes nuevos. Los demás módulos son placeholders.
+> **Estado 0.4.0:** el dashboard, las solicitudes, los proyectos y los mensajes son funcionales y accesibles solo con rol `admin`. Usuarios, clientes, servicios y tecnologías siguen pendientes.
 
 ### 6.1 Dashboard
 
@@ -173,8 +178,9 @@ Si un cliente intenta abrir `/pages/admin/dashboard.html`, el front lo redirige 
 ### 6.5 Proyectos
 
 - Crear y editar proyectos.
-- Asignar cliente, estado, fechas y tecnologías.
-- Publicar o despublicar en el portafolio.
+- Asignar cliente, estado, fechas y URL demo.
+- Capturar reto, solución y resultados del caso.
+- Publicar o despublicar en el portafolio, destacar y decidir si se muestra el nombre del cliente.
 
 ### 6.6 Tecnologías
 
@@ -186,13 +192,14 @@ Catálogo usado para clasificar servicios y proyectos.
 2. Filtrar por estado.
 3. Abrir una solicitud y revisar los datos.
 4. Cambiar el estado según el avance.
-5. Opcional: convertir la solicitud en cliente o proyecto.
+5. Opcional: convertir la solicitud en proyecto.
 
 ### 6.8 Mensajes
 
 1. Abrir **Mensajes**.
-2. Revisar el detalle.
-3. Marcar como atendido o eliminar si es spam.
+2. Filtrar por estado o buscar por nombre, correo o asunto.
+3. Abrir el detalle.
+4. Cambiar el estado a `en_revision`, `atendido` o `archivado`.
 
 > **Capturas pendientes:** dashboard y cada módulo administrativo.
 
@@ -228,3 +235,4 @@ Al reportar un problema, incluir: página, acción realizada, mensaje de error, 
 |---|---|---|
 | 0.1.0 | 2026-11-13 | Estructura inicial del manual |
 | 0.2.0 | 2026-11-13 | Rutas reales de registro/login, política de contraseña, rate limit y estado del portal/dashboard |
+| 0.4.0 | 2026-11-15 | Sitio público completo: servicios, portafolio, nosotros, contacto, diagnóstico y bandeja de mensajes |

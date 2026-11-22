@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Contacta a [Nombre de la empresa] para cotizar un sitio web, dashboard o aplicación móvil.">
+  <title>Contacto — [Nombre de la empresa]</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/contacto.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
+        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html" aria-current="page">Contacto</a></li>
+          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
+          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
+          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+        </ul>
+        <div class="site-header__actions">
+          <span class="site-header__user" data-auth="session" data-user-name></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero">
+      <div class="container">
+        <p class="hero__eyebrow">Contacto</p>
+        <h1 class="hero__title">Hablemos de lo que tu empresa necesita</h1>
+        <p class="hero__lead">
+          Escríbenos con tus preguntas o cuéntanos el reto que quieres resolver.
+          Te responderemos con los siguientes pasos.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="contact-grid">
+          <aside class="contact-card" aria-labelledby="datos-title">
+            <h2 class="panel__title" id="datos-title">Datos de contacto</h2>
+            <p class="muted">
+              También puedes iniciar el diagnóstico si prefieres una propuesta
+              guiada en menos de cinco minutos.
+            </p>
+
+            <ul class="contact-list">
+              <li>
+                <span class="contact-list__label">Correo</span>
+                <a data-config-link="email" href="mailto:contacto@devstudio.local">
+                  <span data-config="email">contacto@devstudio.local</span>
+                </a>
+              </li>
+              <li>
+                <span class="contact-list__label">Teléfono</span>
+                <a data-config-link="telefono" href="tel:+525500000000">
+                  <span data-config="telefono">+52 55 0000 0000</span>
+                </a>
+              </li>
+              <li>
+                <span class="contact-list__label">Ubicación</span>
+                <span data-config="direccion">Ciudad de México, México</span>
+              </li>
+              <li>
+                <span class="contact-list__label">Horario</span>
+                <span data-config="horario">Lunes a viernes, 9:00 a 18:00</span>
+              </li>
+              <li data-social-list>
+                <span class="contact-list__label">Redes</span>
+                <span class="social-links">
+                  <a data-social="linkedin" href="#" target="_blank" rel="noopener noreferrer" hidden>LinkedIn</a>
+                  <a data-social="github" href="#" target="_blank" rel="noopener noreferrer" hidden>GitHub</a>
+                  <a data-social="instagram" href="#" target="_blank" rel="noopener noreferrer" hidden>Instagram</a>
+                </span>
+              </li>
+            </ul>
+
+            <div class="hero__actions">
+              <a class="btn btn--secondary" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
+            </div>
+          </aside>
+
+          <section class="contact-card" aria-labelledby="form-title">
+            <h2 class="panel__title" id="form-title">Envíanos un mensaje</h2>
+
+            <div class="alert" id="contacto-alerta" role="alert" tabindex="-1" hidden></div>
+
+            <form class="form" id="contacto-form" novalidate>
+              <div class="honeypot" aria-hidden="true">
+                <label for="contacto-website">No completar este campo</label>
+                <input id="contacto-website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </div>
+
+              <div class="form__field">
+                <label class="form__label" for="contacto-nombre">Nombre</label>
+                <input class="form__input" id="contacto-nombre" name="nombre" type="text"
+                  minlength="2" maxlength="120" autocomplete="name" required>
+                <p class="form__error" data-error-for="nombre" hidden></p>
+              </div>
+
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="contacto-email">Correo electrónico</label>
+                  <input class="form__input" id="contacto-email" name="email" type="email"
+                    maxlength="254" autocomplete="email" required>
+                  <p class="form__error" data-error-for="email" hidden></p>
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="contacto-asunto">Asunto</label>
+                  <input class="form__input" id="contacto-asunto" name="asunto" type="text"
+                    minlength="3" maxlength="150" required>
+                  <p class="form__error" data-error-for="asunto" hidden></p>
+                </div>
+              </div>
+
+              <div class="form__field">
+                <label class="form__label" for="contacto-mensaje">Mensaje</label>
+                <textarea class="form__textarea" id="contacto-mensaje" name="mensaje"
+                  minlength="10" maxlength="5000" required></textarea>
+                <p class="form__hint">Cuéntanos qué necesitas y, si aplica, para cuándo lo necesitas.</p>
+                <p class="form__error" data-error-for="mensaje" hidden></p>
+              </div>
+
+              <div class="form__field">
+                <label class="form__check" for="contacto-privacidad">
+                  <input id="contacto-privacidad" name="acepta_privacidad" type="checkbox" required>
+                  <span>Acepto que mis datos se usen para responder a este mensaje.</span>
+                </label>
+                <p class="form__error" data-error-for="acepta_privacidad" hidden></p>
+              </div>
+
+              <div class="form__actions">
+                <button class="btn" type="submit">Enviar mensaje</button>
+                <p class="form__hint">No compartimos tus datos con terceros.</p>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">[Nombre de la empresa]</strong> · Proyecto académico 2026</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Servicios</a>
+        <a href="/pages/portafolio.html">Portafolio</a>
+        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Diagnóstico</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <span data-config="telefono">+52 55 0000 0000</span>
+      </p>
+      <p>HTML + CSS Mobile First + JavaScript + PHP + SQL Server</p>
+    </div>
+  </footer>
+</body>
+</html>

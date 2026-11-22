@@ -6,16 +6,17 @@ Inventario de pantallas y piezas reutilizables del front.
 
 | Página | Archivo | Contenido | API | Estado |
 |---|---|---|---|---|
-| Inicio | `index.html` | Hero, accesos y estado del proyecto | — | Implementado |
-| Servicios | `pages/servicios.html` | Catálogo | `GET /servicios` | Pendiente |
-| Detalle de servicio | `pages/servicio-detalle.html?slug=` | Descripción y CTA | `GET /servicios/{slug}` | Pendiente |
-| Portafolio | `pages/portafolio.html` | Casos publicados | `GET /portafolio` | Pendiente |
-| Detalle de caso | `pages/caso-detalle.html?slug=` | Reto, solución y tecnologías | `GET /portafolio/{slug}` | Pendiente |
-| Nosotros | `pages/nosotros.html` | Historia y enfoque | `GET /config` | Pendiente |
-| Contacto | `pages/contacto.html` | Formulario | `POST /contacto` | Pendiente |
-| Cotización | `pages/cotizacion.html` | Formulario | `GET /servicios`, `POST /cotizaciones` | Pendiente |
+| Inicio | `index.html` | Hero, accesos y estado del proyecto | `GET /config` | Implementado |
+| Servicios | `pages/servicios.html` | Catálogo | `GET /servicios` | Implementado |
+| Detalle de servicio | `pages/servicio-detalle.html?slug=` | Descripción, beneficios y casos | `GET /servicios/{slug}` | Implementado |
+| Portafolio | `pages/portafolio.html` | Casos publicados y filtros | `GET /portafolio` | Implementado |
+| Detalle de caso | `pages/caso-detalle.html?slug=` | Reto, solución, resultados y tecnologías | `GET /portafolio/{slug}` | Implementado |
+| Nosotros | `pages/nosotros.html` | Proceso, enfoque y equipo | `GET /config`, `GET /servicios`, `GET /portafolio` | Implementado |
+| Contacto | `pages/contacto.html` | Formulario y datos de contacto | `GET /config`, `POST /contacto` | Implementado |
+| Cotización | `pages/cotizacion.html` | Planes y wizard de diagnóstico | `GET /planes`, `GET /servicios`, `POST /diagnostico` | Implementado |
 | Login | `pages/login.html` | Acceso y redirección por rol | `GET /auth/csrf`, `POST /auth/login`, `GET /auth/me` | Implementado |
 | Registro | `pages/registro.html` | Alta de cliente | `GET /auth/csrf`, `POST /auth/registro` | Implementado |
+| No encontrado | `404.html` | Error 404 y enlaces de recuperación | — | Implementado |
 
 ## 2. Portal del cliente
 
@@ -36,10 +37,10 @@ Inventario de pantallas y piezas reutilizables del front.
 | Usuarios | `pages/admin/usuarios.html` | Tabla y formulario | `GET/POST/PATCH /admin/usuarios` | Pendiente |
 | Clientes | `pages/admin/clientes.html` | Tabla y formulario | `GET/POST/PATCH /admin/clientes` | Pendiente |
 | Servicios | `pages/admin/servicios.html` | CRUD | `GET/POST/PATCH/DELETE /admin/servicios` | Pendiente |
-| Proyectos | `pages/admin/proyectos.html` | CRUD y publicación | `GET/POST/PATCH /admin/proyectos` | Pendiente |
+| Proyectos | `pages/admin/proyectos.html` | CRUD, publicación y contenido de caso | `GET/POST/PATCH /admin/proyectos` | Implementado |
 | Tecnologías | `pages/admin/tecnologias.html` | CRUD | `GET/POST/PATCH/DELETE /admin/tecnologias` | Pendiente |
-| Solicitudes | `pages/admin/solicitudes.html` | Bandeja y estados | `GET/PATCH /admin/solicitudes` | Pendiente |
-| Mensajes | `pages/admin/mensajes.html` | Bandeja | `GET/PATCH/DELETE /admin/mensajes` | Pendiente |
+| Solicitudes | `pages/admin/solicitudes.html` | Bandeja y estados | `GET/PATCH /admin/solicitudes` | Implementado |
+| Mensajes | `pages/admin/mensajes.html` | Bandeja y estados | `GET/PATCH /admin/mensajes` | Implementado |
 
 ## 4. Componentes reutilizables
 
@@ -61,6 +62,17 @@ Inventario de pantallas y piezas reutilizables del front.
 | Modal | `.modal`, `.modal__dialog` | Confirmaciones | Pendiente |
 | Paginación | `.pagination` | Listados | Pendiente |
 | Cargando | `.spinner`, `.skeleton` | Peticiones | Pendiente |
+| Tarjeta de servicio | `.service-cards`, `.service-card`, `.service-card__icon` | Catálogo público | Implementado |
+| Tarjeta de caso | `.case-grid`, `.case-card`, `.case-card__media` | Portafolio | Implementado |
+| Filtros | `.filters`, `.filter-chip` | Portafolio | Implementado |
+| Tecnologías | `.tech-list`, `.tech` | Servicios y casos | Implementado |
+| Lista de beneficios | `.check-list` | Detalle de servicio | Implementado |
+| Métricas de nosotros | `.stats`, `.stat` | Página Nosotros | Implementado |
+| Pasos de proceso | `.steps`, `.step` | Página Nosotros | Implementado |
+| Equipo | `.team-grid`, `.team-card`, `.avatar` | Página Nosotros | Implementado |
+| Contacto | `.contact-grid`, `.contact-card`, `.contact-list` | Página Contacto | Implementado |
+| Banda CTA | `.cta-band` | Cierre de secciones | Implementado |
+| Honeypot | `.honeypot` | Anti-spam del contacto | Implementado |
 
 > La nomenclatura real usa `.btn` y `.form__field`; las clases `.button` y `.field` quedan descartadas.
 

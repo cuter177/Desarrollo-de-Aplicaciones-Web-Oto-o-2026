@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <meta name="description" content="Gestión de proyectos del panel administrativo.">
   <title>Proyectos — [Nombre de la empresa]</title>
   <link rel="stylesheet" href="/assets/css/main.css">
@@ -16,7 +17,7 @@
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="[Nombre de la empresa], inicio">
         <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
-        <span class="brand__name">[Nombre de la empresa]</span>
+        <span class="brand__name" data-config="nombre">[Nombre de la empresa]</span>
       </a>
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
@@ -47,6 +48,7 @@
         <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
         <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
         <a class="admin-nav__link is-active" href="/pages/admin/proyectos.html" aria-current="page">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
       </nav>
 
       <div class="alert" id="admin-alert" role="alert" hidden></div>
@@ -73,6 +75,21 @@
             <div class="form__field">
               <label class="form__label" for="proyecto-descripcion">Descripción</label>
               <textarea class="form__textarea" id="proyecto-descripcion" minlength="10" maxlength="5000" required></textarea>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="proyecto-reto">Reto del cliente</label>
+              <textarea class="form__textarea" id="proyecto-reto" maxlength="5000" placeholder="Qué problema había antes del proyecto"></textarea>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="proyecto-solucion">Solución</label>
+              <textarea class="form__textarea" id="proyecto-solucion" maxlength="5000" placeholder="Qué se construyó y cómo funciona"></textarea>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="proyecto-resultados">Resultados</label>
+              <textarea class="form__textarea" id="proyecto-resultados" maxlength="5000" placeholder="Impacto o aprendizaje del proyecto"></textarea>
             </div>
 
             <div class="form-row">
@@ -111,6 +128,10 @@
             <div class="form__check">
               <input type="checkbox" id="proyecto-destacado">
               <label for="proyecto-destacado">Destacar en la página principal</label>
+            </div>
+            <div class="form__check">
+              <input type="checkbox" id="proyecto-mostrar-cliente">
+              <label for="proyecto-mostrar-cliente">Mostrar el nombre del cliente en el caso público</label>
             </div>
 
             <div class="hero__actions">

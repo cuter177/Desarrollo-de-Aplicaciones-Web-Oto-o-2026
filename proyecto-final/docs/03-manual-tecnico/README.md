@@ -1,7 +1,7 @@
 # Manual técnico
 
 **Sistema:** `[Nombre de la empresa]` — sitio web, portal de clientes y panel administrativo
-**Versión:** 0.2.0 · **Última actualización:** 2026-11-13
+**Versión:** 0.4.0 · **Última actualización:** 2026-11-15
 
 > Documento en construcción. Este índice consolida la instalación, la arquitectura y la operación; el detalle de cada componente vive en `backEnd/docs` y `appWeb/docs`.
 
@@ -168,12 +168,21 @@ Conexión desde el host:
 - Autenticación: cookie de sesión + token CSRF.
 - Contrato completo: [`backEnd/docs/03-api.md`](../../backEnd/docs/03-api.md).
 
-Rutas implementadas en la versión 0.2.0:
+Rutas implementadas en la versión 0.4.0:
 
 | Método | Ruta | Acceso |
 |---|---|---|
 | GET | `/api/v1` | Público |
 | GET | `/api/v1/health` | Público; consulta `SELECT 1` en SQL Server |
+| GET | `/api/v1/config` | Público; datos de la empresa |
+| GET | `/api/v1/planes` | Público |
+| GET | `/api/v1/servicios` | Público |
+| GET | `/api/v1/servicios/{slug}` | Público |
+| GET | `/api/v1/tecnologias` | Público |
+| GET | `/api/v1/portafolio` | Público |
+| GET | `/api/v1/portafolio/{slug}` | Público; `404` si no está publicado |
+| POST | `/api/v1/diagnostico` | Público + CSRF |
+| POST | `/api/v1/contacto` | Público + CSRF; rate limit 5/hora por IP |
 | GET | `/api/v1/auth/csrf` | Público |
 | POST | `/api/v1/auth/login` | Público; rate limit 5/15 min por IP y correo |
 | POST | `/api/v1/auth/logout` | Autenticado |
@@ -181,6 +190,9 @@ Rutas implementadas en la versión 0.2.0:
 | POST | `/api/v1/auth/registro` | Público; crea usuario `cliente` y empresa |
 | PATCH | `/api/v1/auth/password` | Autenticado |
 | GET | `/api/v1/admin/dashboard` | Solo `admin` |
+| GET/PATCH | `/api/v1/admin/solicitudes` | Solo `admin` |
+| GET/POST/PATCH | `/api/v1/admin/proyectos` | Solo `admin` |
+| GET/PATCH | `/api/v1/admin/mensajes` | Solo `admin` |
 
 Ejemplo:
 
@@ -192,9 +204,10 @@ curl -i http://localhost:8080/api/v1/health
 
 - Sitio estático servido por Nginx desde `appWeb/`.
 - CSS Mobile First con variables y breakpoints en 480, 768 y 1024 px. `main.css` contiene la base y `components.css` los formularios, botones, alertas y paneles.
-- JavaScript modular: `api.js` (fetch + CSRF), `auth.js` (sesión, roles y guardas), `ui.js` (header y alertas), `app.js` (arranque) y `pages/` (login, registro, portal y admin).
-- Páginas de la etapa: `/index.html`, `/pages/login.html`, `/pages/registro.html`, `/pages/portal/index.html` y `/pages/admin/dashboard.html`.
+- JavaScript modular: `api.js` (fetch + CSRF), `auth.js` (sesión, roles y guardas), `ui.js` (header y alertas), `app.js` (arranque), `public.js` (configuración y tarjetas del sitio público) y `pages/` (páginas públicas y panel).
+- Páginas de la versión: inicio, servicios y detalle, portafolio y detalle de caso, nosotros, contacto, diagnóstico, login, registro, portal, dashboard, solicitudes, proyectos, mensajes y `404.html`.
 - El front oculta enlaces por rol con `data-auth`, pero el backend siempre valida la sesión y el rol.
+- Los detalles de servicio y caso usan `?slug=` y responden con un estado vacío cuando la API devuelve `404`.
 - Documentación: [`appWeb/docs/`](../../appWeb/docs/).
 
 ## 9. Seguridad
@@ -256,3 +269,4 @@ docker compose cp mssql:/var/opt/mssql/backup/DevStudioDB.bak ./dist/
 |---|---|---|
 | 0.1.0 | 2026-11-13 | Estructura inicial del manual técnico |
 | 0.2.0 | 2026-11-13 | Instalación de BD, alta de administrador, rutas de autenticación y solución de problemas de CSRF/rate limit |
+| 0.4.0 | 2026-11-15 | Variables `COMPANY_*`, migración 002, endpoints públicos y páginas del sitio |

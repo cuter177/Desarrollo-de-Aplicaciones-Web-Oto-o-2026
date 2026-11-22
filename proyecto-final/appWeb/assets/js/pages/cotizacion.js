@@ -1,6 +1,7 @@
 import { apiGet, apiPost } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { obtenerCsrf } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 import { mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const form = document.querySelector('#diagnostico-form');
@@ -195,6 +196,7 @@ function datosFormulario() {
 
 async function init() {
   await iniciarPagina();
+  aplicarConfig();
   mostrarPaso(1);
 
   await Promise.all([cargarPlanes(), cargarServicios()]);

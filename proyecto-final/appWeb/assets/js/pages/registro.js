@@ -1,5 +1,6 @@
 import { iniciarPagina } from '../app.js';
 import { redirigirPorRol, registrar } from '../auth.js';
+import { aplicarConfig } from '../public.js';
 import { mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const form = document.querySelector('#registro-form');
@@ -8,6 +9,7 @@ const boton = form?.querySelector('button[type="submit"]');
 
 async function init() {
   const usuario = await iniciarPagina();
+  aplicarConfig();
 
   if (usuario) {
     redirigirPorRol(usuario);

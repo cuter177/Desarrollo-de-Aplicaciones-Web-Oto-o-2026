@@ -51,6 +51,10 @@ docs/latex/build/
 dist/
 *.zip
 
+# Fotos de perfil subidas en local
+backEnd/storage/avatars/*
+!backEnd/storage/avatars/.gitkeep
+
 # Archivos generados por pruebas
 coverage/
 .phpunit.result.cache

@@ -1,4 +1,5 @@
 import { apiGet } from './api.js';
+import { escapar, urlFoto } from './ui.js';
 
 let configPromise = null;
 
@@ -35,7 +36,16 @@ export function pintarIdentidad(datos, raiz = document) {
       }
 
       const texto = String(valor).trim();
-      elemento.textContent = texto;
+      const esMarca = selector === '[data-identity-iniciales]';
+      const conFoto = esMarca && datos.foto;
+
+      elemento.textContent = conFoto ? '' : texto;
+
+      if (esMarca) {
+        elemento.classList.toggle('has-photo', Boolean(conFoto));
+        const origen = conFoto ? urlFoto(datos.foto) : '';
+        elemento.style.backgroundImage = origen ? `url("${origen}")` : '';
+      }
 
       if (elemento.dataset.optional === '1') {
         elemento.hidden = texto === '';
@@ -125,6 +135,55 @@ export function formatearFecha(valor, opciones = {}) {
   }).format(fecha);
 }
 
+export function formatearMomento(valor) {
+  if (!valor) {
+    return 'Sin fecha';
+  }
+
+  const fecha = new Date(valor);
+
+  if (Number.isNaN(fecha.getTime())) {
+    return String(valor);
+  }
+
+  return new Intl.DateTimeFormat('es-MX', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'America/Mexico_City',
+  }).format(fecha);
+}
+
+export function htmlAvance(porcentaje) {
+  const valor = Math.max(0, Math.min(100, Number(porcentaje) || 0));
+
+  return `
+    <div class="progress">
+      <div class="progress__meta">
+        <span>Avance</span>
+        <span>${valor}%</span>
+      </div>
+      <progress max="100" value="${valor}">${valor}%</progress>
+    </div>
+  `;
+}
+
+export function htmlHistorial(avances) {
+  if (!Array.isArray(avances) || avances.length === 0) {
+    return '<p class="progress__empty">Todavía no hay actualizaciones.</p>';
+  }
+
+  return `
+    <ul class="progress__log">
+      ${avances.map((avance) => `
+        <li>
+          <p class="progress__log-meta">${escapar(formatearMomento(avance.creado_en))} · ${Number(avance.porcentaje) || 0}%</p>
+          <p>${escapar(avance.nota ?? '')}</p>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+}
+
 export function etiquetaEstado(estado) {
   const etiquetas = {
     planificado: 'Planificado',
@@ -137,6 +196,9 @@ export function etiquetaEstado(estado) {
     cotizada: 'Cotizada',
     aceptada: 'Aceptada',
     rechazada: 'Rechazada',
+    solicitada: 'Solicitada',
+    confirmada: 'Confirmada',
+    cancelada: 'Cancelada',
     nuevo: 'Nuevo',
     atendido: 'Atendido',
     archivado: 'Archivado',

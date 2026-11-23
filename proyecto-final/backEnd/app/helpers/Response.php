@@ -52,6 +52,24 @@ final class Response
         self::json(['error' => $error], $status);
     }
 
+    public static function file(string $path, string $type): never
+    {
+        if (!is_file($path)) {
+            self::error('NO_ENCONTRADO', 'No hay foto de perfil.', 404);
+        }
+
+        if (!headers_sent()) {
+            http_response_code(200);
+            header('Content-Type: ' . $type);
+            header('Content-Length: ' . (string) filesize($path));
+            header('X-Content-Type-Options: nosniff');
+            header('Cache-Control: private, max-age=86400');
+        }
+
+        readfile($path);
+        exit;
+    }
+
     public static function noContent(): never
     {
         if (!headers_sent()) {

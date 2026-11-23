@@ -157,7 +157,55 @@ final class Usuario
             'email' => (string) $row['email'],
             'rol' => (string) $row['rol'],
             'cliente_id' => $row['cliente_id'] !== null ? (int) $row['cliente_id'] : null,
+            'foto' => self::versionFoto($row),
         ];
+    }
+
+    public static function directorioFotos(): string
+    {
+        return dirname(__DIR__, 2) . '/storage/avatars';
+    }
+
+    public static function rutaFoto(int $id, string $extension): string
+    {
+        if (!in_array($extension, ['jpg', 'png', 'webp'], true)) {
+            $extension = 'jpg';
+        }
+
+        return self::directorioFotos() . '/' . $id . '.' . $extension;
+    }
+
+    public static function guardarFoto(int $id, string $extension): int
+    {
+        $stmt = Database::connection()->prepare(
+            'UPDATE dbo.Usuarios
+             SET foto = :foto, actualizado_en = SYSUTCDATETIME()
+             WHERE id = :id'
+        );
+        $stmt->execute([
+            ':foto' => $extension,
+            ':id' => $id,
+        ]);
+
+        $path = self::rutaFoto($id, $extension);
+        $version = is_file($path) ? filemtime($path) : time();
+
+        return $version === false ? time() : $version;
+    }
+
+    public static function borrarOtrasFotos(int $id, string $extension): void
+    {
+        foreach (['jpg', 'png', 'webp'] as $otra) {
+            if ($otra === $extension) {
+                continue;
+            }
+
+            $path = self::rutaFoto($id, $otra);
+
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
     }
 
     private static function adminSelect(): string
@@ -228,7 +276,7 @@ final class Usuario
      */
     private static function findBy(string $condition, mixed $value): ?array
     {
-        $sql = 'SELECT u.id, u.nombre, u.email, u.password_hash, u.rol_id, u.activo,
+        $sql = 'SELECT u.id, u.nombre, u.email, u.password_hash, u.rol_id, u.activo, u.foto,
                        r.nombre AS rol, c.id AS cliente_id
                 FROM dbo.Usuarios u
                 INNER JOIN dbo.Roles r ON r.id = u.rol_id
@@ -240,5 +288,27 @@ final class Usuario
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $row === false ? null : $row;
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     */
+    private static function versionFoto(array $row): ?int
+    {
+        $extension = isset($row['foto']) ? (string) $row['foto'] : '';
+
+        if ($extension === '' || !isset($row['id'])) {
+            return null;
+        }
+
+        $path = self::rutaFoto((int) $row['id'], $extension);
+
+        if (!is_file($path)) {
+            return null;
+        }
+
+        $version = filemtime($path);
+
+        return $version === false ? null : $version;
     }
 }

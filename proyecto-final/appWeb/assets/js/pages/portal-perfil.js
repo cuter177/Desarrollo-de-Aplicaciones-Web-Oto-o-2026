@@ -1,8 +1,8 @@
-import { apiGet, apiPatch } from '../api.js';
+import { apiGet, apiPatch, apiPostArchivo } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { cambiarPassword, protegerPagina } from '../auth.js';
 import { aplicarConfig, pintarIdentidad } from '../public.js';
-import { inicialesDe, mensajeError, mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
+import { fijarFotoLocal, inicialesDe, mensajeError, mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const alerta = document.querySelector('#portal-alert');
 const form = document.querySelector('#perfil-form');
@@ -18,11 +18,15 @@ const fraseInput = document.querySelector('#perfil-frase');
 const ciudadInput = document.querySelector('#perfil-ciudad');
 const guardarBoton = document.querySelector('#perfil-guardar');
 const passwordBoton = document.querySelector('#password-guardar');
+const fotoInput = document.querySelector('#foto-input');
+const fotoControl = document.querySelector('.photo');
+let fotoVersion = null;
 
 function mostrarTarjeta() {
   pintarIdentidad({
     iniciales: inicialesDe(nombreInput.value),
     nombre: nombreInput.value.trim(),
+    foto: fotoVersion,
     cargo: cargoInput.value.trim(),
     empresa: empresaInput.value.trim(),
     frase: fraseInput.value.trim(),
@@ -52,6 +56,7 @@ async function init() {
     cargoInput.value = perfil.cliente.cargo ?? '';
     fraseInput.value = perfil.cliente.frase ?? '';
     ciudadInput.value = perfil.cliente.ciudad ?? '';
+    fotoVersion = perfil.usuario.foto ?? null;
     mostrarTarjeta();
   } catch (error) {
     mostrarAlerta(alerta, 'error', mensajeError(error));
@@ -87,6 +92,37 @@ async function init() {
       mostrarAlerta(alerta, 'error', mensajeError(error));
     } finally {
       setBotonCargando(guardarBoton, false);
+    }
+  });
+
+  fotoInput?.addEventListener('change', async () => {
+    const archivo = fotoInput.files?.[0];
+    fotoInput.value = '';
+    ocultarAlerta(alerta);
+
+    if (!archivo) {
+      return;
+    }
+
+    const tipos = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!tipos.includes(archivo.type) || archivo.size > 2 * 1024 * 1024) {
+      mostrarAlerta(alerta, 'error', 'Usa una imagen JPG, PNG o WebP de hasta 2 MB.');
+      return;
+    }
+
+    fotoControl?.setAttribute('aria-busy', 'true');
+
+    try {
+      const respuesta = await apiPostArchivo('/mi/foto', archivo);
+      fotoVersion = respuesta.foto ?? null;
+      await fijarFotoLocal(archivo, fotoVersion);
+      mostrarTarjeta();
+      mostrarAlerta(alerta, 'success', 'Foto actualizada.');
+    } catch (error) {
+      mostrarAlerta(alerta, 'error', mensajeError(error));
+    } finally {
+      fotoControl?.removeAttribute('aria-busy');
     }
   });
 

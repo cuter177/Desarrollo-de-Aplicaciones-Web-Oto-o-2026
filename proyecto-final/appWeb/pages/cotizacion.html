@@ -17,6 +17,11 @@
           if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
             document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
           }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
         }
       } catch (e) {}
       document.documentElement.setAttribute("data-theme", tema);

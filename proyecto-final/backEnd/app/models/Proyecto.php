@@ -19,7 +19,7 @@ final class Proyecto
     ];
 
     private const SELECT_ADMIN = 'p.id, p.cliente_id, p.nombre, p.slug, p.descripcion,
-                    p.reto, p.solucion, p.resultados, p.mostrar_cliente, p.estado,
+                    p.reto, p.solucion, p.resultados, p.mostrar_cliente, p.estado, p.progreso,
                     p.fecha_inicio, p.fecha_fin, p.url_demo, p.publicado, p.destacado,
                     p.creado_en, c.empresa AS cliente_empresa, c.industria AS cliente_industria';
 
@@ -263,19 +263,124 @@ final class Proyecto
      */
     private static function withTechnologies(array $rows): array
     {
-        $tecnologias = self::technologiesForProjects(
-            array_map(static fn (array $row): int => (int) $row['id'], $rows)
-        );
+        $ids = array_map(static fn (array $row): int => (int) $row['id'], $rows);
+        $tecnologias = self::technologiesForProjects($ids);
+        $avances = self::avancesForProjects($ids);
 
         return array_map(
-            static function (array $row) use ($tecnologias): array {
+            static function (array $row) use ($tecnologias, $avances): array {
                 $proyecto = self::mapRow($row);
                 $proyecto['tecnologias'] = $tecnologias[(int) $row['id']] ?? [];
+                $proyecto['avances'] = $avances[(int) $row['id']] ?? [];
 
                 return $proyecto;
             },
             $rows
         );
+    }
+
+    public static function registrarAvance(int $id, int $porcentaje, string $nota): int
+    {
+        $conexion = Database::connection();
+        $conexion->beginTransaction();
+
+        try {
+            $actualizar = $conexion->prepare(
+                'UPDATE dbo.Proyectos
+                 SET progreso = :progreso, actualizado_en = SYSUTCDATETIME()
+                 WHERE id = :id'
+            );
+            $actualizar->execute([
+                ':progreso' => $porcentaje,
+                ':id' => $id,
+            ]);
+
+            $insertar = $conexion->prepare(
+                'INSERT INTO dbo.ProyectoAvances (proyecto_id, porcentaje, nota)
+                 OUTPUT INSERTED.id
+                 VALUES (:proyecto_id, :porcentaje, :nota)'
+            );
+            $insertar->execute([
+                ':proyecto_id' => $id,
+                ':porcentaje' => $porcentaje,
+                ':nota' => $nota,
+            ]);
+            $avanceId = (int) $insertar->fetchColumn();
+            $conexion->commit();
+
+            return $avanceId;
+        } catch (\Throwable $exception) {
+            if ($conexion->inTransaction()) {
+                $conexion->rollBack();
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public static function avancePorId(int $id): ?array
+    {
+        $stmt = Database::connection()->prepare(
+            'SELECT id, proyecto_id, porcentaje, nota, creado_en
+             FROM dbo.ProyectoAvances
+             WHERE id = :id'
+        );
+        $stmt->execute([':id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row === false) {
+            return null;
+        }
+
+        return [
+            'id' => (int) $row['id'],
+            'proyecto_id' => (int) $row['proyecto_id'],
+            'porcentaje' => (int) $row['porcentaje'],
+            'nota' => (string) $row['nota'],
+            'creado_en' => self::formatoUtc((string) $row['creado_en']),
+        ];
+    }
+
+    /**
+     * @param list<int> $ids
+     * @return array<int, list<array<string, mixed>>>
+     */
+    private static function avancesForProjects(array $ids): array
+    {
+        if ($ids === []) {
+            return [];
+        }
+
+        $placeholders = implode(', ', array_fill(0, count($ids), '?'));
+        $stmt = Database::connection()->prepare(
+            'SELECT id, proyecto_id, porcentaje, nota, creado_en
+             FROM dbo.ProyectoAvances
+             WHERE proyecto_id IN (' . $placeholders . ')
+             ORDER BY creado_en DESC, id DESC'
+        );
+        $stmt->execute($ids);
+        $resultado = [];
+
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $resultado[(int) $row['proyecto_id']][] = [
+                'id' => (int) $row['id'],
+                'porcentaje' => (int) $row['porcentaje'],
+                'nota' => (string) $row['nota'],
+                'creado_en' => self::formatoUtc((string) $row['creado_en']),
+            ];
+        }
+
+        return $resultado;
+    }
+
+    private static function formatoUtc(string $valor): string
+    {
+        $fecha = new \DateTimeImmutable($valor, new \DateTimeZone('UTC'));
+
+        return $fecha->format('Y-m-d\TH:i:s\Z');
     }
 
     /**
@@ -357,6 +462,7 @@ final class Proyecto
             'resultados' => $row['resultados'] !== null ? (string) $row['resultados'] : null,
             'mostrar_cliente' => (int) $row['mostrar_cliente'] === 1,
             'estado' => (string) $row['estado'],
+            'progreso' => (int) ($row['progreso'] ?? 0),
             'fecha_inicio' => $row['fecha_inicio'] !== null ? (string) $row['fecha_inicio'] : null,
             'fecha_fin' => $row['fecha_fin'] !== null ? (string) $row['fecha_fin'] : null,
             'url_demo' => $row['url_demo'] !== null ? (string) $row['url_demo'] : null,

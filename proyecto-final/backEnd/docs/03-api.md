@@ -339,10 +339,15 @@ El endpoint exige CSRF, aplica rate limit por IP y guarda la solicitud con
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/mi/resumen` | Métricas y actividad reciente del cliente autenticado |
-| GET | `/mi/perfil` | Perfil del cliente autenticado |
+| GET | `/mi/perfil` | Perfil del cliente autenticado. Incluye `usuario.foto` (versión) o `null` |
 | PATCH | `/mi/perfil` | Actualiza nombre, empresa, teléfono, sitio e industria |
-| GET | `/mi/proyectos` | Proyectos del cliente, con tecnologías |
-| GET | `/mi/proyectos/{id}` | Detalle validando propiedad |
+| GET | `/mi/foto` | Imagen de perfil del cliente autenticado |
+| POST | `/mi/foto` | Sustituye la foto. Campo `foto`, JPG, PNG o WebP, hasta 2 MB |
+| GET | `/mi/proyectos` | Proyectos del cliente, con tecnologías, avance e historial |
+| GET | `/mi/proyectos/{id}` | Detalle validando propiedad, con avance e historial |
+| GET | `/mi/reuniones` | Reuniones del cliente. Filtros opcionales `desde` y `hasta` |
+| POST | `/mi/reuniones` | Agenda una reunión en estado `solicitada` |
+| PATCH | `/mi/reuniones/{id}` | Cancela una reunión propia que aún no empieza |
 | GET | `/mi/solicitudes` | Solicitudes del cliente |
 | POST | `/mi/solicitudes` | Nueva solicitud desde el portal (`origen: portal`) |
 | GET | `/mi/solicitudes/{id}` | Detalle validando propiedad |
@@ -453,10 +458,26 @@ Solo responde al rol `admin`; un cliente recibe `403 SIN_PERMISOS` y un visitant
 | POST | `/admin/proyectos` | Crea proyecto y genera `slug` único |
 | GET | `/admin/proyectos/{id}` | Detalle |
 | PATCH | `/admin/proyectos/{id}` | Actualiza datos, estado, fechas, publicación y destacado |
+| PATCH | `/admin/proyectos/{id}/progreso` | Actualiza el avance (0–100) y agrega una nota al historial |
+| GET | `/admin/reuniones` | Lista las reuniones de todos los clientes |
+| PATCH | `/admin/reuniones/{id}` | Confirma o rechaza, y escribe `respuesta` y `puntos` |
 
 La creación manual requiere `cliente_id`, `nombre`, `descripcion` y `estado`.
 Los estados permitidos son `planificado`, `en_progreso`, `en_revision`,
 `entregado`, `pausado` y `cancelado`.
+
+`PATCH /admin/proyectos/{id}/progreso` recibe `progreso` y `nota`. No tiene
+pantalla: lo consume el futuro panel de desarrolladores. El rol `cliente`
+recibe `403`.
+
+`POST /mi/reuniones` recibe `proyecto_id`, `titulo`, `inicio` y `fin`. Las
+horas sin zona se interpretan en `America/Mexico_City`. La reunión queda
+`solicitada`. Dura entre 15 minutos y 4 horas, debe ser futura y no puede
+empalmarse con otra reunión activa del mismo cliente. `PATCH /mi/reuniones/{id}`
+solo cancela; no acepta puntos ni respuesta.
+
+`PATCH /admin/reuniones/{id}` acepta `estado` (`confirmada` o `rechazada`),
+`respuesta` y `puntos`. Una reunión cancelada responde `409`.
 
 ### 5.6 Tecnologías
 

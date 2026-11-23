@@ -17,6 +17,11 @@
           if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
             document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
           }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
         }
       } catch (e) {}
       document.documentElement.setAttribute("data-theme", tema);
@@ -86,13 +91,17 @@
         <a class="admin-nav__link is-active" href="/pages/portal/index.html" aria-current="page">Resumen</a>
         <a class="admin-nav__link" href="/pages/portal/proyectos.html">Proyectos</a>
         <a class="admin-nav__link" href="/pages/portal/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/portal/calendario.html">Calendario</a>
         <a class="admin-nav__link" href="/pages/portal/perfil.html">Perfil</a>
       </nav>
 
       <div class="alert" id="portal-alert" role="alert" hidden></div>
 
       <section class="identity" data-identity aria-label="Tu identidad">
-        <span class="identity__mark" data-identity-iniciales aria-hidden="true"></span>
+        <a class="identity__photo" href="/pages/portal/perfil.html">
+          <span class="identity__mark" data-identity-iniciales aria-hidden="true"></span>
+          <span class="u-visually-hidden">Ir a mi perfil</span>
+        </a>
         <div>
           <p class="identity__role" data-identity-cargo data-optional="1" hidden></p>
           <h2 class="identity__name" data-identity-nombre>Tu nombre</h2>
@@ -135,6 +144,10 @@
           <div class="empty-state">Cargando actividad…</div>
         </div>
       </section>
+
+      <p class="portal-logout">
+        <button class="btn btn--secondary" type="button" data-action="logout">Cerrar sesión</button>
+      </p>
     </div>
   </main>
 

@@ -10,7 +10,7 @@ export function getCsrfToken() {
   return csrfToken;
 }
 
-async function request(path, { method = 'GET', body, headers = {} } = {}) {
+async function request(path, { method = 'GET', body, formData, headers = {} } = {}) {
   const options = {
     method,
     credentials: 'same-origin',
@@ -20,7 +20,9 @@ async function request(path, { method = 'GET', body, headers = {} } = {}) {
     },
   };
 
-  if (body !== undefined) {
+  if (formData instanceof FormData) {
+    options.body = formData;
+  } else if (body !== undefined) {
     options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(body);
   }
@@ -62,6 +64,12 @@ export function apiGet(path) {
 
 export function apiPost(path, body = {}) {
   return request(path, { method: 'POST', body });
+}
+
+export function apiPostArchivo(path, archivo, campo = 'foto') {
+  const datos = new FormData();
+  datos.append(campo, archivo);
+  return request(path, { method: 'POST', formData: datos });
 }
 
 export function apiPatch(path, body = {}) {

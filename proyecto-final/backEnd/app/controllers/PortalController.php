@@ -11,9 +11,12 @@ use App\Helpers\Response;
 use App\Middleware\Auth;
 use App\Models\Cliente;
 use App\Models\Proyecto;
+use App\Models\Reunion;
 use App\Models\Servicio;
 use App\Models\Solicitud;
 use App\Models\Usuario;
+use DateTimeImmutable;
+use DateTimeZone;
 
 final class PortalController
 {
@@ -170,6 +173,105 @@ final class PortalController
         Response::data($solicitud, 201);
     }
 
+    public function reuniones(): never
+    {
+        $cliente = $this->clienteDeSesion();
+        $desde = $this->instanteConsulta(Request::query('desde'));
+        $hasta = $this->instanteConsulta(Request::query('hasta'));
+
+        if (Request::query('desde') !== null && $desde === null) {
+            Response::error('VALIDACION', 'La fecha inicial no es válida.', 422, [
+                'desde' => 'Usa una fecha válida.',
+            ]);
+        }
+
+        if (Request::query('hasta') !== null && $hasta === null) {
+            Response::error('VALIDACION', 'La fecha final no es válida.', 422, [
+                'hasta' => 'Usa una fecha válida.',
+            ]);
+        }
+
+        Response::data(Reunion::paraCliente((int) $cliente['id'], $desde, $hasta));
+    }
+
+    public function crearReunion(): never
+    {
+        $cliente = $this->clienteDeSesion();
+        Csrf::validate();
+        $data = Request::json();
+        $proyectoId = (int) ($data['proyecto_id'] ?? 0);
+        $titulo = trim((string) ($data['titulo'] ?? ''));
+        $inicio = Reunion::parseLocal((string) ($data['inicio'] ?? ''));
+        $fin = Reunion::parseLocal((string) ($data['fin'] ?? ''));
+        $errors = [];
+
+        if (Proyecto::findForCliente($proyectoId, (int) $cliente['id']) === null) {
+            $errors['proyecto_id'] = 'Selecciona uno de tus proyectos.';
+        }
+
+        if (strlen($titulo) < 3 || strlen($titulo) > 120) {
+            $errors['titulo'] = 'El título debe tener entre 3 y 120 caracteres.';
+        }
+
+        if ($inicio === null) {
+            $errors['inicio'] = 'Indica cuándo empieza la reunión.';
+        }
+
+        if ($fin === null) {
+            $errors['fin'] = 'Indica cuándo termina la reunión.';
+        }
+
+        if ($inicio !== null && $fin !== null) {
+            $duracion = $fin->getTimestamp() - $inicio->getTimestamp();
+
+            if ($duracion <= 0) {
+                $errors['fin'] = 'La reunión debe terminar después de empezar.';
+            } elseif ($duracion < 15 * 60 || $duracion > 4 * 3600) {
+                $errors['fin'] = 'La reunión debe durar entre 15 minutos y 4 horas.';
+            } elseif ($inicio <= Reunion::ahora()) {
+                $errors['inicio'] = 'La reunión debe quedar en el futuro.';
+            } elseif (Reunion::hayEmpalme((int) $cliente['id'], $inicio, $fin)) {
+                $errors['inicio'] = 'Ese horario se empalma con otra reunión tuya.';
+            }
+        }
+
+        if ($errors !== []) {
+            Response::error('VALIDACION', 'Revisa los datos de la reunión.', 422, $errors);
+        }
+
+        $id = Reunion::crear($proyectoId, $titulo, $inicio, $fin);
+        $reunion = Reunion::findForCliente($id, (int) $cliente['id']);
+        Response::data($reunion, 201);
+    }
+
+    public function cancelarReunion(int $id): never
+    {
+        $cliente = $this->clienteDeSesion();
+        Csrf::validate();
+        $reunion = Reunion::findForCliente($id, (int) $cliente['id']);
+
+        if ($reunion === null) {
+            Response::error('NO_ENCONTRADO', 'La reunión no existe.', 404);
+        }
+
+        if (!in_array($reunion['estado'], Reunion::ACTIVAS, true)) {
+            Response::error('VALIDACION', 'Esta reunión ya no se puede cancelar.', 422, [
+                'estado' => 'Solo puedes cancelar una reunión solicitada o confirmada.',
+            ]);
+        }
+
+        $inicio = new DateTimeImmutable((string) $reunion['inicio']);
+
+        if ($inicio <= Reunion::ahora()) {
+            Response::error('VALIDACION', 'Esta reunión ya empezó.', 422, [
+                'inicio' => 'Solo puedes cancelar una reunión que aún no empieza.',
+            ]);
+        }
+
+        Reunion::cancelar($id);
+        Response::data(Reunion::findForCliente($id, (int) $cliente['id']));
+    }
+
     public function perfil(): never
     {
         $sesion = Auth::requireRole('cliente');
@@ -278,6 +380,99 @@ final class PortalController
         Response::data($this->perfilPublico($_SESSION['usuario'], $actualizado));
     }
 
+    public function verFoto(): never
+    {
+        $sesion = Auth::requireRole('cliente');
+        $usuario = Usuario::findById((int) $sesion['id']);
+        $extension = is_array($usuario) ? (string) ($usuario['foto'] ?? '') : '';
+        $tipos = [
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+        ];
+        $ruta = $extension !== '' ? Usuario::rutaFoto((int) $sesion['id'], $extension) : '';
+
+        if ($ruta === '' || !is_file($ruta) || !isset($tipos[$extension])) {
+            Response::error('NO_ENCONTRADO', 'No hay foto de perfil.', 404);
+        }
+
+        Response::file($ruta, $tipos[$extension]);
+    }
+
+    public function subirFoto(): never
+    {
+        $sesion = Auth::requireRole('cliente');
+        Csrf::validate();
+        $archivo = $_FILES['foto'] ?? null;
+
+        if (!is_array($archivo)) {
+            Response::error('VALIDACION', 'Elige una imagen.', 422, [
+                'foto' => 'Elige una imagen.',
+            ]);
+        }
+
+        $codigo = (int) ($archivo['error'] ?? UPLOAD_ERR_NO_FILE);
+
+        if ($codigo === UPLOAD_ERR_INI_SIZE || $codigo === UPLOAD_ERR_FORM_SIZE) {
+            Response::error('VALIDACION', 'La imagen no puede superar 2 MB.', 422, [
+                'foto' => 'La imagen no puede superar 2 MB.',
+            ]);
+        }
+
+        if ($codigo !== UPLOAD_ERR_OK) {
+            Response::error('VALIDACION', 'No se pudo leer la imagen.', 422, [
+                'foto' => 'No se pudo leer la imagen.',
+            ]);
+        }
+
+        $temporal = (string) ($archivo['tmp_name'] ?? '');
+        $peso = (int) ($archivo['size'] ?? 0);
+
+        if ($peso < 1 || $peso > 2 * 1024 * 1024) {
+            Response::error('VALIDACION', 'La imagen no puede superar 2 MB.', 422, [
+                'foto' => 'Usa una imagen de hasta 2 MB.',
+            ]);
+        }
+
+        $info = @getimagesize($temporal);
+        $tipos = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_WEBP => 'webp',
+        ];
+        $tipo = is_array($info) ? (int) ($info[2] ?? 0) : 0;
+
+        if (!isset($tipos[$tipo])) {
+            Response::error('VALIDACION', 'Usa una imagen JPG, PNG o WebP.', 422, [
+                'foto' => 'Usa una imagen JPG, PNG o WebP.',
+            ]);
+        }
+
+        $extension = $tipos[$tipo];
+        $directorio = Usuario::directorioFotos();
+
+        if (!is_dir($directorio) && !mkdir($directorio, 0775, true) && !is_dir($directorio)) {
+            Response::error('ERROR_INTERNO', 'No se pudo guardar la foto.', 500);
+        }
+
+        $destino = Usuario::rutaFoto((int) $sesion['id'], $extension);
+
+        if (!move_uploaded_file($temporal, $destino)) {
+            Response::error('ERROR_INTERNO', 'No se pudo guardar la foto.', 500);
+        }
+
+        Usuario::borrarOtrasFotos((int) $sesion['id'], $extension);
+        Usuario::guardarFoto((int) $sesion['id'], $extension);
+        $usuario = Usuario::findById((int) $sesion['id']);
+
+        if ($usuario === null) {
+            Response::error('ERROR_INTERNO', 'No se pudo recuperar el perfil actualizado.', 500);
+        }
+
+        $_SESSION['usuario'] = Usuario::publicData($usuario);
+        Response::data(['foto' => $_SESSION['usuario']['foto']]);
+    }
+
     /**
      * @param array<string, mixed> $data
      * @param array<string, mixed> $cambios
@@ -314,6 +509,27 @@ final class PortalController
         return substr($texto, 0, $limite);
     }
 
+    private function instanteConsulta(?string $valor): ?DateTimeImmutable
+    {
+        if ($valor === null) {
+            return null;
+        }
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $valor) === 1) {
+            return Reunion::parseLocal($valor . 'T00:00');
+        }
+
+        if (str_ends_with($valor, 'Z') || str_contains($valor, '+')) {
+            try {
+                return (new DateTimeImmutable($valor))->setTimezone(new DateTimeZone('UTC'));
+            } catch (\Exception) {
+                return null;
+            }
+        }
+
+        return Reunion::parseLocal($valor);
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -342,6 +558,7 @@ final class PortalController
                 'nombre' => (string) $usuario['nombre'],
                 'email' => (string) $usuario['email'],
                 'rol' => (string) $usuario['rol'],
+                'foto' => $usuario['foto'] ?? null,
             ],
             'cliente' => [
                 'id' => (int) $cliente['id'],

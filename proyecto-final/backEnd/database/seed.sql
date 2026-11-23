@@ -981,5 +981,101 @@ BEGIN
 END
 GO
 
+/* ==========================================================================
+   12. Avance y reuniones de demostración
+   ========================================================================== */
+
+UPDATE dbo.Proyectos
+SET progreso = 45,
+    actualizado_en = SYSUTCDATETIME()
+WHERE slug = N'portal-comercial-andina'
+  AND progreso = 0;
+GO
+
+UPDATE dbo.Proyectos
+SET progreso = 15,
+    actualizado_en = SYSUTCDATETIME()
+WHERE slug = N'tienda-linea-andina'
+  AND progreso = 0;
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM dbo.ProyectoAvances a
+    INNER JOIN dbo.Proyectos p ON p.id = a.proyecto_id
+    WHERE p.slug = N'portal-comercial-andina'
+      AND a.nota = N'Quedó lista la consulta de pedidos. Sigue el tablero de entregas.'
+)
+BEGIN
+    INSERT INTO dbo.ProyectoAvances (proyecto_id, porcentaje, nota, creado_en)
+    SELECT p.id, 45, N'Quedó lista la consulta de pedidos. Sigue el tablero de entregas.', '2026-11-18T18:00:00'
+    FROM dbo.Proyectos p
+    WHERE p.slug = N'portal-comercial-andina';
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM dbo.ProyectoAvances a
+    INNER JOIN dbo.Proyectos p ON p.id = a.proyecto_id
+    WHERE p.slug = N'tienda-linea-andina'
+      AND a.nota = N'Se definió el catálogo inicial y el flujo del carrito.'
+)
+BEGIN
+    INSERT INTO dbo.ProyectoAvances (proyecto_id, porcentaje, nota, creado_en)
+    SELECT p.id, 15, N'Se definió el catálogo inicial y el flujo del carrito.', '2026-11-20T17:00:00'
+    FROM dbo.Proyectos p
+    WHERE p.slug = N'tienda-linea-andina';
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM dbo.Reuniones r
+    INNER JOIN dbo.Proyectos p ON p.id = r.proyecto_id
+    WHERE p.slug = N'portal-comercial-andina'
+      AND r.titulo = N'Revisión del tablero de entregas'
+)
+BEGIN
+    INSERT INTO dbo.Reuniones (
+        proyecto_id, titulo, inicio, fin, estado, puntos, respuesta
+    )
+    SELECT
+        p.id,
+        N'Revisión del tablero de entregas',
+        '2026-12-03T22:00:00',
+        '2026-12-03T23:00:00',
+        N'confirmada',
+        N'Qué pedidos siguen abiertos y cómo se verá el tablero en el portal.',
+        N'Confirmada. La vemos con el avance del tablero.'
+    FROM dbo.Proyectos p
+    WHERE p.slug = N'portal-comercial-andina';
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM dbo.Reuniones r
+    INNER JOIN dbo.Proyectos p ON p.id = r.proyecto_id
+    WHERE p.slug = N'tienda-linea-andina'
+      AND r.titulo = N'Alcance del catálogo'
+)
+BEGIN
+    INSERT INTO dbo.Reuniones (
+        proyecto_id, titulo, inicio, fin, estado, puntos, respuesta
+    )
+    SELECT
+        p.id,
+        N'Alcance del catálogo',
+        '2026-12-10T17:00:00',
+        '2026-12-10T17:45:00',
+        N'solicitada',
+        NULL,
+        NULL
+    FROM dbo.Proyectos p
+    WHERE p.slug = N'tienda-linea-andina';
+END
+GO
+
 PRINT 'Datos iniciales y de demostración cargados correctamente.';
 GO

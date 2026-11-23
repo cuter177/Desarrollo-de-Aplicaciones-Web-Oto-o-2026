@@ -221,6 +221,48 @@ final class AdminProyectoController
         Response::data(Proyecto::findById($id));
     }
 
+    public function progreso(int $id): never
+    {
+        Auth::requireRole('admin');
+        Csrf::validate();
+
+        if (Proyecto::findById($id) === null) {
+            Response::error('NO_ENCONTRADO', 'El proyecto no existe.', 404);
+        }
+
+        $data = Request::json();
+        $progreso = $data['progreso'] ?? null;
+        $nota = trim((string) ($data['nota'] ?? ''));
+        $errors = [];
+
+        if (!is_int($progreso) && !(is_string($progreso) && ctype_digit($progreso))) {
+            $errors['progreso'] = 'El avance debe ser un número del 0 al 100.';
+        } else {
+            $progreso = (int) $progreso;
+
+            if ($progreso < 0 || $progreso > 100) {
+                $errors['progreso'] = 'El avance debe estar entre 0 y 100.';
+            }
+        }
+
+        if (strlen($nota) < 2 || strlen($nota) > 500) {
+            $errors['nota'] = 'La nota debe tener entre 2 y 500 caracteres.';
+        }
+
+        if ($errors !== []) {
+            Response::error('VALIDACION', 'Revisa el avance del proyecto.', 422, $errors);
+        }
+
+        $avanceId = Proyecto::registrarAvance($id, (int) $progreso, $nota);
+        $avance = Proyecto::avancePorId($avanceId);
+
+        Response::data([
+            'id' => $id,
+            'progreso' => (int) $progreso,
+            'avance' => $avance,
+        ]);
+    }
+
     private static function nullableDate(mixed $value): ?string
     {
         $texto = trim((string) ($value ?? ''));

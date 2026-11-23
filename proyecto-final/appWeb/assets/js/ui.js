@@ -106,6 +106,8 @@ export function actualizarHeader(usuario) {
     // Sin almacenamiento la sesión sigue viéndose al terminar la consulta.
   }
 
+  aplicarFoto(usuario?.foto ?? null);
+
   if (iniciales) {
     document.documentElement.style.setProperty('--user-initials', `"${iniciales}"`);
   } else {
@@ -145,16 +147,151 @@ export function actualizarHeader(usuario) {
         try {
           localStorage.removeItem('ds-sesion');
           localStorage.removeItem('ds-iniciales');
+          localStorage.removeItem('ds-foto');
+          localStorage.removeItem('ds-foto-src');
         } catch {
           // La siguiente página vuelve a consultar la sesión.
         }
 
         delete document.documentElement.dataset.sesion;
+        delete document.documentElement.dataset.foto;
         document.documentElement.style.removeProperty('--user-initials');
+        document.documentElement.style.removeProperty('--user-foto');
         window.location.href = '/index.html';
       }
     });
   });
+}
+
+function esMiniatura(valor) {
+  return typeof valor === 'string'
+    && valor.startsWith('data:image/jpeg;base64,')
+    && valor.length > 40
+    && valor.length < 100000;
+}
+
+function limpiarFoto() {
+  try {
+    localStorage.removeItem('ds-foto');
+    localStorage.removeItem('ds-foto-src');
+  } catch {
+    // La siguiente página vuelve a consultar la sesión.
+  }
+
+  delete document.documentElement.dataset.foto;
+  document.documentElement.style.removeProperty('--user-foto');
+}
+
+function pintarMiniatura(src, marca) {
+  try {
+    const misma = localStorage.getItem('ds-foto') === marca
+      && localStorage.getItem('ds-foto-src') === src
+      && document.documentElement.dataset.foto === '1';
+    localStorage.setItem('ds-foto', marca);
+    localStorage.setItem('ds-foto-src', src);
+
+    if (misma) {
+      return;
+    }
+  } catch {
+    // Sin almacenamiento la foto se pinta solo en esta página.
+  }
+
+  document.documentElement.dataset.foto = '1';
+  document.documentElement.style.setProperty('--user-foto', `url("${src}")`);
+}
+
+function miniaturizar(blob) {
+  return new Promise((resolve) => {
+    const imagen = new Image();
+    const objeto = URL.createObjectURL(blob);
+
+    imagen.onload = () => {
+      const lado = 96;
+      const lienzo = document.createElement('canvas');
+      lienzo.width = lado;
+      lienzo.height = lado;
+      const contexto = lienzo.getContext('2d');
+      const escala = Math.max(lado / imagen.width, lado / imagen.height);
+      const ancho = imagen.width * escala;
+      const alto = imagen.height * escala;
+      contexto.drawImage(imagen, (lado - ancho) / 2, (lado - alto) / 2, ancho, alto);
+      URL.revokeObjectURL(objeto);
+      resolve(lienzo.toDataURL('image/jpeg', 0.82));
+    };
+
+    imagen.onerror = () => {
+      URL.revokeObjectURL(objeto);
+      resolve('');
+    };
+
+    imagen.src = objeto;
+  });
+}
+
+export function urlFoto(version) {
+  const marca = version ? String(version) : '';
+
+  try {
+    const src = localStorage.getItem('ds-foto-src') || '';
+
+    if (localStorage.getItem('ds-foto') === marca && esMiniatura(src)) {
+      return src;
+    }
+  } catch {
+    // Se usa la dirección de la cuenta si el navegador no guarda la copia.
+  }
+
+  return marca ? `/api/v1/mi/foto?v=${encodeURIComponent(marca)}` : '';
+}
+
+export async function fijarFotoLocal(archivo, version) {
+  const marca = version ? String(version) : '';
+
+  if (!/^[0-9]{10,13}$/.test(marca)) {
+    limpiarFoto();
+    return;
+  }
+
+  const src = await miniaturizar(archivo);
+
+  if (!esMiniatura(src)) {
+    return;
+  }
+
+  pintarMiniatura(src, marca);
+}
+
+export function aplicarFoto(version) {
+  const marca = version ? String(version) : '';
+
+  if (!/^[0-9]{10,13}$/.test(marca)) {
+    limpiarFoto();
+    return;
+  }
+
+  try {
+    const src = localStorage.getItem('ds-foto-src') || '';
+
+    if (localStorage.getItem('ds-foto') === marca && esMiniatura(src)) {
+      pintarMiniatura(src, marca);
+      return;
+    }
+  } catch {
+    // Se intenta leer la foto desde la cuenta.
+  }
+
+  fetch(`/api/v1/mi/foto?v=${encodeURIComponent(marca)}`, { credentials: 'same-origin' })
+    .then((respuesta) => (respuesta.ok ? respuesta.blob() : null))
+    .then((blob) => (blob ? miniaturizar(blob) : ''))
+    .then((src) => {
+      if (esMiniatura(src)) {
+        pintarMiniatura(src, marca);
+      }
+    })
+    .catch(() => {
+      // La inicial sigue visible si la foto no alcanza a cargarse.
+    });
 }
 
 export function inicialesDe(nombre) {

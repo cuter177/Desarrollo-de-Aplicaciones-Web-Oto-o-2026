@@ -17,6 +17,11 @@
           if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
             document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
           }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
         }
       } catch (e) {}
       document.documentElement.setAttribute("data-theme", tema);
@@ -84,6 +89,7 @@
         <a class="admin-nav__link" href="/pages/portal/index.html">Resumen</a>
         <a class="admin-nav__link" href="/pages/portal/proyectos.html">Proyectos</a>
         <a class="admin-nav__link is-active" href="/pages/portal/solicitudes.html" aria-current="page">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/portal/calendario.html">Calendario</a>
         <a class="admin-nav__link" href="/pages/portal/perfil.html">Perfil</a>
       </nav>
       <div class="alert" id="portal-alert" role="alert" hidden></div>

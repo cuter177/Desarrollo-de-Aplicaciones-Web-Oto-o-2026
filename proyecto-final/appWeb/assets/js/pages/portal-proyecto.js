@@ -1,7 +1,7 @@
 import { apiGet } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { protegerPagina } from '../auth.js';
-import { aplicarConfig, etiquetaEstado, formatearFecha } from '../public.js';
+import { aplicarConfig, etiquetaEstado, formatearFecha, htmlAvance, htmlHistorial } from '../public.js';
 import { escapar, mostrarAlerta } from '../ui.js';
 
 const alerta = document.querySelector('#portal-alert');
@@ -47,6 +47,11 @@ async function init() {
         <h1 class="page__title">${escapar(proyecto.nombre)}</h1>
         <p>${escapar(proyecto.descripcion)}</p>
       </header>
+      <section class="panel" aria-labelledby="proyecto-avance">
+        <h2 class="panel__title" id="proyecto-avance">Avance</h2>
+        ${htmlAvance(proyecto.progreso)}
+        ${htmlHistorial(proyecto.avances)}
+      </section>
       <section class="panel">
         <dl class="data-list">
           ${fila('Estado', `<span class="badge status status--${escapar(proyecto.estado)}">${escapar(etiquetaEstado(proyecto.estado))}</span>`)}

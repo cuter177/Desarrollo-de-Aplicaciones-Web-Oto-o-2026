@@ -66,6 +66,7 @@ async function init() {
   pintarIdentidad({
     iniciales: inicialesDe(usuario.nombre),
     nombre: usuario.nombre,
+    foto: usuario.foto,
   });
 
   try {
@@ -75,6 +76,7 @@ async function init() {
     pintarIdentidad({
       iniciales: inicialesDe(usuario.nombre),
       nombre: usuario.nombre,
+      foto: usuario.foto,
       cargo: cliente.cargo,
       empresa: cliente.empresa,
       frase: cliente.frase,

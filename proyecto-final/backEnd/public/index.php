@@ -6,6 +6,7 @@ use App\Controllers\AdminClienteController;
 use App\Controllers\AdminController;
 use App\Controllers\AdminMensajeController;
 use App\Controllers\AdminProyectoController;
+use App\Controllers\AdminReunionController;
 use App\Controllers\AdminServicioController;
 use App\Controllers\AdminSolicitudController;
 use App\Controllers\AdminTecnologiaController;
@@ -86,11 +87,16 @@ try {
         'GET /api/v1/mi/resumen' => [PortalController::class, 'resumen'],
         'GET /api/v1/mi/proyectos' => [PortalController::class, 'proyectos'],
         'GET /api/v1/mi/proyectos/{id}' => [PortalController::class, 'proyecto'],
+        'GET /api/v1/mi/reuniones' => [PortalController::class, 'reuniones'],
+        'POST /api/v1/mi/reuniones' => [PortalController::class, 'crearReunion'],
+        'PATCH /api/v1/mi/reuniones/{id}' => [PortalController::class, 'cancelarReunion'],
         'GET /api/v1/mi/solicitudes' => [PortalController::class, 'solicitudes'],
         'GET /api/v1/mi/solicitudes/{id}' => [PortalController::class, 'solicitud'],
         'POST /api/v1/mi/solicitudes' => [PortalController::class, 'crearSolicitud'],
         'GET /api/v1/mi/perfil' => [PortalController::class, 'perfil'],
         'PATCH /api/v1/mi/perfil' => [PortalController::class, 'actualizarPerfil'],
+        'GET /api/v1/mi/foto' => [PortalController::class, 'verFoto'],
+        'POST /api/v1/mi/foto' => [PortalController::class, 'subirFoto'],
 
         'GET /api/v1/admin/dashboard' => [AdminController::class, 'dashboard'],
         'GET /api/v1/admin/roles' => [AdminUsuarioController::class, 'roles'],
@@ -120,6 +126,9 @@ try {
         'GET /api/v1/admin/proyectos/{id}' => [AdminProyectoController::class, 'show'],
         'POST /api/v1/admin/proyectos' => [AdminProyectoController::class, 'store'],
         'PATCH /api/v1/admin/proyectos/{id}' => [AdminProyectoController::class, 'update'],
+        'PATCH /api/v1/admin/proyectos/{id}/progreso' => [AdminProyectoController::class, 'progreso'],
+        'GET /api/v1/admin/reuniones' => [AdminReunionController::class, 'index'],
+        'PATCH /api/v1/admin/reuniones/{id}' => [AdminReunionController::class, 'update'],
 
         'GET /api/v1/admin/mensajes' => [AdminMensajeController::class, 'index'],
         'GET /api/v1/admin/mensajes/{id}' => [AdminMensajeController::class, 'show'],

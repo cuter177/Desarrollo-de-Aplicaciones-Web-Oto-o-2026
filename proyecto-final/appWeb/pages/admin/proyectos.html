@@ -23,6 +23,10 @@
             document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
           }
         }
+        var panel = localStorage.getItem("ds-panel");
+        if (panel === "oculto" || panel === "abierto") {
+          document.documentElement.setAttribute("data-panel", panel);
+        }
       } catch (e) {}
       document.documentElement.setAttribute("data-theme", tema);
     })();
@@ -81,125 +85,132 @@
   </header>
 
   <main id="contenido">
-    <div class="container page">
-      <header class="page__header">
-        <p class="hero__eyebrow">Administración</p>
-        <h1 class="page__title">Proyectos</h1>
-        <p class="page__lead">
-          Crea proyectos a partir de una solicitud o manualmente, actualiza su
-          estado y publica los casos que quieras mostrar en el portafolio.
-        </p>
-      </header>
+    <div class="admin-shell">
+      <button class="admin-panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="menu-panel">
+        <span class="u-visually-hidden" data-panel-label>Ocultar menú</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <aside class="admin-side" id="menu-panel">
+        <nav class="admin-nav" aria-label="Secciones del panel">
+          <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+          <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+          <a class="admin-nav__link is-active" href="/pages/admin/proyectos.html" aria-current="page">Proyectos</a>
+          <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+          <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+          <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
+          <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
+          <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+        </nav>
+        </aside>
+        <div class="admin-main">
+        <header class="page__header">
+          <p class="hero__eyebrow">Administración</p>
+          <h1 class="page__title">Proyectos</h1>
+          <p class="page__lead">
+            Crea proyectos a partir de una solicitud o manualmente, actualiza su
+            estado y publica los casos que quieras mostrar en el portafolio.
+          </p>
+        </header>
 
-      <nav class="admin-nav" aria-label="Secciones del panel">
-        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
-        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
-        <a class="admin-nav__link is-active" href="/pages/admin/proyectos.html" aria-current="page">Proyectos</a>
-        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
-        <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
-        <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
-        <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
-        <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
-      </nav>
+        <div class="alert" id="admin-alert" role="alert" hidden></div>
 
-      <div class="alert" id="admin-alert" role="alert" hidden></div>
+        <div class="admin-grid">
+          <section class="panel" aria-labelledby="proyecto-form-title">
+            <h2 class="panel__title" id="proyecto-form-title">Nuevo proyecto</h2>
 
-      <div class="admin-grid">
-        <section class="panel" aria-labelledby="proyecto-form-title">
-          <h2 class="panel__title" id="proyecto-form-title">Nuevo proyecto</h2>
+            <form class="form" id="proyecto-form">
+              <input type="hidden" id="proyecto-id" value="">
 
-          <form class="form" id="proyecto-form">
-            <input type="hidden" id="proyecto-id" value="">
-
-            <div class="form__field">
-              <label class="form__label" for="proyecto-cliente">Cliente</label>
-              <select class="form__select" id="proyecto-cliente" required>
-                <option value="">Selecciona un cliente</option>
-              </select>
-            </div>
-
-            <div class="form__field">
-              <label class="form__label" for="proyecto-nombre">Nombre</label>
-              <input class="form__input" id="proyecto-nombre" type="text" minlength="3" maxlength="150" required>
-            </div>
-
-            <div class="form__field">
-              <label class="form__label" for="proyecto-descripcion">Descripción</label>
-              <textarea class="form__textarea" id="proyecto-descripcion" minlength="10" maxlength="5000" required></textarea>
-            </div>
-
-            <div class="form__field">
-              <label class="form__label" for="proyecto-reto">Reto del cliente</label>
-              <textarea class="form__textarea" id="proyecto-reto" maxlength="5000" placeholder="Qué problema había antes del proyecto"></textarea>
-            </div>
-
-            <div class="form__field">
-              <label class="form__label" for="proyecto-solucion">Solución</label>
-              <textarea class="form__textarea" id="proyecto-solucion" maxlength="5000" placeholder="Qué se construyó y cómo funciona"></textarea>
-            </div>
-
-            <div class="form__field">
-              <label class="form__label" for="proyecto-resultados">Resultados</label>
-              <textarea class="form__textarea" id="proyecto-resultados" maxlength="5000" placeholder="Impacto o aprendizaje del proyecto"></textarea>
-            </div>
-
-            <div class="form-row">
               <div class="form__field">
-                <label class="form__label" for="proyecto-estado">Estado</label>
-                <select class="form__select" id="proyecto-estado">
-                  <option value="planificado">Planificado</option>
-                  <option value="en_progreso">En progreso</option>
-                  <option value="en_revision">En revisión</option>
-                  <option value="entregado">Entregado</option>
-                  <option value="pausado">Pausado</option>
-                  <option value="cancelado">Cancelado</option>
+                <label class="form__label" for="proyecto-cliente">Cliente</label>
+                <select class="form__select" id="proyecto-cliente" required>
+                  <option value="">Selecciona un cliente</option>
                 </select>
               </div>
+
               <div class="form__field">
-                <label class="form__label" for="proyecto-url">URL demo</label>
-                <input class="form__input" id="proyecto-url" type="url" maxlength="300" placeholder="https://…">
+                <label class="form__label" for="proyecto-nombre">Nombre</label>
+                <input class="form__input" id="proyecto-nombre" type="text" minlength="3" maxlength="150" required>
               </div>
-            </div>
 
-            <div class="form-row">
               <div class="form__field">
-                <label class="form__label" for="proyecto-inicio">Fecha de inicio</label>
-                <input class="form__input" id="proyecto-inicio" type="date">
+                <label class="form__label" for="proyecto-descripcion">Descripción</label>
+                <textarea class="form__textarea" id="proyecto-descripcion" minlength="10" maxlength="5000" required></textarea>
               </div>
+
               <div class="form__field">
-                <label class="form__label" for="proyecto-fin">Fecha de fin</label>
-                <input class="form__input" id="proyecto-fin" type="date">
+                <label class="form__label" for="proyecto-reto">Reto del cliente</label>
+                <textarea class="form__textarea" id="proyecto-reto" maxlength="5000" placeholder="Qué problema había antes del proyecto"></textarea>
               </div>
-            </div>
 
-            <div class="form__check">
-              <input type="checkbox" id="proyecto-publicado">
-              <label for="proyecto-publicado">Publicar en el portafolio</label>
-            </div>
-            <div class="form__check">
-              <input type="checkbox" id="proyecto-destacado">
-              <label for="proyecto-destacado">Destacar en la página principal</label>
-            </div>
-            <div class="form__check">
-              <input type="checkbox" id="proyecto-mostrar-cliente">
-              <label for="proyecto-mostrar-cliente">Mostrar el nombre del cliente en el caso público</label>
-            </div>
+              <div class="form__field">
+                <label class="form__label" for="proyecto-solucion">Solución</label>
+                <textarea class="form__textarea" id="proyecto-solucion" maxlength="5000" placeholder="Qué se construyó y cómo funciona"></textarea>
+              </div>
 
-            <div class="hero__actions">
-              <button class="btn" type="submit" id="proyecto-guardar">Crear proyecto</button>
-              <button class="btn btn--secondary" type="button" id="proyecto-cancelar" hidden>Cancelar edición</button>
-            </div>
-          </form>
-        </section>
+              <div class="form__field">
+                <label class="form__label" for="proyecto-resultados">Resultados</label>
+                <textarea class="form__textarea" id="proyecto-resultados" maxlength="5000" placeholder="Impacto o aprendizaje del proyecto"></textarea>
+              </div>
 
-        <section class="panel" aria-labelledby="proyectos-lista-title">
-          <h2 class="panel__title" id="proyectos-lista-title">Listado</h2>
-          <div id="proyectos-lista" aria-live="polite">
-            <div class="empty-state">Cargando proyectos…</div>
-          </div>
-        </section>
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="proyecto-estado">Estado</label>
+                  <select class="form__select" id="proyecto-estado">
+                    <option value="planificado">Planificado</option>
+                    <option value="en_progreso">En progreso</option>
+                    <option value="en_revision">En revisión</option>
+                    <option value="entregado">Entregado</option>
+                    <option value="pausado">Pausado</option>
+                    <option value="cancelado">Cancelado</option>
+                  </select>
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="proyecto-url">URL demo</label>
+                  <input class="form__input" id="proyecto-url" type="url" maxlength="300" placeholder="https://…">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="proyecto-inicio">Fecha de inicio</label>
+                  <input class="form__input" id="proyecto-inicio" type="date">
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="proyecto-fin">Fecha de fin</label>
+                  <input class="form__input" id="proyecto-fin" type="date">
+                </div>
+              </div>
+
+              <div class="form__check">
+                <input type="checkbox" id="proyecto-publicado">
+                <label for="proyecto-publicado">Publicar en el portafolio</label>
+              </div>
+              <div class="form__check">
+                <input type="checkbox" id="proyecto-destacado">
+                <label for="proyecto-destacado">Destacar en la página principal</label>
+              </div>
+              <div class="form__check">
+                <input type="checkbox" id="proyecto-mostrar-cliente">
+                <label for="proyecto-mostrar-cliente">Mostrar el nombre del cliente en el caso público</label>
+              </div>
+
+              <div class="hero__actions">
+                <button class="btn" type="submit" id="proyecto-guardar">Crear proyecto</button>
+                <button class="btn btn--secondary" type="button" id="proyecto-cancelar" hidden>Cancelar edición</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel" aria-labelledby="proyectos-lista-title">
+            <h2 class="panel__title" id="proyectos-lista-title">Listado</h2>
+            <div id="proyectos-lista" aria-live="polite">
+              <div class="empty-state">Cargando proyectos…</div>
+            </div>
+          </section>
+        </div>
+        </div>
       </div>
-    </div>
   </main>
 
   <footer class="site-footer">

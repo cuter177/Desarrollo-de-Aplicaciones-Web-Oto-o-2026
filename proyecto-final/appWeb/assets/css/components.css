@@ -1200,6 +1200,109 @@ form + .panel {
   text-underline-offset: 0.35rem;
 }
 
+.admin-shell {
+  min-height: calc(100vh - 4.5rem);
+}
+
+.admin-main {
+  min-width: 0;
+  margin-left: 15.5rem;
+  padding: 4rem 2rem 3rem;
+}
+
+.admin-side {
+  position: fixed;
+  z-index: 10;
+  top: 4.3125rem;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 15.5rem;
+  padding: 3.95rem 0.85rem 1.5rem;
+  overflow: auto;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+html:not([data-panel="oculto"]) body:has(.admin-shell) .site-footer {
+  margin-left: 15.5rem;
+}
+
+.admin-panel-toggle {
+  position: fixed;
+  z-index: 15;
+  top: 5.85rem;
+  left: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.admin-panel-toggle:hover {
+  background: var(--color-wash);
+  color: var(--color-text);
+}
+
+html[data-panel="oculto"] .admin-panel-toggle svg {
+  transform: scaleX(-1);
+}
+
+.admin-side .admin-nav {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-side .admin-nav__link {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.admin-side .admin-nav__link:hover,
+.admin-side .admin-nav__link.is-active {
+  color: var(--color-primary-dark);
+  text-decoration: none;
+  background: var(--color-bg);
+}
+
+html[data-panel="oculto"] .admin-main,
+html[data-panel="oculto"] body:has(.admin-shell) .site-footer {
+  margin-left: 0;
+}
+
+html[data-panel="oculto"] .admin-side {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  html:not([data-panel="abierto"]) .admin-side {
+    display: none;
+  }
+
+  html:not([data-panel="abierto"]) .admin-main,
+  html:not([data-panel="abierto"]) body:has(.admin-shell) .site-footer {
+    margin-left: 0;
+  }
+
+  html:not([data-panel="abierto"]) .admin-panel-toggle svg {
+    transform: scaleX(-1);
+  }
+}
+
 .progress {
   display: grid;
   gap: 0.35rem;
@@ -1368,6 +1471,10 @@ form + .panel {
   display: grid;
   gap: var(--space-4);
   grid-template-columns: 1fr;
+}
+
+.admin-grid > * {
+  min-width: 0;
 }
 
 .panel__header {

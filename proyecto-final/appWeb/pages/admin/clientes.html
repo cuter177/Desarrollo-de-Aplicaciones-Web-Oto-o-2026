@@ -23,6 +23,10 @@
             document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
           }
         }
+        var panel = localStorage.getItem("ds-panel");
+        if (panel === "oculto" || panel === "abierto") {
+          document.documentElement.setAttribute("data-panel", panel);
+        }
       } catch (e) {}
       document.documentElement.setAttribute("data-theme", tema);
     })();
@@ -79,77 +83,85 @@
     </div>
   </header>
   <main id="contenido">
-    <div class="container page">
-      <header class="page__header">
-        <p class="hero__eyebrow">Administración</p>
-        <h1 class="page__title">Clientes</h1>
-        <p class="page__lead">Vincula una empresa con un usuario cliente y consulta sus proyectos y solicitudes.</p>
-      </header>
-      <nav class="admin-nav" aria-label="Secciones del panel">
-        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
-        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
-        <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
-        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
-        <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
-        <a class="admin-nav__link is-active" href="/pages/admin/clientes.html" aria-current="page">Clientes</a>
-        <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
-        <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
-      </nav>
-      <div class="alert" id="admin-alert" role="alert" hidden></div>
-      <div class="admin-grid">
-        <section class="panel" aria-labelledby="cliente-form-title">
-          <h2 class="panel__title" id="cliente-form-title">Vincular cliente</h2>
-          <form class="form" id="cliente-form">
-            <input type="hidden" id="cliente-id" value="">
-            <div class="form__field" id="cliente-usuario-campo">
-              <label class="form__label" for="cliente-usuario">Usuario cliente</label>
-              <select class="form__select" id="cliente-usuario" required>
-                <option value="">Selecciona un usuario</option>
-              </select>
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-empresa">Empresa</label>
-              <input class="form__input" id="cliente-empresa" type="text" minlength="2" maxlength="150" required>
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-telefono">Teléfono</label>
-              <input class="form__input" id="cliente-telefono" type="tel" maxlength="30">
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-sitio">Sitio web</label>
-              <input class="form__input" id="cliente-sitio" type="url" maxlength="200" placeholder="https://">
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-industria">Industria</label>
-              <input class="form__input" id="cliente-industria" type="text" maxlength="100">
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-cargo">Cargo</label>
-              <input class="form__input" id="cliente-cargo" type="text" maxlength="80">
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-frase">Frase del negocio</label>
-              <input class="form__input" id="cliente-frase" type="text" maxlength="160">
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="cliente-ciudad">Ciudad</label>
-              <input class="form__input" id="cliente-ciudad" type="text" maxlength="80">
-            </div>
-            <div class="form__actions">
-              <button class="btn" id="cliente-guardar" type="submit">Crear cliente</button>
-              <button class="btn btn--ghost" id="cliente-cancelar" type="button" hidden>Cancelar</button>
-            </div>
-          </form>
+    <div class="admin-shell">
+      <button class="admin-panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="menu-panel">
+        <span class="u-visually-hidden" data-panel-label>Ocultar menú</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <aside class="admin-side" id="menu-panel">
+        <nav class="admin-nav" aria-label="Secciones del panel">
+          <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+          <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+          <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+          <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+          <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+          <a class="admin-nav__link is-active" href="/pages/admin/clientes.html" aria-current="page">Clientes</a>
+          <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
+          <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+        </nav>
+        </aside>
+        <div class="admin-main">
+        <header class="page__header">
+          <p class="hero__eyebrow">Administración</p>
+          <h1 class="page__title">Clientes</h1>
+          <p class="page__lead">Vincula una empresa con un usuario cliente y consulta sus proyectos y solicitudes.</p>
+        </header>
+        <div class="alert" id="admin-alert" role="alert" hidden></div>
+        <div class="admin-grid">
+          <section class="panel" aria-labelledby="cliente-form-title">
+            <h2 class="panel__title" id="cliente-form-title">Vincular cliente</h2>
+            <form class="form" id="cliente-form">
+              <input type="hidden" id="cliente-id" value="">
+              <div class="form__field" id="cliente-usuario-campo">
+                <label class="form__label" for="cliente-usuario">Usuario cliente</label>
+                <select class="form__select" id="cliente-usuario" required>
+                  <option value="">Selecciona un usuario</option>
+                </select>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-empresa">Empresa</label>
+                <input class="form__input" id="cliente-empresa" type="text" minlength="2" maxlength="150" required>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-telefono">Teléfono</label>
+                <input class="form__input" id="cliente-telefono" type="tel" maxlength="30">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-sitio">Sitio web</label>
+                <input class="form__input" id="cliente-sitio" type="url" maxlength="200" placeholder="https://">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-industria">Industria</label>
+                <input class="form__input" id="cliente-industria" type="text" maxlength="100">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-cargo">Cargo</label>
+                <input class="form__input" id="cliente-cargo" type="text" maxlength="80">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-frase">Frase del negocio</label>
+                <input class="form__input" id="cliente-frase" type="text" maxlength="160">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="cliente-ciudad">Ciudad</label>
+                <input class="form__input" id="cliente-ciudad" type="text" maxlength="80">
+              </div>
+              <div class="form__actions">
+                <button class="btn" id="cliente-guardar" type="submit">Crear cliente</button>
+                <button class="btn btn--ghost" id="cliente-cancelar" type="button" hidden>Cancelar</button>
+              </div>
+            </form>
+          </section>
+          <section class="panel">
+            <h2 class="panel__title">Listado</h2>
+            <div id="clientes-lista" aria-live="polite"><div class="empty-state">Cargando clientes…</div></div>
+          </section>
+        </div>
+        <section class="panel" aria-live="polite">
+          <div id="cliente-detalle"><div class="empty-state">Selecciona “Ver” para consultar proyectos y solicitudes.</div></div>
         </section>
-        <section class="panel">
-          <h2 class="panel__title">Listado</h2>
-          <div id="clientes-lista" aria-live="polite"><div class="empty-state">Cargando clientes…</div></div>
-        </section>
+        </div>
       </div>
-      <section class="panel" aria-live="polite">
-        <div id="cliente-detalle"><div class="empty-state">Selecciona “Ver” para consultar proyectos y solicitudes.</div></div>
-      </section>
-    </div>
   </main>
   <footer class="site-footer">
     <div class="container site-footer__inner">

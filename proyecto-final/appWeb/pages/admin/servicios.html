@@ -23,6 +23,10 @@
             document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
           }
         }
+        var panel = localStorage.getItem("ds-panel");
+        if (panel === "oculto" || panel === "abierto") {
+          document.documentElement.setAttribute("data-panel", panel);
+        }
       } catch (e) {}
       document.documentElement.setAttribute("data-theme", tema);
     })();
@@ -79,71 +83,79 @@
     </div>
   </header>
   <main id="contenido">
-    <div class="container page">
-      <header class="page__header">
-        <p class="hero__eyebrow">Administración</p>
-        <h1 class="page__title">Servicios</h1>
-        <p class="page__lead">El catálogo activo se publica en el sitio. Desactivar un servicio no borra sus solicitudes.</p>
-      </header>
-      <nav class="admin-nav" aria-label="Secciones del panel">
-        <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
-        <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
-        <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
-        <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
-        <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
-        <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
-        <a class="admin-nav__link is-active" href="/pages/admin/servicios.html" aria-current="page">Servicios</a>
-        <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
-      </nav>
-      <div class="alert" id="admin-alert" role="alert" hidden></div>
-      <div class="admin-grid">
-        <section class="panel" aria-labelledby="servicio-form-title">
-          <h2 class="panel__title" id="servicio-form-title">Nuevo servicio</h2>
-          <form class="form" id="servicio-form">
-            <input type="hidden" id="servicio-id" value="">
-            <div class="form__field">
-              <label class="form__label" for="servicio-nombre">Nombre</label>
-              <input class="form__input" id="servicio-nombre" type="text" minlength="2" maxlength="120" required>
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="servicio-slug">Slug</label>
-              <input class="form__input" id="servicio-slug" type="text" maxlength="120" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="se genera si lo dejas vacío">
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="servicio-descripcion">Descripción</label>
-              <textarea class="form__textarea" id="servicio-descripcion" minlength="10" maxlength="5000" required></textarea>
-            </div>
-            <div class="form__field">
-              <label class="form__label" for="servicio-beneficios">Beneficios</label>
-              <textarea class="form__textarea" id="servicio-beneficios" maxlength="5000"></textarea>
-              <p class="form__hint">Un beneficio por línea.</p>
-            </div>
-            <div class="form-row">
+    <div class="admin-shell">
+      <button class="admin-panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="menu-panel">
+        <span class="u-visually-hidden" data-panel-label>Ocultar menú</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <aside class="admin-side" id="menu-panel">
+        <nav class="admin-nav" aria-label="Secciones del panel">
+          <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+          <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+          <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+          <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+          <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+          <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
+          <a class="admin-nav__link is-active" href="/pages/admin/servicios.html" aria-current="page">Servicios</a>
+          <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+        </nav>
+        </aside>
+        <div class="admin-main">
+        <header class="page__header">
+          <p class="hero__eyebrow">Administración</p>
+          <h1 class="page__title">Servicios</h1>
+          <p class="page__lead">El catálogo activo se publica en el sitio. Desactivar un servicio no borra sus solicitudes.</p>
+        </header>
+        <div class="alert" id="admin-alert" role="alert" hidden></div>
+        <div class="admin-grid">
+          <section class="panel" aria-labelledby="servicio-form-title">
+            <h2 class="panel__title" id="servicio-form-title">Nuevo servicio</h2>
+            <form class="form" id="servicio-form">
+              <input type="hidden" id="servicio-id" value="">
               <div class="form__field">
-                <label class="form__label" for="servicio-icono">Icono</label>
-                <input class="form__input" id="servicio-icono" type="text" maxlength="80">
+                <label class="form__label" for="servicio-nombre">Nombre</label>
+                <input class="form__input" id="servicio-nombre" type="text" minlength="2" maxlength="120" required>
               </div>
               <div class="form__field">
-                <label class="form__label" for="servicio-orden">Orden</label>
-                <input class="form__input" id="servicio-orden" type="number" min="0" max="9999" value="0">
+                <label class="form__label" for="servicio-slug">Slug</label>
+                <input class="form__input" id="servicio-slug" type="text" maxlength="120" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="se genera si lo dejas vacío">
               </div>
-            </div>
-            <label class="form__check">
-              <input id="servicio-activo" type="checkbox" checked>
-              Visible en el sitio público
-            </label>
-            <div class="form__actions">
-              <button class="btn" id="servicio-guardar" type="submit">Crear servicio</button>
-              <button class="btn btn--ghost" id="servicio-cancelar" type="button" hidden>Cancelar</button>
-            </div>
-          </form>
-        </section>
-        <section class="panel">
-          <h2 class="panel__title">Listado</h2>
-          <div id="servicios-lista" aria-live="polite"><div class="empty-state">Cargando servicios…</div></div>
-        </section>
+              <div class="form__field">
+                <label class="form__label" for="servicio-descripcion">Descripción</label>
+                <textarea class="form__textarea" id="servicio-descripcion" minlength="10" maxlength="5000" required></textarea>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="servicio-beneficios">Beneficios</label>
+                <textarea class="form__textarea" id="servicio-beneficios" maxlength="5000"></textarea>
+                <p class="form__hint">Un beneficio por línea.</p>
+              </div>
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="servicio-icono">Icono</label>
+                  <input class="form__input" id="servicio-icono" type="text" maxlength="80">
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="servicio-orden">Orden</label>
+                  <input class="form__input" id="servicio-orden" type="number" min="0" max="9999" value="0">
+                </div>
+              </div>
+              <label class="form__check">
+                <input id="servicio-activo" type="checkbox" checked>
+                Visible en el sitio público
+              </label>
+              <div class="form__actions">
+                <button class="btn" id="servicio-guardar" type="submit">Crear servicio</button>
+                <button class="btn btn--ghost" id="servicio-cancelar" type="button" hidden>Cancelar</button>
+              </div>
+            </form>
+          </section>
+          <section class="panel">
+            <h2 class="panel__title">Listado</h2>
+            <div id="servicios-lista" aria-live="polite"><div class="empty-state">Cargando servicios…</div></div>
+          </section>
+        </div>
+        </div>
       </div>
-    </div>
   </main>
   <footer class="site-footer">
     <div class="container site-footer__inner">

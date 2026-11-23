@@ -1,0 +1,240 @@
+% Manual técnico de DevStudio
+% Compilar: /usr/bin/latexbuild manual-tecnico.tex
+\input{../comun/preambulo.tex}
+\datosPdf{Manual técnico. DevStudio}
+
+\begin{document}
+\portada{Manual técnico}{Instalación, API y base de DevStudio}{Manual técnico}
+
+\tableofcontents
+\clearpage
+
+\section{Descripción}
+
+DevStudio separa un frente estático de una API PHP. Nginx publica ambos en el
+mismo origen. SQL Server guarda usuarios, catálogo, proyectos, avances,
+reuniones, solicitudes y mensajes. Este manual permite instalar el sistema y
+operar la API sin recorrer el resto de la documentación.
+
+\section{Arquitectura}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      caja/.style={
+        draw=tnDark!75, line width=0.7pt, rounded corners=3pt,
+        fill=codeGray, align=center, inner sep=7pt, text width=8.6cm,
+        font=\small
+      },
+      flecha/.style={-{Stealth[length=2.3mm]}, line width=0.75pt, draw=tnDark}
+    ]
+    \node[caja] (nav) {Navegador};
+    \node[caja, below=7mm of nav] (ngx)
+      {Nginx \texttt{pf-web}, puerto 8080};
+    \node[caja, below=7mm of ngx] (php)
+      {PHP 8.3 \texttt{pf-api}, red interna};
+    \node[caja, below=7mm of php] (sql)
+      {SQL Server \texttt{pf-mssql}, \texttt{DevStudioDB}};
+    \draw[flecha] (nav) -- (ngx);
+    \draw[flecha] (ngx) -- (php);
+    \draw[flecha] (php) -- (sql);
+  \end{tikzpicture}
+  \caption{El navegador no abre un puerto distinto para la API.}
+  \label{fig:arq}
+\end{figure}
+
+\path{appWeb/} se monta de solo lectura en Nginx. \path{backEnd/} se monta en
+el contenedor PHP. Un cambio de HTML o CSS se ve al recargar. Cambiar
+\path{nginx.conf} exige recrear el contenedor web. Recrear la API pierde las
+sesiones PHP.
+
+\section{Requisitos}
+
+\begin{itemize}
+  \item Docker Engine con Compose v2.
+  \item Unos 2 GB libres para SQL Server.
+  \item Arquitectura \texttt{x86\_64}. La imagen oficial de SQL Server no corre nativa en ARM.
+  \item Puertos 8080 y 1433 libres, salvo que se cambien en \path{.env}.
+  \item Cliente SQL opcional: \texttt{sqlcmd} ya viene dentro del contenedor.
+\end{itemize}
+
+\section{Instalación}
+
+Desde \path{proyecto-final/}:
+
+\begin{lstlisting}[caption={Arranque.}]
+cp .env.example .env
+docker compose up -d --build
+\end{lstlisting}
+
+\texttt{DB\_PASSWORD} es obligatorio. No se copia a los PDF ni al ZIP de
+entrega. Después:
+
+\begin{lstlisting}[caption={Esquema y datos iniciales.}]
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/schema.sql
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/seed.sql
+\end{lstlisting}
+
+Los dos scripts se pueden ejecutar más de una vez. \path{/api/v1/health} debe
+responder en \url{http://localhost:8080/api/v1/health}.
+
+Si la base ya existía de una etapa anterior, las migraciones
+\path{001} a \path{005} en \path{backEnd/database/migrations/} agregan planes,
+portafolio, perfil, progreso, reuniones y la columna de la foto sin borrar
+datos.
+
+\section{Configuración}
+
+Las variables viven en \path{.env}. Las que cambian el comportamiento visible
+son \texttt{WEB\_PORT}, \texttt{DB\_PORT}, \texttt{DB\_NAME},
+\texttt{DB\_PASSWORD}, \texttt{APP\_URL} y los textos \texttt{COMPANY\_*}.
+\texttt{SESSION\_NAME} identifica la cookie. En local,
+\texttt{SESSION\_SECURE} queda en falso porque no hay HTTPS.
+
+\section{Base de datos}
+
+\begin{table}[H]
+  \centering
+  \caption{Tablas y la relación que importa.}
+  \label{tab:tablas}
+  \small
+  \begin{tabularx}{\textwidth}{@{}l Y@{}}
+    \toprule
+    Tabla & Guarda \\
+    \midrule
+    \texttt{Roles} & Solo \texttt{admin} y \texttt{cliente} \\
+    \texttt{Usuarios} & Cuenta, hash, rol y extensión de la foto \\
+    \texttt{Clientes} & Empresa, contacto, cargo, frase y ciudad \\
+    \texttt{Servicios}, \texttt{Tecnologias} & Catálogo público \\
+    \texttt{Proyectos} & Trabajo, estado, publicación y \texttt{progreso} \\
+    \texttt{ProyectoAvances} & Historial de porcentaje y nota \\
+    \texttt{Reuniones} & Cita, estado, puntos y respuesta \\
+    \texttt{Planes} & Recomendación del diagnóstico \\
+    \texttt{SolicitudesCotizacion} & Pedidos de propuesta \\
+    \texttt{MensajesContacto} & Bandeja de contacto \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\texttt{Proyectos.progreso} no pasa de 100. Una reunión exige inicio menor que
+el fin y una duración entre 15 y 240 minutos. El archivo de la foto no está en
+la base: se escribe en \path{backEnd/storage/avatars/} y la columna
+\texttt{foto} solo guarda \texttt{jpg}, \texttt{png} o \texttt{webp}.
+
+\section{API}
+
+La prefijo es \path{/api/v1}. Las respuestas de éxito van en \texttt{data}.
+Un error trae \texttt{code}, \texttt{message} y, si aplica, \texttt{details}.
+
+\subsection{Público y sesión}
+
+\begin{table}[H]
+  \centering
+  \caption{Rutas sin rol de portal.}
+  \small
+  \begin{tabularx}{\textwidth}{@{}l Y@{}}
+    \toprule
+    Ruta & Uso \\
+    \midrule
+    \texttt{GET /health} & Estado del proceso y de la base \\
+    \texttt{GET /config}, \texttt{/planes}, \texttt{/servicios}, \texttt{/portafolio} & Catálogo público \\
+    \texttt{POST /contacto}, \texttt{POST /diagnostico} & Formularios, con límite por IP \\
+    \texttt{GET /auth/csrf} & Token para la siguiente escritura \\
+    \texttt{POST /auth/login}, \texttt{/registro}, \texttt{/logout} & Sesión \\
+    \texttt{GET /auth/me} & Usuario actual \\
+    \texttt{PATCH /auth/password} & Cambio de contraseña \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+El login devuelve un token CSRF nuevo. El token pedido antes de entrar no
+sirve para las escrituras posteriores.
+
+\subsection{Portal}
+
+Todas exigen rol \texttt{cliente}. El identificador del cliente sale de la
+sesión.
+
+\begin{itemize}
+  \item \texttt{GET /mi/resumen}, \texttt{/mi/proyectos} y \texttt{/mi/proyectos/\{id\}}.
+        Los proyectos incluyen \texttt{progreso} y \texttt{avances}.
+  \item \texttt{GET /mi/solicitudes}, detalle y \texttt{POST} para crear una.
+  \item \texttt{GET} y \texttt{PATCH /mi/perfil}. El correo no se cambia aquí.
+  \item \texttt{GET} y \texttt{POST /mi/foto}. El cuerpo es \texttt{multipart}
+        con el campo \texttt{foto}.
+  \item \texttt{GET /mi/reuniones?desde=\&hasta=}, \texttt{POST} para agendar
+        y \texttt{PATCH /mi/reuniones/\{id\}} solo para cancelar.
+\end{itemize}
+
+\subsection{Administración}
+
+Exigen rol \texttt{admin}. Hay CRUD de usuarios, clientes, servicios,
+tecnologías y proyectos, y bandejas de solicitudes y mensajes. Dos rutas no
+tienen página:
+
+\begin{itemize}
+  \item \texttt{PATCH /admin/proyectos/\{id\}/progreso} con \texttt{progreso}
+        de 0 a 100 y \texttt{nota} de 2 a 500 caracteres.
+  \item \texttt{GET /admin/reuniones} lista las citas.
+        \texttt{PATCH} sobre cada identificador pasa de \texttt{solicitada}
+        a \texttt{confirmada} o \texttt{rechazada}, y guarda
+        \texttt{respuesta} y \texttt{puntos}.
+        Una reunión \texttt{cancelada} responde 409.
+\end{itemize}
+
+Un cliente que llame estas rutas recibe \texttt{SIN\_PERMISOS} con HTTP 403,
+antes incluso de revisar el CSRF.
+
+\section{Seguridad}
+
+\begin{itemize}
+  \item Contraseñas con \texttt{password\_hash} de PHP. El seed no guarda la clave en claro.
+  \item Consultas con parámetros. Los \texttt{\{id\}} de la ruta son dígitos.
+  \item CSRF en las escrituras del portal, del panel y de la sesión.
+  \item Cinco fallos de login en 15 minutos bloquean ese correo y esa IP.
+  \item La foto se valida con \texttt{getimagesize}. No se acepta SVG.
+  \item El directorio de avatares no lo publica Nginx.
+\end{itemize}
+
+\section{Frente}
+
+El JavaScript del portal llama a la API con la cookie de sesión. La miniatura
+de la foto se guarda en el navegador para pintarla antes de las hojas de
+estilo. Cerrar sesión borra esa copia local. El calendario arma una cuadrícula
+de lunes a domingo y traduce los instantes UTC a la hora de la Ciudad de México.
+
+\section{Operación}
+
+\begin{lstlisting}[caption={Parar y ver registros.}]
+docker compose ps
+docker compose logs api --tail 50
+docker compose stop
+\end{lstlisting}
+
+Un respaldo de la base se toma con las herramientas de SQL Server sobre el
+volumen \texttt{mssql\_data}. Borrar ese volumen obliga a cargar de nuevo
+\path{schema.sql} y \path{seed.sql}. Las fotos subidas están en
+\path{backEnd/storage/avatars/} y no forman parte del esquema.
+
+\section{Fallos frecuentes}
+
+\begin{itemize}
+  \item \textbf{La API no arranca.} Falta \texttt{DB\_PASSWORD} o SQL Server todavía no pasó el healthcheck.
+  \item \textbf{401 al escribir.} Hay que usar el \texttt{csrf\_token} que devolvió el login, no el anterior.
+  \item \textbf{403 en una ruta \texttt{/admin/}.} La cuenta es de cliente. Es el resultado correcto.
+  \item \textbf{422 al agendar.} Duración fuera de rango, inicio en el pasado o empalme con otra reunión activa.
+  \item \textbf{La foto parpadea.} Recargar una vez después de subirla. Las páginas siguientes leen la miniatura local.
+  \item \textbf{El HTML viejo sigue en pantalla.} Nginx marca las páginas como \texttt{no-store}. Una recarga forzada descarta la copia del navegador.
+\end{itemize}
+
+\section{Referencias internas}
+
+El detalle largo de columnas y de cada campo de la API sigue en
+\path{backEnd/docs/}. Este manual es el que debe bastar para instalar y para
+probar las rutas nuevas de avance, reuniones y foto.
+
+\end{document}

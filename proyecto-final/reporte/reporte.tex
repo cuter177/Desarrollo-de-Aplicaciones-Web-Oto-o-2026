@@ -1,0 +1,459 @@
+% Reporte del proyecto final DevStudio
+% Compilar desde esta carpeta: /usr/bin/latexbuild reporte.tex
+\input{../comun/preambulo.tex}
+\datosPdf{Proyecto final. DevStudio}
+
+\newcommand{\captura}[4][width=\linewidth]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[#1]{figuras/#2}%
+    \caption{#3}%
+    \label{#4}%
+  \end{figure}%
+}
+
+\begin{document}
+\portada{Proyecto final}{DevStudio, sitio y portal para negocios de Puebla}{Proyecto final de la asignatura}
+
+\tableofcontents
+\clearpage
+
+\section{Presentación}
+
+DevStudio es la aplicación web del proyecto final. Es el sitio de un estudio
+que trabaja con negocios de Puebla: el visitante entiende el problema, el
+resultado y el siguiente paso, y la tecnología queda en segundo plano. El
+cliente registrado consulta sus proyectos, el avance y el calendario. El
+administrador atiende solicitudes, mensajes y el contenido.
+
+El trabajo es individual. El código vive en \path{proyecto-final/}: el frente
+estático en \path{appWeb/} y la API en \path{backEnd/}. Esta carpeta
+\path{reporte/} es la memoria del proyecto. Los manuales y el contrato están
+en carpetas hermanas y no sustituyen a la documentación Markdown previa.
+
+\subsection{Alcance}
+
+El sitio público presenta soluciones, casos, la forma de trabajo, contacto y
+la solicitud de diagnóstico. El registro crea un cliente. El portal muestra
+solo los proyectos y las solicitudes de esa cuenta, permite pedir o cancelar
+reuniones y cambiar la foto de perfil. El panel cubre usuarios, clientes,
+servicios, tecnologías, proyectos, solicitudes y mensajes. Confirmar una
+reunión o escribir el avance queda en la API de administración: no hay todavía
+una pantalla de desarrolladores para esas dos acciones.
+
+Quedan fuera los pagos, la aplicación móvil nativa, el correo transaccional y
+el hosting de producción. Esas exclusiones se repiten en el contrato.
+
+Las figuras~\ref{fig:inicio} a~\ref{fig:diagnostico} muestran ese sitio en
+marcha. El menú público no cambia al iniciar sesión: la cuenta queda a la
+derecha.
+
+\captura{01-inicio.png}{Inicio en tema de día, con la sesión de la cliente de demostración.}{fig:inicio}
+
+\captura{02-inicio-noche.png}{El mismo inicio en tema de noche.}{fig:noche}
+
+\captura[width=0.38\linewidth]{03-inicio-movil.png}{Inicio a 375 píxeles. El menú pasa a una segunda línea y el llamado a la acción sigue a la vista.}{fig:movil}
+
+\captura{04-servicios.png}{Listado de soluciones.}{fig:servicios}
+
+\captura{05-caso.png}{Caso publicado: portal de clientes de Comercial Andina.}{fig:caso}
+
+\captura{06-diagnostico.png}{Página de diagnóstico, con las referencias de inversión.}{fig:diagnostico}
+
+\subsection{Tecnologías}
+
+El manual de PHP (PHP Documentation Group, s.~f.), la documentación de
+SQL Server (Microsoft, s.~f.) y Docker Compose (Docker, Inc., s.~f.)
+sostienen la pila. Este PDF se compiló con XeTeX (TeX Users Group, s.~f.)
+y con latexmk (Collins, 2025).
+
+\begin{table}[H]
+  \centering
+  \caption{Piezas del sistema y el papel de cada una.}
+  \label{tab:tecnologias}
+  \small
+  \begin{tabularx}{\textwidth}{@{}l Y@{}}
+    \toprule
+    Pieza & Papel \\
+    \midrule
+    HTML y CSS & Páginas estáticas, mobile first, variables de día y noche \\
+    JavaScript & Sesión en el encabezado, formularios y calendario \\
+    PHP 8.3 & API REST, sesión, CSRF y reglas de negocio \\
+    SQL Server 2022 & Persistencia, restricciones e historial \\
+    Nginx & Sirve el frente y reenvía \path{/api} \\
+    Docker Compose & Levanta web, API y base en un solo comando \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Modelación}
+
+\subsection{Requisitos}
+
+Hay tres actores. El visitante consulta el sitio y envía contacto o
+diagnóstico sin cuenta. El cliente, rol \texttt{cliente}, ve y edita su
+perfil, consulta sus proyectos y solicitudes, agenda reuniones y no puede
+escribir el porcentaje de avance. El administrador, rol \texttt{admin},
+gestiona catálogos, bandejas y, por la API, el progreso y la respuesta a las
+reuniones.
+
+Los requisitos funcionales que el sistema ya cumple son estos:
+
+\begin{enumerate}
+  \item Presentar la empresa, las soluciones y los casos publicados.
+  \item Recibir contacto y diagnóstico con validación y límite de envíos.
+  \item Registrar, iniciar y cerrar sesión, con roles distintos.
+  \item Impedir que un cliente lea o cambie datos de otra cuenta.
+  \item Mostrar el avance de 0 a 100 y el historial de notas.
+  \item Consultar, agendar y cancelar reuniones del propio cliente.
+  \item Confirmar o rechazar reuniones y registrar avances desde la API de administración.
+  \item Cambiar la foto de perfil y conservarla al navegar.
+\end{enumerate}
+
+Los requisitos no funcionales que condicionan el diseño son el mismo origen
+para la cookie de sesión, el diseño usable en 375, 768 y 1280 píxeles, las
+consultas parametrizadas y la reconstrucción de la base desde los scripts.
+
+\subsection{Mapa de sitio}
+
+El frente no usa URLs limpias. Nginx entrega el HTML tal como está en disco.
+La tabla~\ref{tab:mapa} resume las páginas reales.
+
+\begin{table}[H]
+  \centering
+  \caption{Mapa de sitio implementado.}
+  \label{tab:mapa}
+  \small
+  \begin{tabularx}{\textwidth}{@{}Y l@{}}
+    \toprule
+    Página & Quién entra \\
+    \midrule
+    \path{/index.html} & Visitante \\
+    \path{/pages/servicios.html} y detalle por \texttt{slug} & Visitante \\
+    \path{/pages/portafolio.html} y detalle de caso & Visitante \\
+    \path{/pages/nosotros.html}, contacto y cotización & Visitante \\
+    \path{/pages/login.html} y \path{/pages/registro.html} & Visitante \\
+    \path{/pages/portal/index.html} & Cliente \\
+    Proyectos, detalle, solicitudes y detalle & Cliente \\
+    \path{/pages/portal/calendario.html} & Cliente \\
+    \path{/pages/portal/perfil.html} & Cliente \\
+    \path{/pages/admin/} dashboard, usuarios, clientes & Admin \\
+    Servicios, proyectos, tecnologías, solicitudes, mensajes & Admin \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Guiones}
+
+Cuatro recorridos bastan para explicar el uso. El visitante entra al inicio,
+abre una solución y envía el diagnóstico en \path{/pages/cotizacion.html}. Si
+faltan datos, el formulario conserva lo escrito. La solicitud queda en estado
+\texttt{nueva}.
+
+Quien crea cuenta captura nombre, correo, empresa y una contraseña de al menos
+ocho caracteres, con mayúscula, minúscula y número. El sistema lo deja en el
+login. Al entrar, el cliente va al portal y el administrador al panel. Las
+figuras~\ref{fig:login} y~\ref{fig:registro} son esas dos pantallas, todavía
+sin sesión.
+
+\captura{07-login.png}{Inicio de sesión. Desde aquí se crea la cuenta de cliente.}{fig:login}
+
+\captura{08-registro.png}{Alta de cliente. El rol de administrador no se elige en este formulario.}{fig:registro}
+
+Laura, la cliente de demostración, abre Mis proyectos y ve la barra de avance.
+En Calendario elige un hueco de entre 15 minutos y 4 horas. La reunión nace
+como \texttt{solicitada}. Puede cancelarla si aún no empieza. No puede
+escribir los puntos ni la respuesta: eso lo hace el desarrollador por la API.
+Las figuras~\ref{fig:resumen} a~\ref{fig:perfil} recorren su portal.
+
+\captura{09-resumen.png}{Resumen de Laura Méndez. La foto abre el perfil.}{fig:resumen}
+
+\captura{10-proyectos.png}{Proyectos de la cuenta, con el avance en 15\,\% y 45\,\%.}{fig:proyectos}
+
+\captura{11-proyecto.png}{Detalle del portal de Comercial Andina y la nota del 18 de noviembre.}{fig:proyecto}
+
+\captura{12-calendario.png}{Calendario de noviembre de 2026 y el formulario para pedir una reunión.}{fig:calendario}
+
+\captura{13-perfil.png}{Perfil de la cliente, con la foto ampliada.}{fig:perfil}
+
+El administrador revisa la bandeja de solicitudes y mensajes. Puede convertir
+una solicitud en proyecto. El porcentaje de avance se actualiza con
+\path{PATCH /api/v1/admin/proyectos/{id}/progreso}. Un cliente que llame esa
+ruta recibe 403. Las figuras~\ref{fig:admin} a~\ref{fig:mensajes} son el panel
+con el que entra \texttt{admin@devstudio.local}.
+
+\captura{14-admin.png}{Resumen del panel. El monograma del administrador es AD.}{fig:admin}
+
+\captura{15-solicitudes.png}{Bandeja de solicitudes, con estado, plan y monto.}{fig:solicitudes}
+
+\captura{16-mensajes.png}{Bandeja de mensajes de contacto.}{fig:mensajes}
+
+\subsection{Diagrama de navegación}
+
+La figura~\ref{fig:navegacion} separa el sitio público de las dos zonas con
+sesión. El encabezado no cambia de liga al entrar: el acceso a la cuenta está
+en el monograma, a la derecha del menú.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      nodo/.style={
+        draw=tnDark!75, line width=0.6pt, rounded corners=2pt,
+        fill=codeGray, align=center, inner sep=4pt, font=\footnotesize,
+        text width=3.1cm
+      },
+      flecha/.style={-{Stealth[length=2mm]}, line width=0.6pt, draw=tnDark}
+    ]
+    \node[nodo] (inicio) {Inicio};
+    \node[nodo, right=8mm of inicio] (sol) {Soluciones y casos};
+    \node[nodo, right=8mm of sol] (cot) {Contacto y diagnóstico};
+    \node[nodo, below=12mm of inicio] (login) {Login y registro};
+    \node[nodo, below=12mm of sol] (portal) {Portal del cliente};
+    \node[nodo, below=12mm of cot] (admin) {Panel de administración};
+    \draw[flecha] (inicio) -- (sol);
+    \draw[flecha] (sol) -- (cot);
+    \draw[flecha] (inicio) -- (login);
+    \draw[flecha] (login) -- (portal);
+    \draw[flecha] (login) -- (admin);
+  \end{tikzpicture}
+  \caption{Del sitio público a las dos áreas con sesión.}
+  \label{fig:navegacion}
+\end{figure}
+
+Dentro del portal el orden es Resumen, Proyectos, Solicitudes, Calendario y
+Perfil. La foto del resumen abre Perfil. Abajo de la actividad reciente está
+Cerrar sesión.
+
+\subsection{Estructura de archivos}
+
+\begin{table}[H]
+  \centering
+  \caption{Carpetas que importan para instalar y entregar.}
+  \label{tab:carpetas}
+  \small
+  \begin{tabularx}{\textwidth}{@{}l Y@{}}
+    \toprule
+    Ruta & Contenido \\
+    \midrule
+    \path{appWeb/} & HTML, CSS y JavaScript del sitio, portal y panel \\
+    \path{backEnd/public/} & Único punto de entrada de la API \\
+    \path{backEnd/app/} & Controladores, modelos y sesión \\
+    \path{backEnd/database/} & \path{schema.sql}, \path{seed.sql} y migraciones \\
+    \path{docker/} & Imagen PHP y configuración de Nginx \\
+    \path{compose.yaml} & Web, API y SQL Server \\
+    \path{reporte/} y hermanos & Esta documentación en LaTeX \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Arquitectura y entorno}
+
+\subsection{Diagrama}
+
+El navegador solo habla con Nginx. Así la cookie de sesión viaja en el mismo
+origen y no hace falta CORS. La figura~\ref{fig:arquitectura} muestra el
+recorrido.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      caja/.style={
+        draw=tnDark!75, line width=0.7pt, rounded corners=3pt,
+        fill=codeGray, align=center, inner sep=7pt, text width=8.6cm,
+        font=\small
+      },
+      flecha/.style={-{Stealth[length=2.3mm]}, line width=0.75pt, draw=tnDark}
+    ]
+    \node[caja] (nav) {Navegador};
+    \node[caja, below=7mm of nav] (ngx)
+      {Nginx, puerto 8080\\[1pt]
+       {\footnotesize HTML de \texttt{appWeb} y proxy de \texttt{/api}}};
+    \node[caja, below=7mm of ngx] (php)
+      {PHP 8.3 y Apache\\[1pt]
+       {\footnotesize sesión, CSRF y \texttt{pdo\_sqlsrv}}};
+    \node[caja, below=7mm of php] (sql)
+      {SQL Server 2022\\[1pt]
+       {\footnotesize base \texttt{DevStudioDB}, puerto 1433}};
+    \draw[flecha] (nav) -- (ngx);
+    \draw[flecha] (ngx) -- (php);
+    \draw[flecha] (php) -- (sql);
+  \end{tikzpicture}
+  \caption{Mismo origen: el navegador no llama a la API por otro host.}
+  \label{fig:arquitectura}
+\end{figure}
+
+\subsection{Puertos}
+
+\begin{table}[H]
+  \centering
+  \caption{Servicios de \texttt{compose.yaml}.}
+  \label{tab:puertos}
+  \begin{tabular}{lll}
+    \toprule
+    Servicio & Contenedor & Puerto publicado \\
+    \midrule
+    web & \texttt{pf-web} & 8080 \\
+    api & \texttt{pf-api} & solo red interna \\
+    mssql & \texttt{pf-mssql} & 1433 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+La zona horaria de negocio es \texttt{America/Mexico\_City}. Las reuniones se
+guardan en UTC y el calendario las muestra en esa zona.
+
+\section{Desarrollo}
+
+\subsection{HTML y CSS, mobile first}
+
+Las páginas comparten encabezado, pie y variables de color. El tema de día o
+noche se aplica en una línea de script antes de las hojas de estilo, así no
+hay un destello claro al abrir de noche. La figura~\ref{fig:noche} es ese
+tema y la figura~\ref{fig:movil} es el mismo inicio a 375 píxeles. La
+cuadrícula del calendario y las tarjetas del portal se probaron también en
+768 y 1280 píxeles. El menú público sigue siendo Soluciones, Casos, Cómo
+trabajamos y Contacto. La cuenta y el cambio de tema viven aparte, a la
+derecha.
+
+\subsection{JavaScript, usuarios y restricciones}
+
+El módulo de interfaz lee la sesión en \path{/api/v1/auth/me} y muestra el
+monograma o el enlace de entrar. Las iniciales y una miniatura de la foto se
+guardan en \texttt{localStorage} para pintarse antes del primer render: al
+cambiar de página la foto no vuelve a pedirse a la red. Las páginas del portal
+exigen rol \texttt{cliente}; las del panel, rol \texttt{admin}. Esa guarda es
+de interfaz. La API repite la comprobación.
+
+\subsection{PHP}
+
+\path{backEnd/public/index.php} compara el método y la ruta. Los identificadores
+de la URL tienen que ser dígitos. Cada escritura, salvo el alta pública de
+contacto y diagnóstico, exige el encabezado \texttt{X-CSRF-Token}. El cliente
+de una ruta \path{/mi/} sale de la sesión, nunca del cuerpo. Un administrador
+en esas rutas recibe 403, y un cliente en \path{/admin/} también.
+
+El avance acepta un entero de 0 a 100 y una nota de 2 a 500 caracteres. Guarda
+el porcentaje en el proyecto y añade una fila al historial. Una reunión nueva
+queda \texttt{solicitada}. Solo se cancela si está solicitada o confirmada y
+todavía no empieza. No puede empalmarse con otra reunión activa del mismo
+cliente.
+
+\subsection{Base de datos}
+
+El esquema es idempotente. Las tablas que sostienen el negocio son
+\texttt{Roles}, \texttt{Usuarios}, \texttt{Clientes}, \texttt{Servicios},
+\texttt{Tecnologias}, \texttt{Proyectos}, \texttt{ProyectoTecnologia},
+\texttt{ProyectoAvances}, \texttt{Reuniones}, \texttt{Planes},
+\texttt{SolicitudesCotizacion} y \texttt{MensajesContacto}.
+
+\texttt{Proyectos.progreso} es un \texttt{TINYINT} de 0 a 100.
+\texttt{ProyectoAvances} guarda porcentaje, nota y fecha.
+\texttt{Reuniones} exige inicio anterior al fin y una duración de 15 a 240
+minutos. El estado solo puede ser \texttt{solicitada}, \texttt{confirmada},
+\texttt{rechazada} o \texttt{cancelada}. \texttt{Usuarios.foto} guarda la
+extensión del archivo, que vive fuera del directorio público.
+
+\section{Resultados}
+
+\subsection{Matriz de cumplimiento}
+
+\begin{table}[H]
+  \centering
+  \caption{Requisitos de la materia y dónde quedan cubiertos.}
+  \label{tab:matriz}
+  \small
+  \begin{tabularx}{\textwidth}{@{}Y Y@{}}
+    \toprule
+    Requisito & Dónde se cumple \\
+    \midrule
+    Requisitos, mapa, guiones, navegación y archivos & Secciones 2.1 a 2.5 de este reporte \\
+    HTML, CSS mobile first y JavaScript con login & \path{appWeb/} y la sección 4 \\
+    PHP y diseño de la base & \path{backEnd/} y la sección 4 \\
+    Manual de usuario & \path{manual-usuario/build/manual-usuario.pdf} \\
+    Manual técnico & \path{manual-tecnico/build/manual-tecnico.pdf} \\
+    Contrato de prestación, alcances y costo & \path{contrato/build/contrato.pdf} \\
+    Código en ZIP y PDF en LaTeX & \path{scripts/empaquetar.sh} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Cuentas de demostración}
+
+El seed crea dos cuentas para recorrer el sistema. No se documenta aquí la
+contraseña del servidor de base de datos.
+
+\begin{table}[H]
+  \centering
+  \caption{Cuentas locales después de \texttt{seed.sql}.}
+  \label{tab:cuentas}
+  \begin{tabular}{lll}
+    \toprule
+    Rol & Correo & Contraseña \\
+    \midrule
+    admin & \texttt{admin@devstudio.local} & \texttt{Admin\#2026} \\
+    cliente & \texttt{cliente@devstudio.local} & \texttt{Cliente\#2026} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+La cliente de demostración es Laura Méndez, de Comercial Andina. Su calendario
+no abre vacío: hay un avance y dos reuniones de ejemplo.
+
+\section{Cómo reproducir}
+
+Hace falta Docker y los puertos 8080 y 1433 libres. Desde
+\path{proyecto-final/}:
+
+\begin{lstlisting}[caption={Levantar el entorno.}]
+cp .env.example .env
+docker compose up -d --build
+\end{lstlisting}
+
+Hay que definir \texttt{DB\_PASSWORD} en \path{.env} antes de arrancar. Luego
+se cargan el esquema y los datos:
+
+\begin{lstlisting}[caption={Cargar esquema y semilla.}]
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/schema.sql
+docker compose exec -T mssql /bin/bash -c \
+  '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -i /dev/stdin' \
+  < backEnd/database/seed.sql
+\end{lstlisting}
+
+El sitio queda en \url{http://localhost:8080}. El estado de la API se consulta
+en \path{/api/v1/health}. Los cuatro PDF de esta entrega se generan con
+\path{/usr/bin/latexbuild} dentro de cada carpeta, o de una vez con
+\path{scripts/empaquetar.sh}.
+
+\section{Conclusiones}
+
+El proyecto cubre el recorrido que pide la materia: modelar, construir con
+HTML, CSS y JavaScript, proteger el acceso en PHP y dejar la base diseñada y
+reproducible. El cliente ya puede ver su avance y usar el calendario. Lo que
+sigue fuera de estas páginas, a propósito, es la pantalla en la que el
+desarrollador confirmaría la reunión y escribiría el avance: la API ya lo
+permite y el contrato lo deja dentro del alcance del sistema, no de una
+entrega posterior de interfaz.
+
+\section{Referencias}
+
+\begin{list}{}{%
+  \setlength{\leftmargin}{1.27cm}%
+  \setlength{\itemindent}{-1.27cm}%
+  \setlength{\itemsep}{0.7em}%
+  \setlength{\parsep}{0pt}%
+  \setlength{\topsep}{0.4em}%
+}
+  \item Collins, J. (2025). \emph{latexmk} (Versión 4.87) [Software]. \url{https://ctan.org/pkg/latexmk}
+
+  \item Docker, Inc. (s.~f.). \emph{Docker Compose}. \url{https://docs.docker.com/compose/}
+
+  \item Microsoft. (s.~f.). \emph{Documentación técnica de SQL Server}. \url{https://learn.microsoft.com/es-es/sql/sql-server/sql-server-technical-documentation}
+
+  \item PHP Documentation Group. (s.~f.). \emph{Manual de PHP}. \url{https://www.php.net/manual/es/}
+
+  \item TeX Users Group. (s.~f.). \emph{XeTeX}. \url{https://tug.org/xetex/}
+\end{list}
+
+\end{document}

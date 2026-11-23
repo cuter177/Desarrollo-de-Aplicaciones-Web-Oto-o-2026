@@ -14,7 +14,7 @@ final class Cliente
     public static function all(?string $q = null): array
     {
         $sql = 'SELECT c.id, c.usuario_id, c.empresa, c.telefono, c.sitio_web, c.industria,
-                    u.nombre AS contacto, u.email
+                    c.cargo, c.frase, c.ciudad, u.nombre AS contacto, u.email
              FROM dbo.Clientes c
              INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id';
         $params = [];
@@ -40,6 +40,9 @@ final class Cliente
                 'telefono' => $row['telefono'] !== null ? (string) $row['telefono'] : null,
                 'sitio_web' => $row['sitio_web'] !== null ? (string) $row['sitio_web'] : null,
                 'industria' => $row['industria'] !== null ? (string) $row['industria'] : null,
+                'cargo' => $row['cargo'] !== null ? (string) $row['cargo'] : null,
+                'frase' => $row['frase'] !== null ? (string) $row['frase'] : null,
+                'ciudad' => $row['ciudad'] !== null ? (string) $row['ciudad'] : null,
             ],
             $stmt->fetchAll(\PDO::FETCH_ASSOC)
         );
@@ -52,7 +55,7 @@ final class Cliente
     {
         $stmt = Database::connection()->prepare(
             'SELECT c.id, c.usuario_id, c.empresa, c.telefono, c.sitio_web, c.industria,
-                    u.nombre AS contacto, u.email
+                    c.cargo, c.frase, c.ciudad, u.nombre AS contacto, u.email
              FROM dbo.Clientes c
              INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id
              WHERE c.id = :id'
@@ -73,6 +76,9 @@ final class Cliente
             'telefono' => $row['telefono'] !== null ? (string) $row['telefono'] : null,
             'sitio_web' => $row['sitio_web'] !== null ? (string) $row['sitio_web'] : null,
             'industria' => $row['industria'] !== null ? (string) $row['industria'] : null,
+            'cargo' => $row['cargo'] !== null ? (string) $row['cargo'] : null,
+            'frase' => $row['frase'] !== null ? (string) $row['frase'] : null,
+            'ciudad' => $row['ciudad'] !== null ? (string) $row['ciudad'] : null,
         ];
     }
 
@@ -83,7 +89,7 @@ final class Cliente
     {
         $stmt = Database::connection()->prepare(
             'SELECT c.id, c.usuario_id, c.empresa, c.telefono, c.sitio_web, c.industria,
-                    u.nombre AS contacto, u.email
+                    c.cargo, c.frase, c.ciudad, u.nombre AS contacto, u.email
              FROM dbo.Clientes c
              INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id
              WHERE c.usuario_id = :usuario_id'
@@ -104,6 +110,9 @@ final class Cliente
             'telefono' => $row['telefono'] !== null ? (string) $row['telefono'] : null,
             'sitio_web' => $row['sitio_web'] !== null ? (string) $row['sitio_web'] : null,
             'industria' => $row['industria'] !== null ? (string) $row['industria'] : null,
+            'cargo' => $row['cargo'] !== null ? (string) $row['cargo'] : null,
+            'frase' => $row['frase'] !== null ? (string) $row['frase'] : null,
+            'ciudad' => $row['ciudad'] !== null ? (string) $row['ciudad'] : null,
         ];
     }
 
@@ -112,7 +121,7 @@ final class Cliente
      */
     public static function update(int $id, array $data): void
     {
-        $allowed = ['empresa', 'telefono', 'sitio_web', 'industria'];
+        $allowed = ['empresa', 'telefono', 'sitio_web', 'industria', 'cargo', 'frase', 'ciudad'];
         $sets = [];
         $params = [':id' => $id];
 
@@ -142,12 +151,15 @@ final class Cliente
         string $empresa,
         ?string $telefono = null,
         ?string $sitioWeb = null,
-        ?string $industria = null
+        ?string $industria = null,
+        ?string $cargo = null,
+        ?string $frase = null,
+        ?string $ciudad = null
     ): int {
         $stmt = Database::connection()->prepare(
-            'INSERT INTO dbo.Clientes (usuario_id, empresa, telefono, sitio_web, industria)
+            'INSERT INTO dbo.Clientes (usuario_id, empresa, telefono, sitio_web, industria, cargo, frase, ciudad)
              OUTPUT INSERTED.id
-             VALUES (:usuario_id, :empresa, :telefono, :sitio_web, :industria)'
+             VALUES (:usuario_id, :empresa, :telefono, :sitio_web, :industria, :cargo, :frase, :ciudad)'
         );
         $stmt->execute([
             ':usuario_id' => $usuarioId,
@@ -155,6 +167,9 @@ final class Cliente
             ':telefono' => $telefono,
             ':sitio_web' => $sitioWeb,
             ':industria' => $industria,
+            ':cargo' => $cargo,
+            ':frase' => $frase,
+            ':ciudad' => $ciudad,
         ]);
 
         return (int) $stmt->fetchColumn();

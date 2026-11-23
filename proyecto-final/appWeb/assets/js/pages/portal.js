@@ -1,8 +1,8 @@
 import { apiGet } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { protegerPagina } from '../auth.js';
-import { aplicarConfig, etiquetaEstado, formatearFecha } from '../public.js';
-import { escapar, mostrarAlerta } from '../ui.js';
+import { aplicarConfig, etiquetaEstado, formatearFecha, pintarIdentidad } from '../public.js';
+import { escapar, inicialesDe, mostrarAlerta } from '../ui.js';
 
 const alerta = document.querySelector('#portal-alert');
 const actividad = document.querySelector('#portal-actividad');
@@ -63,15 +63,25 @@ async function init() {
     return;
   }
 
-  document.querySelectorAll('[data-portal-nombre]').forEach((element) => {
-    element.textContent = usuario.nombre;
+  pintarIdentidad({
+    iniciales: inicialesDe(usuario.nombre),
+    nombre: usuario.nombre,
   });
 
   try {
     const resumen = await apiGet('/mi/resumen');
+    const cliente = resumen.cliente ?? {};
 
-    document.querySelectorAll('[data-portal-empresa]').forEach((element) => {
-      element.textContent = resumen.cliente?.empresa ?? '—';
+    pintarIdentidad({
+      iniciales: inicialesDe(usuario.nombre),
+      nombre: usuario.nombre,
+      cargo: cliente.cargo,
+      empresa: cliente.empresa,
+      frase: cliente.frase,
+      ciudad: cliente.ciudad,
+      telefono: cliente.telefono,
+      sitio: cliente.sitio_web,
+      industria: cliente.industria,
     });
     document.querySelector('[data-metric="proyectos_activos"]').textContent = String(resumen.proyectos_activos ?? 0);
     document.querySelector('[data-metric="solicitudes_abiertas"]').textContent = String(resumen.solicitudes_abiertas ?? 0);

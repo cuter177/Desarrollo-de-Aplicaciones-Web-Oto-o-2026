@@ -46,6 +46,9 @@ final class AdminClienteController
         $telefono = trim((string) ($data['telefono'] ?? ''));
         $sitio = trim((string) ($data['sitio_web'] ?? ''));
         $industria = trim((string) ($data['industria'] ?? ''));
+        $cargo = trim((string) ($data['cargo'] ?? ''));
+        $frase = trim((string) ($data['frase'] ?? ''));
+        $ciudad = trim((string) ($data['ciudad'] ?? ''));
         $errors = [];
         $usuario = $usuarioId > 0 ? Usuario::findById($usuarioId) : null;
 
@@ -73,6 +76,18 @@ final class AdminClienteController
             $errors['industria'] = 'La industria no puede superar los 100 caracteres.';
         }
 
+        if (strlen($cargo) > 80) {
+            $errors['cargo'] = 'El cargo no puede superar los 80 caracteres.';
+        }
+
+        if (strlen($frase) > 160) {
+            $errors['frase'] = 'La frase no puede superar los 160 caracteres.';
+        }
+
+        if (strlen($ciudad) > 80) {
+            $errors['ciudad'] = 'La ciudad no puede superar los 80 caracteres.';
+        }
+
         if ($errors !== []) {
             Response::error('VALIDACION', 'Revisa los datos del cliente.', 422, $errors);
         }
@@ -83,7 +98,10 @@ final class AdminClienteController
                 $empresa,
                 $telefono !== '' ? $telefono : null,
                 $sitio !== '' ? $sitio : null,
-                $industria !== '' ? $industria : null
+                $industria !== '' ? $industria : null,
+                $cargo !== '' ? $cargo : null,
+                $frase !== '' ? $frase : null,
+                $ciudad !== '' ? $ciudad : null
             );
         } catch (PDOException $exception) {
             if (in_array((string) $exception->getCode(), ['23000', '2627'], true)) {
@@ -153,6 +171,10 @@ final class AdminClienteController
             }
         }
 
+        $this->textoOpcional($data, 'cargo', 80, 'El cargo no puede superar los 80 caracteres.', $cambios, $errors);
+        $this->textoOpcional($data, 'frase', 160, 'La frase no puede superar los 160 caracteres.', $cambios, $errors);
+        $this->textoOpcional($data, 'ciudad', 80, 'La ciudad no puede superar los 80 caracteres.', $cambios, $errors);
+
         if ($errors !== []) {
             Response::error('VALIDACION', 'Revisa los datos del cliente.', 422, $errors);
         }
@@ -163,5 +185,32 @@ final class AdminClienteController
 
         Cliente::update($id, $cambios);
         Response::data(Cliente::findById($id));
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $cambios
+     * @param array<string, string> $errors
+     */
+    private function textoOpcional(
+        array $data,
+        string $campo,
+        int $maximo,
+        string $mensaje,
+        array &$cambios,
+        array &$errors
+    ): void {
+        if (!array_key_exists($campo, $data)) {
+            return;
+        }
+
+        $valor = trim((string) $data[$campo]);
+
+        if (strlen($valor) > $maximo) {
+            $errors[$campo] = $mensaje;
+            return;
+        }
+
+        $cambios[$campo] = $valor !== '' ? $valor : null;
     }
 }

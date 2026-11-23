@@ -60,6 +60,11 @@ final class PortalController
                 'id' => (int) $cliente['id'],
                 'empresa' => $cliente['empresa'],
                 'industria' => $cliente['industria'],
+                'telefono' => $cliente['telefono'],
+                'sitio_web' => $cliente['sitio_web'],
+                'cargo' => $cliente['cargo'],
+                'frase' => $cliente['frase'],
+                'ciudad' => $cliente['ciudad'],
             ],
             'proyectos_total' => count($proyectos),
             'proyectos_activos' => count(array_filter(
@@ -242,6 +247,10 @@ final class PortalController
             }
         }
 
+        $this->textoOpcional($data, 'cargo', 80, 'El cargo no puede superar los 80 caracteres.', $clienteCambios, $errors);
+        $this->textoOpcional($data, 'frase', 160, 'La frase no puede superar los 160 caracteres.', $clienteCambios, $errors);
+        $this->textoOpcional($data, 'ciudad', 80, 'La ciudad no puede superar los 80 caracteres.', $clienteCambios, $errors);
+
         if ($errors !== []) {
             Response::error('VALIDACION', 'Revisa los datos del perfil.', 422, $errors);
         }
@@ -267,6 +276,33 @@ final class PortalController
 
         $_SESSION['usuario'] = Usuario::publicData($usuario);
         Response::data($this->perfilPublico($_SESSION['usuario'], $actualizado));
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $cambios
+     * @param array<string, string> $errors
+     */
+    private function textoOpcional(
+        array $data,
+        string $campo,
+        int $maximo,
+        string $mensaje,
+        array &$cambios,
+        array &$errors
+    ): void {
+        if (!array_key_exists($campo, $data)) {
+            return;
+        }
+
+        $valor = trim((string) $data[$campo]);
+
+        if (strlen($valor) > $maximo) {
+            $errors[$campo] = $mensaje;
+            return;
+        }
+
+        $cambios[$campo] = $valor !== '' ? $valor : null;
     }
 
     private static function recortar(string $texto, int $limite): string
@@ -313,6 +349,9 @@ final class PortalController
                 'telefono' => $cliente['telefono'],
                 'sitio_web' => $cliente['sitio_web'],
                 'industria' => $cliente['industria'],
+                'cargo' => $cliente['cargo'],
+                'frase' => $cliente['frase'],
+                'ciudad' => $cliente['ciudad'],
             ],
         ];
     }

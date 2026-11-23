@@ -15,6 +15,9 @@ const empresaInput = document.querySelector('#cliente-empresa');
 const telefonoInput = document.querySelector('#cliente-telefono');
 const sitioInput = document.querySelector('#cliente-sitio');
 const industriaInput = document.querySelector('#cliente-industria');
+const cargoInput = document.querySelector('#cliente-cargo');
+const fraseInput = document.querySelector('#cliente-frase');
+const ciudadInput = document.querySelector('#cliente-ciudad');
 const guardarBoton = document.querySelector('#cliente-guardar');
 const cancelarBoton = document.querySelector('#cliente-cancelar');
 const titulo = document.querySelector('#cliente-form-title');
@@ -95,6 +98,9 @@ function editar(id) {
   telefonoInput.value = cliente.telefono ?? '';
   sitioInput.value = cliente.sitio_web ?? '';
   industriaInput.value = cliente.industria ?? '';
+  cargoInput.value = cliente.cargo ?? '';
+  fraseInput.value = cliente.frase ?? '';
+  ciudadInput.value = cliente.ciudad ?? '';
   usuarioCampo.hidden = true;
   usuarioSelect.required = false;
   titulo.textContent = 'Editar cliente';
@@ -169,6 +175,9 @@ async function init() {
       telefono: telefonoInput.value.trim(),
       sitio_web: sitioInput.value.trim(),
       industria: industriaInput.value.trim(),
+      cargo: cargoInput.value.trim(),
+      frase: fraseInput.value.trim(),
+      ciudad: ciudadInput.value.trim(),
     };
     setBotonCargando(guardarBoton, true, id ? 'Guardando…' : 'Creando…');
 

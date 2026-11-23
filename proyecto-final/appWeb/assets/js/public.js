@@ -13,6 +13,37 @@ export function obtenerConfig() {
   return configPromise;
 }
 
+export function pintarIdentidad(datos, raiz = document) {
+  const valores = {
+    '[data-identity-iniciales]': datos.iniciales ?? '',
+    '[data-identity-nombre]': datos.nombre ?? '',
+    '[data-identity-cargo]': datos.cargo ?? '',
+    '[data-identity-empresa]': datos.empresa ?? '',
+    '[data-identity-frase]': datos.frase ?? '',
+    '[data-identity-ciudad]': datos.ciudad ?? '',
+    '[data-identity-telefono]': datos.telefono ?? '',
+    '[data-identity-sitio]': datos.sitio ?? '',
+    '[data-identity-industria]': datos.industria ?? '',
+  };
+
+  raiz.querySelectorAll('[data-identity]').forEach((tarjeta) => {
+    Object.entries(valores).forEach(([selector, valor]) => {
+      const elemento = tarjeta.querySelector(selector);
+
+      if (!elemento) {
+        return;
+      }
+
+      const texto = String(valor).trim();
+      elemento.textContent = texto;
+
+      if (elemento.dataset.optional === '1') {
+        elemento.hidden = texto === '';
+      }
+    });
+  });
+}
+
 /**
  * Rellena los elementos con data-config, data-config-link y data-social.
  */

@@ -1,8 +1,8 @@
 import { apiGet, apiPatch } from '../api.js';
 import { iniciarPagina } from '../app.js';
 import { cambiarPassword, protegerPagina } from '../auth.js';
-import { aplicarConfig } from '../public.js';
-import { mensajeError, mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
+import { aplicarConfig, pintarIdentidad } from '../public.js';
+import { inicialesDe, mensajeError, mostrarAlerta, ocultarAlerta, setBotonCargando } from '../ui.js';
 
 const alerta = document.querySelector('#portal-alert');
 const form = document.querySelector('#perfil-form');
@@ -13,8 +13,25 @@ const empresaInput = document.querySelector('#perfil-empresa');
 const telefonoInput = document.querySelector('#perfil-telefono');
 const sitioInput = document.querySelector('#perfil-sitio');
 const industriaInput = document.querySelector('#perfil-industria');
+const cargoInput = document.querySelector('#perfil-cargo');
+const fraseInput = document.querySelector('#perfil-frase');
+const ciudadInput = document.querySelector('#perfil-ciudad');
 const guardarBoton = document.querySelector('#perfil-guardar');
 const passwordBoton = document.querySelector('#password-guardar');
+
+function mostrarTarjeta() {
+  pintarIdentidad({
+    iniciales: inicialesDe(nombreInput.value),
+    nombre: nombreInput.value.trim(),
+    cargo: cargoInput.value.trim(),
+    empresa: empresaInput.value.trim(),
+    frase: fraseInput.value.trim(),
+    ciudad: ciudadInput.value.trim(),
+    telefono: telefonoInput.value.trim(),
+    sitio: sitioInput.value.trim(),
+    industria: industriaInput.value.trim(),
+  });
+}
 
 async function init() {
   const usuario = await iniciarPagina();
@@ -32,6 +49,10 @@ async function init() {
     telefonoInput.value = perfil.cliente.telefono ?? '';
     sitioInput.value = perfil.cliente.sitio_web ?? '';
     industriaInput.value = perfil.cliente.industria ?? '';
+    cargoInput.value = perfil.cliente.cargo ?? '';
+    fraseInput.value = perfil.cliente.frase ?? '';
+    ciudadInput.value = perfil.cliente.ciudad ?? '';
+    mostrarTarjeta();
   } catch (error) {
     mostrarAlerta(alerta, 'error', mensajeError(error));
   }
@@ -53,7 +74,11 @@ async function init() {
         telefono: telefonoInput.value.trim(),
         sitio_web: sitioInput.value.trim(),
         industria: industriaInput.value.trim(),
+        cargo: cargoInput.value.trim(),
+        frase: fraseInput.value.trim(),
+        ciudad: ciudadInput.value.trim(),
       });
+      mostrarTarjeta();
       document.querySelectorAll('[data-user-name]').forEach((element) => {
         element.textContent = perfil.usuario.nombre;
       });

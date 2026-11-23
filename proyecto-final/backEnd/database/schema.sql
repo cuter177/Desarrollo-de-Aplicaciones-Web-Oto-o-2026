@@ -83,6 +83,9 @@ BEGIN
         telefono        NVARCHAR(30)      NULL,
         sitio_web       NVARCHAR(200)     NULL,
         industria       NVARCHAR(100)     NULL,
+        cargo           NVARCHAR(80)      NULL,
+        frase           NVARCHAR(160)     NULL,
+        ciudad          NVARCHAR(80)      NULL,
         creado_en       DATETIME2(0)      NOT NULL
             CONSTRAINT DF_Clientes_Creado DEFAULT SYSUTCDATETIME(),
         actualizado_en  DATETIME2(0)      NOT NULL

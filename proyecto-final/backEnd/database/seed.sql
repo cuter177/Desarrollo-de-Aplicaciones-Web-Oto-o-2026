@@ -359,6 +359,39 @@ BEGIN
 END
 GO
 
+UPDATE c
+SET
+    c.cargo = N'Dirección general',
+    c.frase = N'Un comercio que quiere que los pedidos no se pierdan entre mensajes.',
+    c.ciudad = N'Puebla'
+FROM dbo.Clientes c
+INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id
+WHERE u.email = N'cliente@devstudio.local'
+  AND c.cargo IS NULL;
+GO
+
+UPDATE c
+SET
+    c.cargo = N'Operaciones',
+    c.frase = N'Un equipo que necesita ver las ventas sin armar reportes a mano.',
+    c.ciudad = N'Monterrey'
+FROM dbo.Clientes c
+INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id
+WHERE u.email = N'carlos.ruiz@innovatech.mx'
+  AND c.cargo IS NULL;
+GO
+
+UPDATE c
+SET
+    c.cargo = N'Administración',
+    c.frase = N'Una clínica que quiere una sola agenda para todo el equipo.',
+    c.ciudad = N'Guadalajara'
+FROM dbo.Clientes c
+INNER JOIN dbo.Usuarios u ON u.id = c.usuario_id
+WHERE u.email = N'ana.torres@nexoclinica.com'
+  AND c.cargo IS NULL;
+GO
+
 /* ==========================================================================
    7. Proyectos
    ========================================================================== */

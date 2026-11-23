@@ -4,17 +4,28 @@
    ========================================================================== */
 
 :root {
-  --color-primary: #1f5eff;
-  --color-primary-dark: #1746c4;
-  --color-accent: #00a67e;
-  --color-bg: #f7f8fb;
-  --color-surface: #ffffff;
-  --color-text: #16202a;
-  --color-muted: #5b6b7c;
-  --color-border: #d9e0e8;
+  --color-primary: #243e58;
+  --color-primary-dark: #1a2e42;
+  --color-accent: #3d5874;
+  --color-bg: #f4f0e8;
+  --color-surface: #fcfaf6;
+  --color-text: #1c1915;
+  --color-muted: #6b645c;
+  --color-border: #e4ddd2;
   --color-danger: #c0392b;
   --color-warning: #b7791f;
   --color-success: #1e7d4f;
+  --color-on-primary: #fff;
+  --color-footer: #1c1915;
+  --color-footer-text: #f3efe8;
+  --color-footer-link: #c9d4e0;
+  --header-bg: rgb(252 250 246 / 94%);
+  --color-wash: rgb(36 62 88 / 8%);
+  --page-base: linear-gradient(180deg, #f7f3eb 0%, #f1e8da 52%, #e8dccb 100%);
+  --glow-cool: rgb(58 112 168 / 34%);
+  --glow-cool-fade: rgb(58 112 168 / 0%);
+  --glow-warm: rgb(214 186 150 / 38%);
+  --glow-warm-fade: rgb(214 186 150 / 0%);
 
   --font-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
@@ -30,10 +41,40 @@
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
 
-  --shadow-sm: 0 1px 2px rgb(22 32 42 / 8%);
-  --shadow-md: 0 8px 24px rgb(22 32 42 / 10%);
+  --shadow-sm: 0 1px 2px rgb(28 25 21 / 6%);
+  --shadow-md: 0 8px 24px rgb(28 25 21 / 8%);
 
   --container: 72rem;
+
+  color-scheme: light;
+}
+
+html[data-theme="noche"] {
+  --color-primary: #c5d6e8;
+  --color-primary-dark: #e4eef6;
+  --color-accent: #9bb0c4;
+  --color-bg: #141210;
+  --color-surface: #221f1b;
+  --color-text: #f3efe8;
+  --color-muted: #b7aea3;
+  --color-border: #3a342e;
+  --color-danger: #f0b0a8;
+  --color-warning: #e6c27a;
+  --color-success: #8dccaa;
+  --color-on-primary: #141210;
+  --color-footer: #0c0b09;
+  --color-footer-text: #f3efe8;
+  --color-footer-link: #c9d4e0;
+  --header-bg: rgb(20 18 16 / 92%);
+  --color-wash: rgb(197 214 232 / 8%);
+  --page-base: linear-gradient(180deg, #2a2a2a 0%, #161616 48%, #0c0c0c 100%);
+  --glow-cool: rgb(255 255 255 / 16%);
+  --glow-cool-fade: rgb(255 255 255 / 0%);
+  --glow-warm: rgb(255 255 255 / 8%);
+  --glow-warm-fade: rgb(255 255 255 / 0%);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-md: 0 12px 32px rgb(0 0 0 / 45%);
+  color-scheme: dark;
 }
 
 /* Reset mínimo
@@ -46,16 +87,62 @@
 }
 
 html {
+  scroll-behavior: auto;
   scroll-padding-top: 5.5rem;
+  background: var(--page-base);
+  min-height: 100%;
 }
 
 body {
+  position: relative;
+  z-index: 0;
   margin: 0;
+  min-height: 100vh;
   font-family: var(--font-base);
   font-size: 1rem;
   line-height: 1.6;
   color: var(--color-text);
-  background: var(--color-bg);
+  background: transparent;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  inset: -30%;
+  background: radial-gradient(ellipse 46% 40% at 16% 32%, var(--glow-cool), var(--glow-cool-fade) 72%);
+  animation: glow-cool 34s ease-in-out infinite alternate;
+}
+
+body::after {
+  inset: -35%;
+  background: radial-gradient(ellipse 42% 36% at 82% 18%, var(--glow-warm), var(--glow-warm-fade) 74%);
+  animation: glow-warm 26s ease-in-out infinite alternate;
+}
+
+@keyframes glow-cool {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(6%, 8%, 0);
+  }
+}
+
+@keyframes glow-warm {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-12%, 9%, 0);
+  }
 }
 
 h1,
@@ -153,7 +240,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgb(255 255 255 / 96%);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -182,7 +269,7 @@ img {
   height: 1.75rem;
   border-radius: 0.5rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -198,9 +285,7 @@ img {
 
 .hero {
   padding-block: calc(var(--space-7) + var(--space-4)) var(--space-7);
-  background:
-    radial-gradient(circle at 15% 20%, rgb(31 94 255 / 8%), transparent 42%),
-    var(--color-bg);
+  background: transparent;
 }
 
 .hero__eyebrow {
@@ -351,7 +436,7 @@ img {
 }
 
 .badge--info {
-  background: rgb(31 94 255 / 10%);
+  background: rgb(36 62 88 / 10%);
   color: var(--color-primary-dark);
 }
 
@@ -370,8 +455,8 @@ img {
 
 .site-footer {
   padding-block: var(--space-6);
-  background: var(--color-text);
-  color: #e8edf3;
+  background: var(--color-footer);
+  color: var(--color-footer-text);
 }
 
 .site-footer__inner {
@@ -385,7 +470,7 @@ img {
 }
 
 .site-footer a {
-  color: #9db8ff;
+  color: var(--color-footer-link);
 }
 
 /* Mejoras para tablet y escritorio

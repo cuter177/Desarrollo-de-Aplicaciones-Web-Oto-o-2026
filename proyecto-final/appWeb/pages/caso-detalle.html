@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Caso de éxito de DevStudio.">
-  <title>Caso de éxito — DevStudio</title>
+  <meta name="description" content="Resultado de un caso: qué cambió en el negocio.">
+  <title>Caso — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/caso-detalle.js" defer></script>
@@ -16,25 +16,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
-          <li><a class="site-nav__link" href="/pages/portafolio.html" aria-current="page">Portafolio</a></li>
-          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html" aria-current="page">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
           <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
-          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
@@ -52,31 +51,31 @@
     <section class="section" id="caso-contenido" hidden>
       <div class="container">
         <div class="case-content">
+          <section class="case-section case-content__wide" id="seccion-resultados" aria-labelledby="resultados-title">
+            <h2 class="case-section__title" id="resultados-title">El resultado</h2>
+            <p class="case-prose" id="caso-resultados"></p>
+          </section>
+
           <section class="case-section" aria-labelledby="reto-title">
-            <h2 class="case-section__title" id="reto-title">El reto</h2>
+            <h2 class="case-section__title" id="reto-title">Qué pasaba</h2>
             <p class="case-prose" id="caso-reto"></p>
           </section>
 
           <section class="case-section" id="seccion-solucion" aria-labelledby="solucion-title">
-            <h2 class="case-section__title" id="solucion-title">La solución</h2>
+            <h2 class="case-section__title" id="solucion-title">Qué se hizo</h2>
             <p class="case-prose" id="caso-solucion"></p>
           </section>
 
-          <section class="case-section" id="seccion-resultados" aria-labelledby="resultados-title">
-            <h2 class="case-section__title" id="resultados-title">Resultados</h2>
-            <p class="case-prose" id="caso-resultados"></p>
-          </section>
-
-          <section class="case-section" aria-labelledby="tecnologias-title">
-            <h2 class="case-section__title" id="tecnologias-title">Tecnologías</h2>
+          <details class="tech-note case-content__wide" id="caso-hecho">
+            <summary>Si quieres saber con qué está hecho</summary>
             <ul class="tech-list" id="caso-tecnologias"></ul>
-          </section>
+          </details>
 
           <div class="case-section case-content__wide">
             <div class="hero__actions">
-              <a class="btn" href="/pages/cotizacion.html">Quiero algo similar</a>
-              <a class="btn btn--secondary" id="caso-demo" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver demo</a>
-              <a class="btn btn--ghost" href="/pages/portafolio.html">Volver al portafolio</a>
+              <a class="btn" href="/pages/cotizacion.html">Quiero algo así</a>
+              <a class="btn btn--secondary" id="caso-demo" href="#" target="_blank" rel="noopener noreferrer" hidden>Ver un ejemplo</a>
+              <a class="btn btn--ghost" href="/pages/portafolio.html">Volver a casos</a>
             </div>
           </div>
         </div>
@@ -87,7 +86,7 @@
       <div class="container">
         <div class="empty-state">
           <p>El caso que buscas no existe o no está publicado.</p>
-          <a class="btn btn--secondary" href="/pages/portafolio.html">Ver todos los casos</a>
+          <a class="btn btn--secondary" href="/pages/portafolio.html">Ver los casos</a>
         </div>
       </div>
     </section>
@@ -96,15 +95,15 @@
       <div class="container">
         <div class="cta-band">
           <div>
-            <h2>¿Tienes un reto parecido?</h2>
+            <h2>¿Te pasó algo parecido?</h2>
             <p>
-              Cuéntanos qué necesita tu empresa y te propondremos un plan con
-              alcance, etapas e inversión estimada.
+              Cuéntanos cómo trabajas. Te decimos si este resultado te sirve y
+              cuál sería el primer paso.
             </p>
           </div>
           <div class="hero__actions">
-            <a class="btn" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
-            <a class="btn btn--secondary" href="/pages/contacto.html">Hablar con el equipo</a>
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
           </div>
         </div>
       </div>
@@ -115,15 +114,15 @@
     <div class="container site-footer__inner">
       <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

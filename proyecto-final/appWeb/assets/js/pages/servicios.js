@@ -1,6 +1,6 @@
 import { apiGet } from '../api.js';
 import { iniciarPagina } from '../app.js';
-import { aplicarConfig, iconoServicio } from '../public.js';
+import { aplicarConfig, enfoqueDe, iconoServicio } from '../public.js';
 
 const lista = document.querySelector('#servicios-lista');
 
@@ -12,18 +12,20 @@ function crearTarjeta(servicio) {
   icono.className = 'service-card__icon';
   icono.innerHTML = iconoServicio(servicio.icono);
 
+  const enfoque = enfoqueDe(servicio);
+
   const titulo = document.createElement('h3');
   titulo.className = 'service-card__title';
-  titulo.textContent = servicio.nombre;
+  titulo.textContent = enfoque?.titulo ?? servicio.nombre;
 
   const descripcion = document.createElement('p');
   descripcion.className = 'service-card__body';
-  descripcion.textContent = servicio.descripcion;
+  descripcion.textContent = enfoque?.texto ?? servicio.descripcion;
 
   const enlace = document.createElement('a');
   enlace.className = 'service-card__link';
   enlace.href = `/pages/servicio-detalle.html?slug=${encodeURIComponent(servicio.slug)}`;
-  enlace.textContent = 'Conocer el servicio →';
+  enlace.textContent = 'Ver cómo ayuda';
 
   articulo.append(icono, titulo, descripcion, enlace);
 

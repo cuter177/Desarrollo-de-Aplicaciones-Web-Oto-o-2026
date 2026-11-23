@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Conoce al equipo y la forma de trabajo de DevStudio.">
-  <title>Nosotros — DevStudio</title>
+  <meta name="description" content="Equipo en Puebla. Platicamos, te decimos qué conviene y lo dejamos funcionando. No hace falta saber de tecnología.">
+  <title>Cómo trabajamos — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/nosotros.js" defer></script>
@@ -16,25 +16,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
-          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
-          <li><a class="site-nav__link" href="/pages/nosotros.html" aria-current="page">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html" aria-current="page">Cómo trabajamos</a></li>
           <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
-          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
@@ -42,87 +41,76 @@
 
   <main id="contenido">
     <section class="hero">
-      <div class="container">
-        <p class="hero__eyebrow">Nosotros</p>
-        <h1 class="hero__title">Tecnología con propósito y resultados medibles</h1>
-        <p class="hero__lead" data-config="descripcion">
-          Diseñamos sitios web, dashboards y aplicaciones móviles para empresas
-          que quieren vender más y trabajar con menos procesos manuales.
-        </p>
-        <div class="hero__actions">
-          <a class="btn" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
-          <a class="btn btn--secondary" href="/pages/contacto.html">Conocer al equipo</a>
+      <div class="container hero__layout">
+        <div>
+          <p class="hero__eyebrow">Puebla</p>
+          <h1 class="hero__title">Un equipo en Puebla que habla de tu negocio</h1>
+          <p class="hero__lead" data-config="descripcion">
+            Acompañamos a empresas de Puebla a conseguir clientes,
+            ordenar la operación y atender desde el teléfono.
+          </p>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="stats" aria-label="Datos del equipo">
-          <article class="stat">
-            <p class="stat__value" data-stat="servicios">—</p>
-            <p class="stat__label">Servicios activos</p>
-          </article>
-          <article class="stat">
-            <p class="stat__value" data-stat="proyectos">—</p>
-            <p class="stat__label">Casos publicados</p>
-          </article>
-          <article class="stat">
-            <p class="stat__value">4</p>
-            <p class="stat__label">Etapas de trabajo</p>
-          </article>
-          <article class="stat">
-            <p class="stat__value">24 h</p>
-            <p class="stat__label">Respuesta inicial</p>
-          </article>
-        </div>
+        <aside class="hero-panel" aria-label="Datos del equipo">
+          <div class="stats">
+            <article class="stat">
+              <p class="stat__value" data-stat="servicios">—</p>
+              <p class="stat__label">Soluciones activas</p>
+            </article>
+            <article class="stat">
+              <p class="stat__value" data-stat="proyectos">—</p>
+              <p class="stat__label">Casos publicados</p>
+            </article>
+            <article class="stat">
+              <p class="stat__value">3</p>
+              <p class="stat__label">Pasos para empezar</p>
+            </article>
+            <article class="stat">
+              <p class="stat__value">24 h</p>
+              <p class="stat__label">Respuesta inicial</p>
+            </article>
+          </div>
+        </aside>
       </div>
     </section>
 
     <section class="section section--muted">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head section-head--plain">
           <div>
             <p class="hero__eyebrow">Cómo trabajamos</p>
-            <h2 class="section__title">Un proceso claro, sin sorpresas</h2>
+            <h2 class="section__title">Así trabajamos</h2>
+            <p class="section__lead">
+              No hace falta que sepas de sistemas. Cada paso termina con algo
+              que puedes revisar antes de seguir.
+            </p>
           </div>
-          <p class="section__lead">
-            Cada etapa termina con algo que puedes revisar y aprobar. Así
-            mantenemos el alcance, el tiempo y el presupuesto bajo control.
-          </p>
         </div>
 
-        <ol class="steps">
+        <ol class="steps steps--three">
           <li class="step">
             <span class="step__number" aria-hidden="true">1</span>
-            <h3 class="step__title">Diagnóstico</h3>
+            <h3 class="step__title">Platicamos</h3>
             <p class="step__text">
-              Entendemos tu operación, tus objetivos de crecimiento y los
-              procesos que más tiempo consumen.
+              Nos cuentas qué vendes, quién te busca y dónde se te atora el día.
             </p>
           </li>
           <li class="step">
             <span class="step__number" aria-hidden="true">2</span>
-            <h3 class="step__title">Diseño</h3>
+            <h3 class="step__title">Te decimos qué conviene</h3>
             <p class="step__text">
-              Traducimos las necesidades en flujos, pantallas y un alcance
-              priorizado por impacto.
+              Un siguiente paso, con tiempo y alcance que se entienden. Si algo
+              cambia, se habla antes de hacerlo.
             </p>
           </li>
           <li class="step">
             <span class="step__number" aria-hidden="true">3</span>
-            <h3 class="step__title">Desarrollo</h3>
+            <h3 class="step__title">Lo dejamos funcionando</h3>
             <p class="step__text">
-              Construimos por entregas, con revisiones frecuentes y pruebas en
-              cada avance.
-            </p>
-          </li>
-          <li class="step">
-            <span class="step__number" aria-hidden="true">4</span>
-            <h3 class="step__title">Entrega y acompañamiento</h3>
-            <p class="step__text">
-              Documentamos, capacitamos y damos seguimiento para que la solución
-              se use y evolucione.
+              Queda listo para usarse y te mostramos cómo, sin manuales raros.
             </p>
           </li>
         </ol>
@@ -131,33 +119,33 @@
 
     <section class="section">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head section-head--plain">
           <div>
-            <p class="hero__eyebrow">Nuestra forma de colaborar</p>
-            <h2 class="section__title">Lo que puedes esperar</h2>
+            <p class="hero__eyebrow">Para quién es</p>
+            <h2 class="section__title">Negocios de Puebla</h2>
           </div>
         </div>
 
         <div class="service-cards">
           <article class="service-card">
-            <h3 class="service-card__title">Claridad desde el inicio</h3>
+            <h3 class="service-card__title">Comercio y servicios locales</h3>
             <p class="service-card__body">
-              Alcance, entregables y fechas por escrito. Si algo cambia, se
-              conversa y se ajusta antes de ejecutarlo.
+              Locales, consultorios y empresas que venden o atienden y hoy
+              dependen del mostrador, del teléfono o de WhatsApp.
             </p>
           </article>
           <article class="service-card">
-            <h3 class="service-card__title">Decisiones con datos</h3>
+            <h3 class="service-card__title">Quien decide sin ser técnico</h3>
             <p class="service-card__body">
-              Medimos lo que importa: ventas, tiempo ahorrado, adopción y
-              calidad de la operación.
+              No tienes que elegir herramientas. Con que conozcas tu negocio
+              alcanza para empezar.
             </p>
           </article>
           <article class="service-card">
-            <h3 class="service-card__title">Tecnología mantenible</h3>
+            <h3 class="service-card__title">Acuerdo por escrito</h3>
             <p class="service-card__body">
-              Código documentado, buenas prácticas y una arquitectura que tu
-              equipo puede entender y continuar.
+              Alcance, fechas y qué queda funcionando se dicen antes. Si algo
+              cambia, se conversa y se ajusta.
             </p>
           </article>
         </div>
@@ -166,32 +154,32 @@
 
     <section class="section section--muted">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head section-head--plain">
           <div>
             <p class="hero__eyebrow">Equipo</p>
-            <h2 class="section__title">Quiénes están detrás</h2>
+            <h2 class="section__title">Quién te atiende</h2>
+            <p class="section__lead">
+              Un equipo chico en Puebla. Las mismas personas te escuchan, arman
+              el acuerdo y lo dejan funcionando.
+            </p>
           </div>
-          <p class="section__lead">
-            Un equipo pequeño y multidisciplinario que acompaña el proyecto de
-            principio a fin.
-          </p>
         </div>
 
         <div class="team-grid">
           <article class="team-card">
             <p class="avatar" aria-hidden="true">DP</p>
-            <h3 class="team-card__name">Dirección de proyecto</h3>
-            <p class="team-card__role">Estrategia, alcance y relación con el cliente</p>
+            <h3 class="team-card__name">Quien te escucha</h3>
+            <p class="team-card__role">Entiende el negocio, el alcance y las fechas</p>
           </article>
           <article class="team-card">
             <p class="avatar" aria-hidden="true">DV</p>
-            <h3 class="team-card__name">Desarrollo</h3>
-            <p class="team-card__role">Web, APIs, dashboards y aplicaciones móviles</p>
+            <h3 class="team-card__name">Quien lo deja funcionando</h3>
+            <p class="team-card__role">Arma la solución y te muestra cómo usarla</p>
           </article>
           <article class="team-card">
             <p class="avatar" aria-hidden="true">UX</p>
-            <h3 class="team-card__name">Diseño y experiencia</h3>
-            <p class="team-card__role">Interfaces claras, accesibles y fáciles de usar</p>
+            <h3 class="team-card__name">Quien lo hace claro</h3>
+            <p class="team-card__role">Que se entienda en el teléfono y en el mostrador</p>
           </article>
         </div>
       </div>
@@ -201,15 +189,15 @@
       <div class="container">
         <div class="cta-band">
           <div>
-            <h2>Hablemos de tu próximo proyecto</h2>
+            <h2>Cuéntanos cómo trabajas hoy</h2>
             <p>
-              Cuéntanos qué quieres lograr. Si todavía no lo tienes claro, el
-              diagnóstico te ayuda a ordenar las prioridades.
+              Si todavía no sabes qué pedir, con el problema alcanza. Te
+              decimos el siguiente paso.
             </p>
           </div>
           <div class="hero__actions">
-            <a class="btn" href="/pages/cotizacion.html">Iniciar diagnóstico</a>
-            <a class="btn btn--secondary" href="/pages/contacto.html">Escribir al equipo</a>
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
           </div>
         </div>
       </div>
@@ -220,15 +208,15 @@
     <div class="container site-footer__inner">
       <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

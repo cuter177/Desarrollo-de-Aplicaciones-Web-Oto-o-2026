@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Servicios de desarrollo web, dashboards, aplicaciones móviles y consultoría de DevStudio.">
-  <title>Servicios — DevStudio</title>
+  <meta name="description" content="Soluciones para que te encuentren, para que la operación no dependa de mensajes y para atender desde el teléfono.">
+  <title>Soluciones — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/servicios.js" defer></script>
@@ -16,25 +16,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li><a class="site-nav__link" href="/pages/servicios.html" aria-current="page">Servicios</a></li>
-          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
-          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html" aria-current="page">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
           <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
-          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
@@ -43,15 +42,15 @@
   <main id="contenido">
     <section class="hero">
       <div class="container">
-        <p class="hero__eyebrow">Servicios</p>
-        <h1 class="hero__title">Soluciones de software para cada etapa de tu negocio</h1>
+        <p class="hero__eyebrow">Soluciones</p>
+        <h1 class="hero__title">Qué problema de tu negocio podemos ordenar</h1>
         <p class="hero__lead">
-          Desde tu presencia digital hasta dashboards y aplicaciones móviles.
-          Trabajamos por etapas para que cada inversión tenga un retorno medible.
+          Cada solución responde a un tropiezo concreto: que no te encuentren,
+          que todo viva en mensajes o que no puedas atender desde el teléfono.
         </p>
         <div class="hero__actions">
-          <a class="btn" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
-          <a class="btn btn--secondary" href="/pages/portafolio.html">Ver casos de éxito</a>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+          <a class="btn btn--secondary" href="/pages/portafolio.html">Ver casos</a>
         </div>
       </div>
     </section>
@@ -60,12 +59,12 @@
       <div class="container">
         <div class="section-head">
           <div>
-            <p class="hero__eyebrow">Qué hacemos</p>
-            <h2 class="section__title">Nuestros servicios</h2>
+            <p class="hero__eyebrow">Para tu operación</p>
+            <h2 class="section__title">Elige el resultado</h2>
           </div>
           <p class="section__lead">
-            Cada servicio se adapta a tu operación. El alcance y el precio se
-            confirman después de un diagnóstico breve.
+            El alcance y el tiempo se confirman después de platicar. No tienes
+            que saber cuál herramienta pedir.
           </p>
         </div>
 
@@ -79,15 +78,15 @@
       <div class="container">
         <div class="cta-band">
           <div>
-            <h2>¿No sabes por dónde empezar?</h2>
+            <h2>¿No sabes cuál te toca?</h2>
             <p>
-              Responde unas preguntas sobre tus necesidades y objetivos. Te
-              propondremos el plan que mejor se ajusta a tu etapa, sin compromiso.
+              Cuéntanos cómo trabajas. Te decimos por dónde empezar, sin
+              compromiso y sin pedirte que elijas herramientas.
             </p>
           </div>
           <div class="hero__actions">
-            <a class="btn" href="/pages/cotizacion.html">Iniciar diagnóstico</a>
-            <a class="btn btn--secondary" href="/pages/contacto.html">Hablar con el equipo</a>
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
           </div>
         </div>
       </div>
@@ -98,15 +97,15 @@
     <div class="container site-footer__inner">
       <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

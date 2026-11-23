@@ -16,18 +16,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html" aria-current="page">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
@@ -159,15 +165,15 @@
     <div class="container site-footer__inner">
       <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

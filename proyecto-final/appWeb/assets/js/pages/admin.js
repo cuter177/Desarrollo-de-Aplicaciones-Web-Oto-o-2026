@@ -105,7 +105,7 @@ async function init() {
     renderRecientes(data.solicitudes_recientes ?? []);
   } catch (error) {
     if (error.status === 401) {
-      window.location.href = '/pages/login.html';
+      window.location.href = '/pages/login.html?nuevo=1';
       return;
     }
 

@@ -15,21 +15,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
-          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
           <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html" aria-current="page">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html" aria-current="page">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>

@@ -42,9 +42,15 @@ export async function aplicarConfig(root = document) {
       return;
     }
 
+    elemento.hidden = false;
+
     if (clave === 'email') {
       elemento.href = `mailto:${valor}`;
-    } else if (clave === 'telefono' || clave === 'whatsapp') {
+    } else if (clave === 'whatsapp') {
+      elemento.href = `https://wa.me/${valor.replace(/\D/g, '')}`;
+      elemento.target = '_blank';
+      elemento.rel = 'noopener noreferrer';
+    } else if (clave === 'telefono') {
       elemento.href = `tel:${valor.replace(/[^\d+]/g, '')}`;
     } else {
       elemento.href = valor;
@@ -171,18 +177,14 @@ export function crearTarjetaProyecto(proyecto) {
 
   const resumen = document.createElement('p');
   resumen.className = 'case-card__text';
-  resumen.textContent = proyecto.resumen;
+  resumen.textContent = proyecto.resultados || proyecto.resumen;
 
   cuerpo.append(meta, titulo, resumen);
-
-  if (Array.isArray(proyecto.tecnologias) && proyecto.tecnologias.length > 0) {
-    cuerpo.append(crearListaTecnologias(proyecto.tecnologias, 4));
-  }
 
   const pie = document.createElement('a');
   pie.className = 'case-card__link';
   pie.href = enlace.href;
-  pie.textContent = 'Ver caso completo';
+  pie.textContent = 'Ver el resultado';
   cuerpo.append(pie);
 
   articulo.append(media, cuerpo);
@@ -206,6 +208,57 @@ export function mostrarNoEncontrado(contenedor, mensaje, enlaceTexto, enlaceHref
 
   caja.append(texto, enlace);
   contenedor.append(caja);
+}
+
+export const enfoqueServicio = {
+  'desarrollo-web': {
+    titulo: 'Que te encuentren',
+    texto: 'Una página clara para que alguien de Puebla sepa qué ofreces, dónde estás y cómo contactarte.',
+    beneficios: [
+      'Se entiende qué vendes en el primer vistazo',
+      'Te escriben o te llaman sin buscarte en redes',
+      'Se ve bien en el teléfono, que es donde te buscan',
+      'Puedes cambiar lo que ofreces sin empezar de cero',
+    ],
+  },
+  dashboards: {
+    titulo: 'Que la operación no dependa de mensajes',
+    texto: 'Ventas, citas y pendientes en un solo lugar, para decidir sin armar reportes a mano ni preguntar en el chat.',
+    beneficios: [
+      'Ves cómo va el negocio sin pedir un reporte',
+      'El equipo deja de preguntar lo mismo por WhatsApp',
+      'Comparas periodos o sucursales con los mismos números',
+      'Decides con lo que pasó, no con lo que se recuerda',
+    ],
+  },
+  'apps-moviles': {
+    titulo: 'Que atiendas desde el teléfono',
+    texto: 'Tus clientes piden, consultan o regresan desde el celular, sin llamarte cada vez.',
+    beneficios: [
+      'Agendan o piden desde el celular',
+      'Reciben un recordatorio sin que alguien llame',
+      'Atiendes fuera del local con la misma información',
+      'El teléfono deja de ser la única agenda',
+    ],
+  },
+  consultoria: {
+    titulo: 'Que sepas qué conviene hacer primero',
+    texto: 'Ordenamos el problema y te decimos el siguiente paso, sin que tengas que elegir herramientas.',
+    beneficios: [
+      'Sales con un orden claro de qué hacer primero',
+      'No tienes que elegir herramientas tú solo',
+      'El plan cabe en cómo trabajas hoy',
+      'Sabes qué puedes dejar para después',
+    ],
+  },
+};
+
+export function enfoqueDe(servicio) {
+  if (!servicio || typeof servicio.slug !== 'string') {
+    return null;
+  }
+
+  return enfoqueServicio[servicio.slug] ?? null;
 }
 
 export function iconoServicio(icono) {

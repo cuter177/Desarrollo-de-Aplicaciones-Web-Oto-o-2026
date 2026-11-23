@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Casos de éxito y proyectos publicados por DevStudio.">
-  <title>Portafolio — DevStudio</title>
+  <meta name="description" content="Casos de negocios que ya ordenaron clientes, operación y atención. El resultado va primero.">
+  <title>Casos — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/portafolio.js" defer></script>
@@ -16,25 +16,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li><a class="site-nav__link" href="/pages/servicios.html">Servicios</a></li>
-          <li><a class="site-nav__link" href="/pages/portafolio.html" aria-current="page">Portafolio</a></li>
-          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html" aria-current="page">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
           <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
-          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
@@ -42,38 +41,51 @@
 
   <main id="contenido">
     <section class="hero">
-      <div class="container">
-        <p class="hero__eyebrow">Portafolio</p>
-        <h1 class="hero__title">Proyectos que ya están trabajando</h1>
-        <p class="hero__lead">
-          Casos reales de sitios, dashboards y aplicaciones construidos para
-          empresas que necesitaban vender más o reducir trabajo manual.
-        </p>
-        <div class="hero__actions">
-          <a class="btn" href="/pages/cotizacion.html">Quiero algo similar</a>
-          <a class="btn btn--secondary" href="/pages/servicios.html">Ver servicios</a>
+      <div class="container hero__layout">
+        <div>
+          <p class="hero__eyebrow">Casos</p>
+          <h1 class="hero__title">Lo que cambió en el negocio</h1>
+          <p class="hero__lead">
+            Cada caso se cuenta por el resultado: menos mensajes perdidos, una
+            compra en un solo lugar o una agenda que sí se respeta.
+          </p>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Quiero algo así</a>
+            <a class="btn btn--secondary" href="/pages/servicios.html">Ver soluciones</a>
+          </div>
         </div>
+        <aside class="hero-panel" aria-labelledby="lectura-casos">
+          <p class="hero__eyebrow" id="lectura-casos">Qué vas a ver</p>
+          <ul class="hero-panel__list">
+            <li>El resultado para el negocio, antes que cualquier otra cosa.</li>
+            <li>Qué pasaba antes y qué se hizo después.</li>
+            <li>Las herramientas, solo si quieres saber con qué está hecho.</li>
+          </ul>
+        </aside>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head section-head--plain">
           <div>
-            <p class="hero__eyebrow">Casos publicados</p>
-            <h2 class="section__title">Resultados, no solo pantallas</h2>
+            <p class="hero__eyebrow">Publicados</p>
+            <h2 class="section__title">Resultados primero</h2>
+            <p class="section__lead">
+              El nombre de la herramienta no es lo importante. Si quieres
+              comparar por eso, está al final de la lista.
+            </p>
           </div>
-          <p class="section__lead">
-            Filtra por tecnología para encontrar proyectos parecidos al que
-            tienes en mente.
-          </p>
         </div>
-
-        <div class="filters" id="portafolio-filtros" aria-label="Filtrar por tecnología"></div>
 
         <div class="case-grid" id="portafolio-lista" aria-live="polite">
-          <div class="empty-state">Cargando proyectos…</div>
+          <div class="empty-state">Cargando casos…</div>
         </div>
+
+        <details class="tech-note">
+          <summary>Si buscas un caso por la herramienta usada</summary>
+          <div class="filters" id="portafolio-filtros" aria-label="Filtrar por herramienta"></div>
+        </details>
       </div>
     </section>
 
@@ -81,15 +93,15 @@
       <div class="container">
         <div class="cta-band">
           <div>
-            <h2>Tu proyecto puede ser el próximo caso</h2>
+            <h2>¿Te pasó algo parecido?</h2>
             <p>
-              Empecemos con un diagnóstico de tus necesidades, objetivos de
-              crecimiento y procesos que quieres eficientar.
+              Cuéntanos cómo trabajas hoy. Te decimos si alguno de estos
+              resultados te sirve y cuál sería el primer paso.
             </p>
           </div>
           <div class="hero__actions">
-            <a class="btn" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
-            <a class="btn btn--secondary" href="/pages/contacto.html">Hablar con el equipo</a>
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
           </div>
         </div>
       </div>
@@ -100,15 +112,15 @@
     <div class="container site-footer__inner">
       <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

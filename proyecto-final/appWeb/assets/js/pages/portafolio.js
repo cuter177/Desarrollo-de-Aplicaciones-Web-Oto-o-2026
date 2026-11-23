@@ -18,7 +18,7 @@ function renderProyectos() {
   if (visibles.length === 0) {
     const vacio = document.createElement('div');
     vacio.className = 'empty-state';
-    vacio.textContent = 'No hay proyectos publicados con esa tecnología.';
+    vacio.textContent = 'No hay casos publicados con esa herramienta.';
     lista.append(vacio);
     return;
   }
@@ -58,7 +58,7 @@ function renderFiltros() {
 }
 
 async function cargar() {
-  lista.innerHTML = '<div class="empty-state">Cargando proyectos…</div>';
+  lista.innerHTML = '<div class="empty-state">Cargando casos…</div>';
 
   try {
     const data = await apiGet('/portafolio');

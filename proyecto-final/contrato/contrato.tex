@@ -1,0 +1,252 @@
+% Contrato de prestación de servicios
+% Compilar: /usr/bin/latexbuild contrato.tex
+\input{../comun/preambulo.tex}
+\datosPdf{Contrato de prestación de servicios. DevStudio}
+
+\begin{document}
+\portada{Contrato de servicios}{Desarrollo de una aplicación web del tamaño de DevStudio}{Modelo académico, no constituye asesoría legal}
+
+\tableofcontents
+\clearpage
+
+\section{Advertencia}
+
+Este contrato es un modelo para la materia Diseño de Aplicaciones Web. Fija el
+alcance y el costo de construir un software de la medida de DevStudio. No
+sustituye la revisión de un profesional del derecho ni obliga a un cliente
+real.
+
+\section{Partes}
+
+El contrato número PF-2026-001 se celebra en Puebla, México, el 22 de
+noviembre de 2026.
+
+\textbf{Prestador.} Alfredo Ramírez Candia, alumno de la Facultad de Ciencias
+de la Computación de la Benemérita Universidad Autónoma de Puebla. Se
+identifica, para este modelo, con la matrícula 202375947. Domicilio para oír
+y recibir notificaciones: Facultad de Ciencias de la Computación, Avenida
+San Claudio y 14 Sur, Ciudad Universitaria, C.P.~72570, Puebla, Puebla,
+Estados Unidos Mexicanos. Correo: \texttt{contacto@devstudio.local}.
+
+\textbf{Cliente.} DevStudio, negocio de desarrollo para comercios de Puebla,
+en cuyo nombre se encarga el sistema descrito en este documento. En este
+ejercicio no es una persona moral inscrita, así que no tiene representante
+legal ni RFC. Se identifica con su denominación, el correo
+\texttt{contacto@devstudio.local} y el teléfono +52~222~000~0000. Quien firme
+la columna del cliente lo hace a nombre de esa denominación, solo para el
+modelo. Domicilio para notificaciones: Puebla, municipio de Puebla, estado de
+Puebla, Estados Unidos Mexicanos, en el lugar de celebración de este contrato.
+
+Las partes declaran tener capacidad para firmar este modelo con fines
+académicos.
+
+\section{Objeto}
+
+El prestador diseña, construye y entrega una aplicación web de la medida de
+DevStudio, compuesta por sitio público, portal de clientes, panel de
+administración, API PHP y base SQL Server, más la documentación de usuario,
+la documentación técnica y este contrato.
+
+\section{Alcances}
+
+\subsection{Módulos incluidos}
+
+\begin{table}[H]
+  \centering
+  \caption{Lo que el precio de la sección 8 cubre.}
+  \label{tab:alcance}
+  \small
+  \begin{tabularx}{\textwidth}{@{}l Y@{}}
+    \toprule
+    Módulo & Queda incluido \\
+    \midrule
+    Sitio público & Inicio, soluciones, casos, forma de trabajo, contacto y diagnóstico \\
+    Acceso & Registro, inicio y cierre de sesión, roles cliente y administrador \\
+    Portal & Perfil, foto, proyectos, avance, solicitudes y calendario \\
+    Administración & Usuarios, clientes, servicios, proyectos, tecnologías, solicitudes y mensajes \\
+    API de seguimiento & Actualizar el avance y confirmar o rechazar reuniones \\
+    Datos & Esquema, semilla y migraciones idempotentes \\
+    Entorno & Docker con Nginx, PHP 8.3 y SQL Server 2022 \\
+    Documentación & Manual de usuario, manual técnico y este contrato, en PDF \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Entregables}
+
+\begin{enumerate}
+  \item Código fuente en repositorio y en archivo ZIP, sin secretos.
+  \item \path{schema.sql}, \path{seed.sql} y las migraciones.
+  \item Cuatro PDF generados con LaTeX.
+  \item Sesión de demostración con las cuentas locales del seed.
+\end{enumerate}
+
+\subsection{Aceptación técnica}
+
+El sitio se usa en móvil, tableta y escritorio. El cliente solo ve su
+información. El administrador gestiona el contenido. La base se reconstruye
+desde los scripts. Un cliente no puede escribir el avance ni responder una
+reunión. La documentación permite instalar el sistema y recorrerlo.
+
+\section{Limitaciones}
+
+No entran en el precio, salvo un anexo firmado:
+
+\begin{itemize}
+  \item Pagos en línea, facturación o nómina.
+  \item Aplicaciones nativas para iOS o Android.
+  \item Chat, videollamada o notificaciones push.
+  \item Integración con un CRM, un ERP u otro sistema del cliente.
+  \item Correo de recuperación de contraseña o correos transaccionales.
+  \item Pantalla nueva para que el desarrollador confirme reuniones: la acción existe en la API.
+  \item Hosting, dominio, certificados y costos de nube.
+  \item Soporte posterior a la garantía, auditoría de intrusión o cumplimiento normativo.
+\end{itemize}
+
+\section{Obligaciones}
+
+Mientras el trabajo se está haciendo, el cliente entrega textos, datos de
+contacto y un responsable de las revisiones, y responde observaciones en cinco
+días hábiles. Ese plazo de cinco días solo corre durante la ejecución. No es
+el plazo de aceptación ni el de garantía: esos se cuentan como dice el
+apartado~11, después de la entrega.
+
+El prestador construye lo descrito, comunica el avance, entrega código y
+documentación, hace la demostración y corrige durante la garantía los defectos
+que sean del desarrollo.
+
+\section{Cronograma}
+
+Las fechas anteriores a la firma solo se asientan como antecedentes de la
+celebración. No son plazos pendientes.
+
+\begin{table}[H]
+  \centering
+  \caption{Antecedentes, previos al 22 de noviembre de 2026.}
+  \begin{tabularx}{\textwidth}{@{}Y l@{}}
+    \toprule
+    Resultado ya realizado & Fecha del antecedente \\
+    \midrule
+    Requisitos, mapa, guiones y navegación & 13 de noviembre de 2026 \\
+    Interfaz y modelo de datos & 15 de noviembre de 2026 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+En la fecha de celebración, el 22 de noviembre de 2026, se entregan el portal
+con calendario, avance y foto, las pruebas en 375, 768 y 1280 píxeles, y los
+PDF y el ZIP. A partir de ese día corren la aceptación y la garantía del
+apartado~11. No se programa ningún cierre con fecha anterior a la firma.
+
+Si el cliente no entrega insumos de un trabajo todavía pendiente, los plazos
+posteriores se recorren por escrito.
+
+\section{Precio}
+
+El costo de hacer un software de esta medida es de \textbf{\$235{,}000 MXN}
+más IVA. El desglose corresponde a los módulos de la sección 3 y no a un plan
+comercial que el sitio ofrezca a un negocio.
+
+\begin{table}[H]
+  \centering
+  \caption{Desglose del costo.}
+  \label{tab:costo}
+  \begin{tabular}{lr}
+    \toprule
+    Concepto & Importe (MXN) \\
+    \midrule
+    Modelación y diseño & 25{,}000 \\
+    Sitio público, mobile first & 45{,}000 \\
+    Autenticación y roles & 20{,}000 \\
+    Portal, avance, calendario y perfil & 55{,}000 \\
+    Panel de administración y API & 50{,}000 \\
+    Base de datos y entorno Docker & 25{,}000 \\
+    Documentación y transferencia & 15{,}000 \\
+    \midrule
+    Total, antes de IVA & 235{,}000 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+El pago se divide en tres partes: 40\,\% a la firma (\$94{,}000), 30\,\% al
+aprobar la versión funcional (\$70{,}500) y 30\,\% contra entrega y aceptación
+(\$70{,}500). La forma de pago de un encargo real sería transferencia. Este
+modelo no incluye datos bancarios ni factura. El precio no cubre hosting ni
+servicios de terceros.
+
+\section{Cambios de alcance}
+
+Cualquier función que no esté en el objeto (apartado~3), que no esté en los
+alcances (apartado~4) o que el apartado~5 deje fuera se cotiza aparte. El
+trabajo de ese cambio empieza cuando el cliente acepta esa cotización por
+escrito.
+
+\section{Propiedad y confidencialidad}
+
+Liquidado el total, el código y la documentación específicos del proyecto pasan
+al cliente. El prestador conserva componentes genéricos y el derecho a mostrar
+el trabajo en su portafolio, salvo que el cliente pida reserva por escrito.
+La confidencialidad dura dos años después del fin del contrato, excepto la
+información que ya sea pública o que pida una autoridad.
+
+\section{Garantía y aceptación}
+
+La entrega ocurre el 22 de noviembre de 2026, fecha de este contrato. Desde el
+día hábil siguiente, el cliente tiene 10 días hábiles para aceptar o enlistar
+defectos. Sin respuesta en ese plazo, el modelo da el entregable por aceptado.
+Este plazo no se confunde con los cinco días hábiles del apartado~6, que solo
+aplican mientras el trabajo se ejecuta.
+
+Aceptado el entregable, corren 30 días naturales de garantía. En ellos el
+prestador corrige sin costo los defectos reproducibles que vengan del
+desarrollo. No cubre cambios nuevos, modificaciones de terceros, fallas de red
+o de hosting, ni textos aportados por el cliente.
+
+\section{Terminación y ley aplicable}
+
+Cualquiera de las partes podrá dar por terminado el contrato de manera
+anticipada mediante aviso por escrito con al menos 15 días naturales de
+antelación. El trabajo entregado y aceptado hasta la fecha en que surta
+efectos la terminación se liquidará conforme al desglose de costos del
+apartado~8.
+
+Este contrato se rige por las leyes aplicables de los Estados Unidos Mexicanos
+y del estado libre y soberano de Puebla. Para la interpretación y cumplimiento
+del presente, así como para cualquier controversia proveniente del mismo, las
+partes se someten expresamente a la jurisdicción de los tribunales competentes
+de Puebla, Puebla, renunciando a cualquier otro fuero que pudiera
+corresponderles por razón de su domicilio presente o futuro, así como
+derivado de otra causa.
+
+\section{Firmas}
+
+\vspace{1.1cm}
+\noindent
+\begin{minipage}[t]{0.47\textwidth}
+  \textbf{Prestador}\\[1.5cm]
+  Alfredo Ramírez Candia\\[0.8cm]
+  Firma: \rule{3cm}{0.4pt}\\[0.6cm]
+  22 de noviembre de 2026
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}
+  \textbf{Cliente}\\[1.5cm]
+  DevStudio\\[0.8cm]
+  Firma: \rule{3cm}{0.4pt}\\[0.6cm]
+  22 de noviembre de 2026
+\end{minipage}
+
+\vspace{1.3cm}
+\noindent\textbf{Testigos}
+
+\vspace{0.8cm}
+\noindent
+\begin{minipage}[t]{0.47\textwidth}
+  Nombre: \rule{3cm}{0.4pt}\\[0.8cm]
+  Firma: \rule{3cm}{0.4pt}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.47\textwidth}
+  Nombre: \rule{3cm}{0.4pt}\\[0.8cm]
+  Firma: \rule{3cm}{0.4pt}
+\end{minipage}
+
+\end{document}

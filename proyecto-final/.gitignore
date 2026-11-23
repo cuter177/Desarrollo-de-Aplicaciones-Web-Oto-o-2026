@@ -1,0 +1,63 @@
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+*.local
+
+# Dependencias
+vendor/
+node_modules/
+
+# Logs y temporales
+*.log
+logs/
+tmp/
+.cache/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# SQL Server: respaldos y archivos de datos
+*.bak
+*.mdf
+*.ldf
+*.ndf
+*.trn
+
+# LaTeX
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+docs/latex/build/
+
+# Entregables empaquetados
+dist/
+*.zip
+
+# Fotos de perfil subidas en local
+backEnd/storage/avatars/*
+!backEnd/storage/avatars/.gitkeep
+
+# Archivos generados por pruebas
+coverage/
+.phpunit.result.cache
+
+# Mantener carpetas vacías documentadas
+!.gitkeep

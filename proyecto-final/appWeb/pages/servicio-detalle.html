@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Qué problema resuelve esta solución y qué cambia en el negocio.">
+  <title>Solución — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/servicio-detalle.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html" aria-current="page">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden>Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="servicio-hero">
+      <div class="container">
+        <p class="hero__eyebrow">Solución</p>
+        <h1 class="hero__title" id="servicio-titulo">Cargando…</h1>
+        <p class="hero__lead" id="servicio-descripcion"></p>
+        <div class="hero__actions" id="servicio-acciones" hidden>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+          <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servicio-contenido" hidden>
+      <div class="container">
+        <div class="contact-grid">
+          <section class="panel" aria-labelledby="beneficios-title" id="panel-beneficios">
+            <h2 class="panel__title" id="beneficios-title">Qué cambia en el negocio</h2>
+            <ul class="check-list" id="servicio-beneficios"></ul>
+          </section>
+
+          <section class="panel" aria-labelledby="casos-title">
+            <h2 class="panel__title" id="casos-title">Casos parecidos</h2>
+            <p class="muted">Resultados de negocios que ya pasaron por esto.</p>
+            <div class="case-grid" id="servicio-casos"></div>
+          </section>
+        </div>
+
+        <details class="tech-note" id="servicio-hecho">
+          <summary>Si quieres saber con qué está hecho</summary>
+          <div class="tech-note__tools">
+            <div class="service-card__icon" id="servicio-icono"></div>
+            <p class="muted" id="servicio-nombre-tecnico"></p>
+          </div>
+          <p class="tech-note__label" id="servicio-alcance-label" hidden>Detalle del alcance</p>
+          <ul class="check-list" id="servicio-alcance" hidden></ul>
+          <p class="tech-note__label">Herramientas del estudio</p>
+          <ul class="tech-list" id="servicio-tecnologias"></ul>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" id="servicio-no-encontrado" hidden>
+      <div class="container">
+        <div class="empty-state">
+          <p>La solución que buscas no existe o ya no está disponible.</p>
+          <a class="btn btn--secondary" href="/pages/servicios.html">Volver a soluciones</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted" id="servicio-cta" hidden>
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>¿Este es tu caso?</h2>
+            <p>
+              Cuéntanos cómo trabajas. Te decimos si esta solución te sirve y
+              cuál sería el primer paso.
+            </p>
+          </div>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

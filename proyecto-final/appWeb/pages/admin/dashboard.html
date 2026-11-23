@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+        var panel = localStorage.getItem("ds-panel");
+        if (panel === "oculto" || panel === "abierto") {
+          document.documentElement.setAttribute("data-panel", panel);
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Panel administrativo de DevStudio.">
+  <title>Dashboard administrativo — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden aria-current="page">Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="admin-shell">
+      <button class="admin-panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="menu-panel">
+        <span class="u-visually-hidden" data-panel-label>Ocultar menú</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <aside class="admin-side" id="menu-panel">
+        <nav class="admin-nav" aria-label="Secciones del panel">
+          <a class="admin-nav__link is-active" href="/pages/admin/dashboard.html" aria-current="page">Resumen</a>
+          <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+          <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+          <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+          <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+          <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
+          <a class="admin-nav__link" href="/pages/admin/servicios.html">Servicios</a>
+          <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+        </nav>
+        </aside>
+        <div class="admin-main">
+        <header class="page__header">
+          <p class="hero__eyebrow">Administración</p>
+          <h1 class="page__title">Dashboard</h1>
+          <p class="page__lead">
+            Resumen operativo del sistema, solicitudes entrantes y estado del
+            portafolio. Los datos se consultan a la API con la sesión del
+            administrador.
+          </p>
+        </header>
+
+        <div class="alert" id="admin-alert" role="alert" hidden></div>
+
+        <section class="metrics" aria-label="Métricas del sistema">
+          <article class="metric">
+            <p class="metric__label">Usuarios activos</p>
+            <p class="metric__value" data-metric="usuarios_activos">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Clientes</p>
+            <p class="metric__value" data-metric="clientes">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Proyectos</p>
+            <p class="metric__value" data-metric="proyectos">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Solicitudes nuevas</p>
+            <p class="metric__value" data-metric="solicitudes_nuevas">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Mensajes nuevos</p>
+            <p class="metric__value" data-metric="mensajes_nuevos">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Pipeline estimado</p>
+            <p class="metric__value" data-metric="pipeline_valor">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Tasa de conversión</p>
+            <p class="metric__value" data-metric="tasa_conversion">—</p>
+          </article>
+          <article class="metric">
+            <p class="metric__label">Crecimiento promedio</p>
+            <p class="metric__value" data-metric="promedio_crecimiento">—</p>
+          </article>
+        </section>
+
+        <section class="panel" aria-labelledby="admin-recientes-title">
+          <div class="panel__header">
+            <h2 class="panel__title" id="admin-recientes-title">Solicitudes recientes</h2>
+            <a class="btn btn--ghost" href="/pages/admin/solicitudes.html">Ver bandeja</a>
+          </div>
+          <div id="solicitudes-recientes" aria-live="polite">
+            <div class="empty-state">Cargando solicitudes…</div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="admin-sesion-title">
+          <h2 class="panel__title" id="admin-sesion-title">Sesión actual</h2>
+          <dl class="data-list">
+            <div class="data-list__row">
+              <dt class="data-list__label">Nombre</dt>
+              <dd class="data-list__value" data-user-name>—</dd>
+            </div>
+            <div class="data-list__row">
+              <dt class="data-list__label">Correo</dt>
+              <dd class="data-list__value" data-user-email>—</dd>
+            </div>
+            <div class="data-list__row">
+              <dt class="data-list__label">Rol</dt>
+              <dd class="data-list__value" data-user-role>—</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="panel" aria-labelledby="admin-pendiente-title">
+          <h2 class="panel__title" id="admin-pendiente-title">Módulos del panel</h2>
+          <div class="module-links">
+            <a class="module-link" href="/pages/admin/solicitudes.html">
+              <strong>Solicitudes</strong>
+              <span>Bandeja, diagnóstico, pipeline y conversión a proyecto.</span>
+            </a>
+            <a class="module-link" href="/pages/admin/proyectos.html">
+              <strong>Proyectos</strong>
+              <span>Alta, estado, fechas y publicación en el portafolio.</span>
+            </a>
+            <a class="module-link" href="/pages/admin/mensajes.html">
+              <strong>Mensajes</strong>
+              <span>Bandeja de contacto y seguimiento.</span>
+            </a>
+            <a class="module-link" href="/pages/admin/usuarios.html">
+              <strong>Usuarios</strong>
+              <span>Cuentas, roles y estado, sin exponer contraseñas.</span>
+            </a>
+            <a class="module-link" href="/pages/admin/clientes.html">
+              <strong>Clientes</strong>
+              <span>Empresas vinculadas a un usuario cliente.</span>
+            </a>
+            <a class="module-link" href="/pages/admin/servicios.html">
+              <strong>Servicios</strong>
+              <span>Catálogo público, slug, beneficios y visibilidad.</span>
+            </a>
+            <a class="module-link" href="/pages/admin/tecnologias.html">
+              <strong>Tecnologías</strong>
+              <span>Catálogo usado en el sitio y en los proyectos.</span>
+            </a>
+          </div>
+        </section>
+        </div>
+      </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

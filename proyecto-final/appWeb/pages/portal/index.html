@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Resumen del portal de clientes de DevStudio.">
+  <title>Mi portal — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/portal.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session" aria-current="page">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden>Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Portal del cliente</p>
+        <h1 class="page__title">Tu cuenta</h1>
+      </header>
+
+      <nav class="admin-nav" aria-label="Secciones del portal">
+        <a class="admin-nav__link is-active" href="/pages/portal/index.html" aria-current="page">Resumen</a>
+        <a class="admin-nav__link" href="/pages/portal/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/portal/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/portal/calendario.html">Calendario</a>
+        <a class="admin-nav__link" href="/pages/portal/perfil.html">Perfil</a>
+      </nav>
+
+      <div class="alert" id="portal-alert" role="alert" hidden></div>
+
+      <section class="identity" data-identity aria-label="Tu identidad">
+        <a class="identity__photo" href="/pages/portal/perfil.html">
+          <span class="identity__mark" data-identity-iniciales aria-hidden="true"></span>
+          <span class="u-visually-hidden">Ir a mi perfil</span>
+        </a>
+        <div>
+          <p class="identity__role" data-identity-cargo data-optional="1" hidden></p>
+          <h2 class="identity__name" data-identity-nombre>Tu nombre</h2>
+          <p class="identity__company" data-identity-empresa></p>
+          <p class="identity__phrase" data-identity-frase data-optional="1" hidden></p>
+          <p class="identity__city" data-identity-ciudad data-optional="1" hidden></p>
+          <ul class="identity__meta">
+            <li data-identity-telefono data-optional="1" hidden></li>
+            <li data-identity-sitio data-optional="1" hidden></li>
+            <li data-identity-industria data-optional="1" hidden></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="metrics metrics--quiet" aria-label="Resumen de la cuenta">
+        <article class="metric">
+          <p class="metric__label">Empresa</p>
+          <p class="metric__value" data-portal-empresa>—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Proyectos activos</p>
+          <p class="metric__value" data-metric="proyectos_activos">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Solicitudes abiertas</p>
+          <p class="metric__value" data-metric="solicitudes_abiertas">—</p>
+        </article>
+        <article class="metric">
+          <p class="metric__label">Proyectos en total</p>
+          <p class="metric__value" data-metric="proyectos_total">—</p>
+        </article>
+      </section>
+
+      <section class="panel" aria-labelledby="portal-actividad-title">
+        <div class="panel__header">
+          <h2 class="panel__title" id="portal-actividad-title">Actividad reciente</h2>
+          <a class="btn btn--ghost" href="/pages/portal/proyectos.html">Ver proyectos</a>
+        </div>
+        <div id="portal-actividad" aria-live="polite">
+          <div class="empty-state">Cargando actividad…</div>
+        </div>
+      </section>
+
+      <p class="portal-logout">
+        <button class="btn btn--secondary" type="button" data-action="logout">Cerrar sesión</button>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

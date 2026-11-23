@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Inicia sesión en el portal de clientes de DevStudio.">
+  <title>Iniciar sesión — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/login.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1" aria-current="page">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden>Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <div class="container auth">
+      <section class="auth__panel" aria-labelledby="login-title">
+        <h1 class="auth__title" id="login-title">Iniciar sesión</h1>
+        <p class="auth__lead">
+          Accede al portal para consultar tus proyectos y solicitudes.
+        </p>
+
+        <div class="alert" id="login-alert" role="alert" hidden></div>
+
+        <form class="form" id="login-form" novalidate>
+          <div class="form__field">
+            <label class="form__label" for="email">Correo electrónico</label>
+            <input
+              class="form__input"
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="nombre@empresa.com"
+              maxlength="254"
+              required
+            >
+          </div>
+
+          <div class="form__field">
+            <label class="form__label" for="password">Contraseña</label>
+            <input
+              class="form__input"
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              maxlength="200"
+              required
+            >
+          </div>
+
+          <div class="form__actions">
+            <button class="btn btn--block" type="submit">Entrar</button>
+          </div>
+        </form>
+
+        <p class="auth__footer">
+          ¿Aún no tienes cuenta?
+          <a href="/pages/registro.html">Regístrate como cliente</a>.
+        </p>
+      </section>
+
+      <aside class="auth__aside" aria-labelledby="login-aside-title">
+        <h2 id="login-aside-title">¿Qué puedes hacer en el portal?</h2>
+        <ul>
+          <li>Consultar el avance de tus proyectos.</li>
+          <li>Revisar el estado de tus solicitudes de cotización.</li>
+          <li>Mantener actualizados los datos de tu empresa.</li>
+        </ul>
+        <p>
+          Si olvidaste tu contraseña, contacta al administrador del sitio para
+          restablecerla.
+        </p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

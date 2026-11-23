@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Equipo en Puebla. Platicamos, te decimos qué conviene y lo dejamos funcionando. No hace falta saber de tecnología.">
+  <title>Cómo trabajamos — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/nosotros.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html" aria-current="page">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden>Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero">
+      <div class="container hero__layout">
+        <div>
+          <p class="hero__eyebrow">Puebla</p>
+          <h1 class="hero__title">Un equipo en Puebla que habla de tu negocio</h1>
+          <p class="hero__lead" data-config="descripcion">
+            Acompañamos a empresas de Puebla a conseguir clientes,
+            ordenar la operación y atender desde el teléfono.
+          </p>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="Datos del equipo">
+          <div class="stats">
+            <article class="stat">
+              <p class="stat__value" data-stat="servicios">—</p>
+              <p class="stat__label">Soluciones activas</p>
+            </article>
+            <article class="stat">
+              <p class="stat__value" data-stat="proyectos">—</p>
+              <p class="stat__label">Casos publicados</p>
+            </article>
+            <article class="stat">
+              <p class="stat__value">3</p>
+              <p class="stat__label">Pasos para empezar</p>
+            </article>
+            <article class="stat">
+              <p class="stat__value">24 h</p>
+              <p class="stat__label">Respuesta inicial</p>
+            </article>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--muted">
+      <div class="container">
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">Cómo trabajamos</p>
+            <h2 class="section__title">Así trabajamos</h2>
+            <p class="section__lead">
+              No hace falta que sepas de sistemas. Cada paso termina con algo
+              que puedes revisar antes de seguir.
+            </p>
+          </div>
+        </div>
+
+        <ol class="steps steps--three">
+          <li class="step">
+            <span class="step__number" aria-hidden="true">1</span>
+            <h3 class="step__title">Platicamos</h3>
+            <p class="step__text">
+              Nos cuentas qué vendes, quién te busca y dónde se te atora el día.
+            </p>
+          </li>
+          <li class="step">
+            <span class="step__number" aria-hidden="true">2</span>
+            <h3 class="step__title">Te decimos qué conviene</h3>
+            <p class="step__text">
+              Un siguiente paso, con tiempo y alcance que se entienden. Si algo
+              cambia, se habla antes de hacerlo.
+            </p>
+          </li>
+          <li class="step">
+            <span class="step__number" aria-hidden="true">3</span>
+            <h3 class="step__title">Lo dejamos funcionando</h3>
+            <p class="step__text">
+              Queda listo para usarse y te mostramos cómo, sin manuales raros.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">Para quién es</p>
+            <h2 class="section__title">Negocios de Puebla</h2>
+          </div>
+        </div>
+
+        <div class="service-cards">
+          <article class="service-card">
+            <h3 class="service-card__title">Comercio y servicios locales</h3>
+            <p class="service-card__body">
+              Locales, consultorios y empresas que venden o atienden y hoy
+              dependen del mostrador, del teléfono o de WhatsApp.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3 class="service-card__title">Quien decide sin ser técnico</h3>
+            <p class="service-card__body">
+              No tienes que elegir herramientas. Con que conozcas tu negocio
+              alcanza para empezar.
+            </p>
+          </article>
+          <article class="service-card">
+            <h3 class="service-card__title">Acuerdo por escrito</h3>
+            <p class="service-card__body">
+              Alcance, fechas y qué queda funcionando se dicen antes. Si algo
+              cambia, se conversa y se ajusta.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--muted">
+      <div class="container">
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">Equipo</p>
+            <h2 class="section__title">Quién te atiende</h2>
+            <p class="section__lead">
+              Un equipo chico en Puebla. Las mismas personas te escuchan, arman
+              el acuerdo y lo dejan funcionando.
+            </p>
+          </div>
+        </div>
+
+        <div class="team-grid">
+          <article class="team-card">
+            <p class="avatar" aria-hidden="true">DP</p>
+            <h3 class="team-card__name">Quien te escucha</h3>
+            <p class="team-card__role">Entiende el negocio, el alcance y las fechas</p>
+          </article>
+          <article class="team-card">
+            <p class="avatar" aria-hidden="true">DV</p>
+            <h3 class="team-card__name">Quien lo deja funcionando</h3>
+            <p class="team-card__role">Arma la solución y te muestra cómo usarla</p>
+          </article>
+          <article class="team-card">
+            <p class="avatar" aria-hidden="true">UX</p>
+            <h3 class="team-card__name">Quien lo hace claro</h3>
+            <p class="team-card__role">Que se entienda en el teléfono y en el mostrador</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Cuéntanos cómo trabajas hoy</h2>
+            <p>
+              Si todavía no sabes qué pedir, con el problema alcanza. Te
+              decimos el siguiente paso.
+            </p>
+          </div>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <nav class="site-footer__nav" aria-label="Enlaces del pie">
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
+        <a href="/pages/contacto.html">Contacto</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
+      </nav>
+      <p>
+        <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

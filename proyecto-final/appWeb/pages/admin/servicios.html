@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+        var panel = localStorage.getItem("ds-panel");
+        if (panel === "oculto" || panel === "abierto") {
+          document.documentElement.setAttribute("data-panel", panel);
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Gestión de servicios del panel administrativo.">
+  <title>Servicios — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/admin-servicios.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden aria-current="page">Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main id="contenido">
+    <div class="admin-shell">
+      <button class="admin-panel-toggle" type="button" data-panel-toggle aria-expanded="true" aria-controls="menu-panel">
+        <span class="u-visually-hidden" data-panel-label>Ocultar menú</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <aside class="admin-side" id="menu-panel">
+        <nav class="admin-nav" aria-label="Secciones del panel">
+          <a class="admin-nav__link" href="/pages/admin/dashboard.html">Resumen</a>
+          <a class="admin-nav__link" href="/pages/admin/solicitudes.html">Solicitudes</a>
+          <a class="admin-nav__link" href="/pages/admin/proyectos.html">Proyectos</a>
+          <a class="admin-nav__link" href="/pages/admin/mensajes.html">Mensajes</a>
+          <a class="admin-nav__link" href="/pages/admin/usuarios.html">Usuarios</a>
+          <a class="admin-nav__link" href="/pages/admin/clientes.html">Clientes</a>
+          <a class="admin-nav__link is-active" href="/pages/admin/servicios.html" aria-current="page">Servicios</a>
+          <a class="admin-nav__link" href="/pages/admin/tecnologias.html">Tecnologías</a>
+        </nav>
+        </aside>
+        <div class="admin-main">
+        <header class="page__header">
+          <p class="hero__eyebrow">Administración</p>
+          <h1 class="page__title">Servicios</h1>
+          <p class="page__lead">El catálogo activo se publica en el sitio. Desactivar un servicio no borra sus solicitudes.</p>
+        </header>
+        <div class="alert" id="admin-alert" role="alert" hidden></div>
+        <div class="admin-grid">
+          <section class="panel" aria-labelledby="servicio-form-title">
+            <h2 class="panel__title" id="servicio-form-title">Nuevo servicio</h2>
+            <form class="form" id="servicio-form">
+              <input type="hidden" id="servicio-id" value="">
+              <div class="form__field">
+                <label class="form__label" for="servicio-nombre">Nombre</label>
+                <input class="form__input" id="servicio-nombre" type="text" minlength="2" maxlength="120" required>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="servicio-slug">Slug</label>
+                <input class="form__input" id="servicio-slug" type="text" maxlength="120" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="se genera si lo dejas vacío">
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="servicio-descripcion">Descripción</label>
+                <textarea class="form__textarea" id="servicio-descripcion" minlength="10" maxlength="5000" required></textarea>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="servicio-beneficios">Beneficios</label>
+                <textarea class="form__textarea" id="servicio-beneficios" maxlength="5000"></textarea>
+                <p class="form__hint">Un beneficio por línea.</p>
+              </div>
+              <div class="form-row">
+                <div class="form__field">
+                  <label class="form__label" for="servicio-icono">Icono</label>
+                  <input class="form__input" id="servicio-icono" type="text" maxlength="80">
+                </div>
+                <div class="form__field">
+                  <label class="form__label" for="servicio-orden">Orden</label>
+                  <input class="form__input" id="servicio-orden" type="number" min="0" max="9999" value="0">
+                </div>
+              </div>
+              <label class="form__check">
+                <input id="servicio-activo" type="checkbox" checked>
+                Visible en el sitio público
+              </label>
+              <div class="form__actions">
+                <button class="btn" id="servicio-guardar" type="submit">Crear servicio</button>
+                <button class="btn btn--ghost" id="servicio-cancelar" type="button" hidden>Cancelar</button>
+              </div>
+            </form>
+          </section>
+          <section class="panel">
+            <h2 class="panel__title">Listado</h2>
+            <div id="servicios-lista" aria-live="polite"><div class="empty-state">Cargando servicios…</div></div>
+          </section>
+        </div>
+        </div>
+      </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

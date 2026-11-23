@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function () {
+      var tema = "dia";
+      try {
+        var guardado = localStorage.getItem("ds-tema");
+        if (guardado === "noche" || guardado === "dia") {
+          tema = guardado;
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          tema = "noche";
+        }
+        if (localStorage.getItem("ds-sesion") === "1") {
+          document.documentElement.setAttribute("data-sesion", "1");
+          var iniciales = localStorage.getItem("ds-iniciales") || "";
+          if (/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{1,3}$/.test(iniciales)) {
+            document.documentElement.style.setProperty("--user-initials", '"' + iniciales + '"');
+          }
+          var fotoSrc = localStorage.getItem("ds-foto-src") || "";
+          if (fotoSrc.indexOf("data:image/jpeg;base64,") === 0 && fotoSrc.length < 100000) {
+            document.documentElement.setAttribute("data-foto", "1");
+            document.documentElement.style.setProperty("--user-foto", 'url("' + fotoSrc + '")');
+          }
+        }
+      } catch (e) {}
+      document.documentElement.setAttribute("data-theme", tema);
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Perfil y contraseña del portal de clientes.">
+  <title>Mi perfil — DevStudio</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <script type="module" src="/assets/js/pages/portal-perfil.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
+        <span class="brand__name" data-config="nombre">DevStudio</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+        </ul>
+        <div class="site-tools">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+            <span class="u-visually-hidden" data-theme-label>Cambiar a modo noche</span>
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="currentColor"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6"/></svg>
+          </button>
+          <div class="site-tools__account">
+          <a class="site-nav__link site-nav__quiet" data-auth="guest" href="/pages/login.html?nuevo=1">Iniciar sesión</a>
+          <div class="account" data-auth="session" hidden>
+            <button class="account__button" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menu-cuenta">
+              <span class="user-chip__mark" data-user-initials aria-hidden="true"></span>
+              <span class="u-visually-hidden">Menú de cuenta</span>
+            </button>
+            <div class="account__menu" id="menu-cuenta" hidden>
+              <p class="account__name" data-user-name></p>
+              <a href="/pages/portal/index.html" data-auth="session" aria-current="page">Mi portal</a>
+              <a href="/pages/admin/dashboard.html" data-auth="admin" hidden>Administración</a>
+              <button type="button" data-action="logout">Cerrar sesión</button>
+            </div>
+          </div>
+          </div>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main id="contenido">
+    <div class="container page">
+      <header class="page__header">
+        <p class="hero__eyebrow">Portal del cliente</p>
+        <h1 class="page__title">Mi perfil</h1>
+        <p class="page__lead">Así te ve el equipo. El correo lo cambia el administrador.</p>
+      </header>
+      <nav class="admin-nav" aria-label="Secciones del portal">
+        <a class="admin-nav__link" href="/pages/portal/index.html">Resumen</a>
+        <a class="admin-nav__link" href="/pages/portal/proyectos.html">Proyectos</a>
+        <a class="admin-nav__link" href="/pages/portal/solicitudes.html">Solicitudes</a>
+        <a class="admin-nav__link" href="/pages/portal/calendario.html">Calendario</a>
+        <a class="admin-nav__link is-active" href="/pages/portal/perfil.html" aria-current="page">Perfil</a>
+      </nav>
+      <div class="alert" id="portal-alert" role="alert" hidden></div>
+      <section class="identity" data-identity aria-label="Tu identidad">
+        <label class="photo">
+          <span class="identity__mark photo__mark" data-identity-iniciales aria-hidden="true"></span>
+          <span class="photo__pencil" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+            </svg>
+          </span>
+          <input class="photo__file" id="foto-input" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Cambiar foto de perfil">
+        </label>
+        <div>
+          <p class="identity__role" data-identity-cargo data-optional="1" hidden></p>
+          <h2 class="identity__name" data-identity-nombre>Tu nombre</h2>
+          <p class="identity__company" data-identity-empresa></p>
+          <p class="identity__phrase" data-identity-frase data-optional="1" hidden></p>
+          <p class="identity__city" data-identity-ciudad data-optional="1" hidden></p>
+          <ul class="identity__meta">
+            <li data-identity-telefono data-optional="1" hidden></li>
+            <li data-identity-sitio data-optional="1" hidden></li>
+            <li data-identity-industria data-optional="1" hidden></li>
+          </ul>
+        </div>
+      </section>
+      <form class="form" id="perfil-form">
+        <div class="admin-grid">
+          <section class="panel" aria-labelledby="perfil-presentacion">
+            <h2 class="panel__title" id="perfil-presentacion">Cómo te presentas</h2>
+            <div class="form__field">
+              <label class="form__label" for="perfil-nombre">Nombre</label>
+              <input class="form__input" id="perfil-nombre" type="text" minlength="2" maxlength="120" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-cargo">Cargo</label>
+              <input class="form__input" id="perfil-cargo" type="text" maxlength="80" placeholder="Dirección, administración, mostrador">
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-frase">Frase del negocio</label>
+              <input class="form__input" id="perfil-frase" type="text" maxlength="160" placeholder="Una línea de lo que haces">
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-ciudad">Ciudad</label>
+              <input class="form__input" id="perfil-ciudad" type="text" maxlength="80" placeholder="Puebla">
+            </div>
+          </section>
+          <section class="panel" aria-labelledby="perfil-contacto">
+            <h2 class="panel__title" id="perfil-contacto">Contacto del negocio</h2>
+            <div class="form__field">
+              <label class="form__label" for="perfil-email">Correo</label>
+              <input class="form__input" id="perfil-email" type="email" readonly>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-empresa">Empresa</label>
+              <input class="form__input" id="perfil-empresa" type="text" minlength="2" maxlength="150" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-telefono">Teléfono</label>
+              <input class="form__input" id="perfil-telefono" type="tel" maxlength="30">
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-sitio">Sitio web</label>
+              <input class="form__input" id="perfil-sitio" type="url" maxlength="200" placeholder="https://">
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="perfil-industria">Industria</label>
+              <input class="form__input" id="perfil-industria" type="text" maxlength="100">
+            </div>
+            <div class="form__actions">
+              <button class="btn" id="perfil-guardar" type="submit">Guardar perfil</button>
+            </div>
+          </section>
+        </div>
+      </form>
+      <section class="panel" aria-labelledby="password-title">
+          <h2 class="panel__title" id="password-title">Contraseña</h2>
+          <form class="form" id="password-form">
+            <div class="form__field">
+              <label class="form__label" for="password-actual">Contraseña actual</label>
+              <input class="form__input" id="password-actual" type="password" autocomplete="current-password" required>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="password-nueva">Nueva contraseña</label>
+              <input class="form__input" id="password-nueva" type="password" autocomplete="new-password" minlength="8" required>
+              <p class="form__hint">Mínimo 8 caracteres, con mayúscula, minúscula y número.</p>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="password-confirmacion">Confirmar contraseña</label>
+              <input class="form__input" id="password-confirmacion" type="password" autocomplete="new-password" minlength="8" required>
+            </div>
+            <div class="form__actions">
+              <button class="btn" id="password-guardar" type="submit">Cambiar contraseña</button>
+            </div>
+          </form>
+        </section>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>

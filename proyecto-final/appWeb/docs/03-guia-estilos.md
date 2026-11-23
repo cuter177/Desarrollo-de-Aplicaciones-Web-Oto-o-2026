@@ -1,0 +1,189 @@
+# Guía de estilos
+
+Sistema visual del front. Los valores deben coincidir con las variables de `assets/css/main.css`.
+
+## 1. Principios
+
+- **Mobile First:** el diseño base es para pantallas pequeñas; las mejoras se agregan con `min-width`.
+- **Claridad:** jerarquía tipográfica simple y espaciado consistente.
+- **Consistencia:** un solo conjunto de tokens para color, espacio, radio y sombra.
+- **Accesibilidad:** contraste AA, foco visible y áreas táctiles de al menos 44 × 44 px.
+- **Rendimiento:** sin fuentes ni librerías externas obligatorias.
+
+## 2. Breakpoints
+
+| Nombre | Ancho | Uso |
+|---|---|---|
+| Base | 0–479 px | Móvil |
+| `sm` | ≥ 480 px | Móvil grande |
+| `md` | ≥ 768 px | Tablet |
+| `lg` | ≥ 1024 px | Escritorio |
+
+```css
+@media (min-width: 768px) {
+  /* mejoras para tablet */
+}
+```
+
+## 3. Tokens
+
+### Color
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--color-primary` | `#1f5eff` | Acciones principales |
+| `--color-primary-dark` | `#1746c4` | Hover y énfasis |
+| `--color-accent` | `#00a67e` | Éxito y detalles |
+| `--color-bg` | `#f7f8fb` | Fondo general |
+| `--color-surface` | `#ffffff` | Tarjetas y formularios |
+| `--color-text` | `#16202a` | Texto principal |
+| `--color-muted` | `#5b6b7c` | Texto secundario |
+| `--color-border` | `#d9e0e8` | Bordes |
+| `--color-danger` | `#c0392b` | Errores |
+| `--color-warning` | `#b7791f` | Advertencias |
+| `--color-success` | `#1e7d4f` | Confirmaciones |
+
+### Espaciado
+
+| Token | Valor |
+|---|---|
+| `--space-1` | `0.25rem` |
+| `--space-2` | `0.5rem` |
+| `--space-3` | `0.75rem` |
+| `--space-4` | `1rem` |
+| `--space-5` | `1.5rem` |
+| `--space-6` | `2rem` |
+| `--space-7` | `3rem` |
+
+### Tipografía
+
+- Familia: `system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`.
+- Escala móvil: `1rem` base, títulos `1.5rem`, `1.875rem`, `2.25rem`.
+- Altura de línea: `1.6` en párrafos y `1.2` en títulos.
+- Ancho máximo de lectura: `65ch`.
+
+### Bordes y sombras
+
+| Token | Valor |
+|---|---|
+| `--radius-sm` | `0.375rem` |
+| `--radius-md` | `0.75rem` |
+| `--radius-lg` | `1rem` |
+| `--shadow-sm` | `0 1px 2px rgb(22 32 42 / 8%)` |
+| `--shadow-md` | `0 8px 24px rgb(22 32 42 / 10%)` |
+| `--container` | `72rem` |
+
+## 4. Layout
+
+- Contenedor centrado: `.container` con `width: min(100% - 2rem, var(--container))`.
+- Rejilla de tarjetas: una columna en móvil, dos en tablet y tres en escritorio.
+- Espaciado vertical entre secciones: `var(--space-7)`.
+- Evitar anchos fijos en píxeles; usar `max-width`, `min()`, `clamp()` y `fr`.
+
+## 5. Componentes
+
+### Botones
+
+```css
+.btn {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+.btn--secondary { background: var(--color-surface); border-color: var(--color-border); color: var(--color-text); }
+.btn--ghost { background: transparent; color: var(--color-primary-dark); }
+.btn--danger { background: var(--color-danger); }
+.btn--block { width: 100%; }
+```
+
+Estados: `:hover`, `:focus-visible`, `:disabled`. El estado de carga se aplica con `setBotonCargando()` de `ui.js`, que cambia el texto y deshabilita el botón.
+
+### Formularios
+
+- Un campo por fila en móvil; dos en tablet cuando tenga sentido.
+- Etiqueta arriba del campo.
+- Borde de error con `--color-danger` y texto debajo.
+- Ayuda con `--color-muted` y tamaño `0.875rem`.
+- Nunca usar el placeholder como única etiqueta.
+
+### Tarjetas
+
+- Fondo `--color-surface`, borde suave, radio `--radius-md`.
+- Sombra solo al interactuar o para elementos destacados.
+- Título, descripción y acción con jerarquía clara.
+
+### Tablas
+
+- En móvil, convertir a tarjetas o permitir scroll horizontal con contenedor `.table-scroll`.
+- Encabezados con `scope="col"`.
+- Estados con `.badge` y texto, no solo color.
+
+### Alertas
+
+- `.alert--success`, `.alert--error`, `.alert--warning`, `.alert--info`.
+- Icono o texto que refuerce el significado.
+- `role="status"` o `role="alert"` según urgencia.
+
+### Sitio público (etapa 4)
+
+- `.service-cards` / `.service-card`: catálogo con icono SVG, título, texto y enlace.
+- `.case-grid` / `.case-card`: portafolio con portada degradada e iniciales; nunca imágenes binarias.
+- `.filters` / `.filter-chip`: filtros con `aria-pressed` y estado `.is-active`.
+- `.tech-list` / `.tech`: etiquetas de tecnologías.
+- `.check-list`: beneficios del servicio con marca `✓` generada por CSS.
+- `.stats` / `.stat`: métricas de la página Nosotros.
+- `.steps` / `.step`: proceso de trabajo numerado.
+- `.team-grid` / `.team-card` / `.avatar`: equipo con avatar de iniciales.
+- `.contact-grid` / `.contact-card` / `.contact-list`: datos y formulario de contacto.
+- `.cta-band`: cierre de sección con degradado y acciones.
+- `.honeypot`: campo oculto fuera de pantalla para anti-spam; no usar `display: none`.
+
+Las portadas y avatares usan degradados CSS, por lo que el sitio no depende de imágenes
+binarias nuevas.
+
+## 6. Convención de clases
+
+BEM:
+
+```text
+.card
+.card__title
+.card__body
+.card--featured
+```
+
+Utilidades limitadas:
+
+```text
+.u-visually-hidden
+.u-text-center
+.u-mt-4
+```
+
+Evitar `!important` salvo utilidades justificadas.
+
+## 7. Imágenes
+
+- Formatos preferidos: SVG para iconos, WebP/AVIF para fotografías.
+- Atributos `width` y `height` para evitar saltos de layout.
+- `loading="lazy"` salvo la imagen principal.
+- Texto alternativo descriptivo o `alt=""` si es decorativa.
+- Logotipo en SVG con versión clara y oscura.
+
+## 8. Modo oscuro (opcional)
+
+Si se implementa:
+
+- Tokens redefinidos en `@media (prefers-color-scheme: dark)`.
+- Mantener contraste AA.
+- No depender solo del color para comunicar estados.
+- Probar formularios, tablas y badges.
+
+## 9. Buenas prácticas
+
+- No usar estilos en línea salvo casos excepcionales.
+- No duplicar bloques CSS; extraer componentes.
+- Preferir `rem` para tipografía y espaciado.
+- Usar `clamp()` para títulos fluidos.
+- Revisar en 320 px, 768 px y 1280 px antes de cada entrega.

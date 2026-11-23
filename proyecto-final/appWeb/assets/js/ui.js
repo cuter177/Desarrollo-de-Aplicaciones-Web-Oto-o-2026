@@ -35,6 +35,72 @@ export function iniciarTema() {
   });
 }
 
+export function iniciarMenuPanel() {
+  const boton = document.querySelector('[data-panel-toggle]');
+
+  if (!boton || boton.dataset.bound === '1') {
+    return;
+  }
+
+  boton.dataset.bound = '1';
+
+  const etiqueta = boton.querySelector('[data-panel-label]');
+  const estrecho = () => window.matchMedia('(max-width: 767px)').matches;
+
+  const menuVisible = () => {
+    const estado = document.documentElement.getAttribute('data-panel');
+
+    if (estado === 'oculto') {
+      return false;
+    }
+
+    if (estrecho() && estado !== 'abierto') {
+      return false;
+    }
+
+    return true;
+  };
+
+  const pintar = () => {
+    const visible = menuVisible();
+    boton.setAttribute('aria-expanded', visible ? 'true' : 'false');
+
+    if (etiqueta) {
+      etiqueta.textContent = visible ? 'Ocultar menú' : 'Mostrar menú';
+    }
+  };
+
+  const guardar = (valor) => {
+    try {
+      if (valor) {
+        localStorage.setItem('ds-panel', valor);
+      } else {
+        localStorage.removeItem('ds-panel');
+      }
+    } catch {
+      // Si el navegador bloquea el almacenamiento, el cambio vale solo en esta visita.
+    }
+
+    if (valor) {
+      document.documentElement.setAttribute('data-panel', valor);
+    } else {
+      document.documentElement.removeAttribute('data-panel');
+    }
+
+    pintar();
+  };
+
+  boton.addEventListener('click', () => {
+    if (menuVisible()) {
+      guardar('oculto');
+      return;
+    }
+
+    guardar(estrecho() ? 'abierto' : null);
+  });
+  pintar();
+}
+
 export function iniciarCuenta() {
   const boton = document.querySelector('.account__button');
   const menu = document.getElementById('menu-cuenta');

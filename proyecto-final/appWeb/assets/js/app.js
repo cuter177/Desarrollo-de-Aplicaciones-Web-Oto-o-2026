@@ -1,9 +1,10 @@
 import { obtenerSesion } from './auth.js';
-import { actualizarHeader, iniciarCuenta, iniciarTema } from './ui.js';
+import { actualizarHeader, iniciarCuenta, iniciarMenuPanel, iniciarTema } from './ui.js';
 
 export async function iniciarPagina() {
   iniciarTema();
   iniciarCuenta();
+  iniciarMenuPanel();
 
   try {
     const usuario = await obtenerSesion();

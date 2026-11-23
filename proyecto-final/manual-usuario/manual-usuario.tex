@@ -1,0 +1,174 @@
+% Manual de usuario de DevStudio
+% Compilar: /usr/bin/latexbuild manual-usuario.tex
+\input{../comun/preambulo.tex}
+\datosPdf{Manual de usuario. DevStudio}
+
+\begin{document}
+\portada{Manual de usuario}{Sitio, portal y panel de DevStudio}{Manual de usuario}
+
+\tableofcontents
+\clearpage
+
+\section{Para quién es este manual}
+
+Este manual explica cómo usar DevStudio sin entrar al código. El sitio público
+sirve para conocer el estudio. El portal es de quien ya es cliente. El panel
+es de quien administra el contenido y la bandeja.
+
+En la demostración local el sitio está en \url{http://localhost:8080}. Hace
+falta un navegador actual, con JavaScript, y conexión si el servidor no está
+en la misma máquina.
+
+\section{Entrar y salir}
+
+\subsection{Crear cuenta}
+
+\begin{enumerate}
+  \item Abrir \path{/pages/registro.html}.
+  \item Escribir nombre, correo y empresa. El teléfono es opcional.
+  \item Escribir la contraseña dos veces.
+  \item Pulsar \textbf{Crear cuenta}.
+\end{enumerate}
+
+La contraseña tiene entre 8 y 200 caracteres, con al menos una mayúscula, una
+minúscula y un número. Si el correo ya existe, hay que iniciar sesión o usar
+otro. Si las dos contraseñas no coinciden, el formulario lo indica y conserva
+el resto.
+
+\subsection{Iniciar sesión}
+
+En \path{/pages/login.html} se capturan correo y contraseña y se pulsa
+\textbf{Entrar}. Un cliente llega al resumen del portal. Un administrador
+llega al tablero. Tras cinco intentos fallidos con el mismo correo o desde la
+misma dirección, el acceso espera 15 minutos.
+
+\subsection{Cerrar sesión}
+
+En el portal, el botón \textbf{Cerrar sesión} está en Resumen, debajo de la
+actividad reciente. También está en el menú del monograma, en cualquier
+página. Al salir se vuelve al inicio y el encabezado muestra de nuevo
+\textbf{Iniciar sesión}.
+
+\subsection{Cuentas de la demostración}
+
+\begin{table}[H]
+  \centering
+  \caption{Cuentas para recorrer la demostración local.}
+  \begin{tabular}{lll}
+    \toprule
+    Uso & Correo & Contraseña \\
+    \midrule
+    Administración & \texttt{admin@devstudio.local} & \texttt{Admin\#2026} \\
+    Cliente, Laura Méndez & \texttt{cliente@devstudio.local} & \texttt{Cliente\#2026} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Sitio público}
+
+El menú fijo tiene Soluciones, Casos, Cómo trabajamos y Contacto. A la derecha
+están el cambio de día y noche, la cuenta y el botón \textbf{Hablar de mi
+negocio}.
+
+\begin{itemize}
+  \item \textbf{Inicio.} Presenta el estudio y lleva al diagnóstico.
+  \item \textbf{Soluciones.} Lista los servicios activos. Cada uno abre su detalle.
+  \item \textbf{Casos.} Muestra proyectos publicados. Se puede filtrar por tecnología.
+  \item \textbf{Cómo trabajamos.} Explica el modo de trabajo del estudio.
+  \item \textbf{Contacto.} Pide nombre, correo, asunto y mensaje.
+  \item \textbf{Diagnóstico.} En \path{/pages/cotizacion.html} se describe el negocio sin crear cuenta.
+\end{itemize}
+
+Si faltan campos, el formulario señala el error y no borra lo ya escrito. Si
+se envía demasiadas veces en poco tiempo, hay que esperar.
+
+El tema elegido se recuerda en ese navegador. Crear cuenta no está en el menú
+principal: el enlace está en la página de inicio de sesión.
+
+\section{Portal del cliente}
+
+Solo entra quien tiene rol de cliente. Otro rol que abra estas páginas vuelve
+al sitio. Las secciones son Resumen, Proyectos, Solicitudes, Calendario y
+Perfil.
+
+\subsection{Resumen}
+
+Muestra el nombre, la empresa y cuatro cifras: empresa, proyectos activos,
+solicitudes abiertas y proyectos en total. Debajo está la actividad reciente.
+La foto abre Perfil. El botón de cerrar sesión está al final de esta página.
+
+\subsection{Proyectos y avance}
+
+Mis proyectos lista los trabajos de la empresa de la cuenta. Cada fila tiene
+una barra de 0 a 100. El detalle repite la barra y el historial: fecha y nota
+de cada actualización. El cliente solo consulta. No hay un campo para cambiar
+el porcentaje.
+
+\subsection{Solicitudes}
+
+La lista muestra las solicitudes de esa cuenta y su estado. El detalle incluye
+la respuesta cuando el estudio ya la escribió. Desde el portal también se puede
+crear una solicitud nueva. No se ven las de otras empresas.
+
+\subsection{Calendario}
+
+La página muestra el mes, con botones para el mes anterior y el siguiente. Un
+día con reuniones indica cuántas hay. Al elegirlo se ven el título, el horario,
+el proyecto, el estado y, si el estudio ya los escribió, la respuesta y los
+puntos.
+
+Para agendar se eligen proyecto, título, inicio y fin. La reunión aparece al
+momento con estado \textbf{Solicitada}. La duración válida va de 15 minutos a
+4 horas y no puede cruzarse con otra reunión activa de la misma cuenta. El
+horario se interpreta en la hora de la Ciudad de México.
+
+\textbf{Cancelar reunión} solo aparece si la cita sigue solicitada o
+confirmada y todavía no empieza. Una cita cancelada permanece en el día, con
+la etiqueta correspondiente, y ya no se puede cancelar otra vez.
+
+\subsection{Perfil y foto}
+
+Perfil muestra cómo ve el equipo a la persona: nombre, cargo, empresa, frase
+y ciudad. El correo no se edita ahí. \textbf{Guardar perfil} actualiza el
+resto. Más abajo se cambia la contraseña; pide la actual y la nueva dos veces.
+
+La foto es el círculo grande. Al pasar el cursor aparece un lápiz. Al pulsarlo
+se elige una imagen JPG, PNG o WebP de hasta 2 MB. La misma foto se ve en el
+menú de la cuenta. Si todavía no hay foto, se muestran las iniciales.
+
+\section{Panel de administración}
+
+Entra con la cuenta de administración. El tablero resume conteos y actividad.
+Desde el menú interno se abren:
+
+\begin{itemize}
+  \item usuarios, su rol y si la cuenta está activa;
+  \item clientes y sus datos de empresa;
+  \item servicios y tecnologías del catálogo público;
+  \item proyectos, incluida la publicación en casos;
+  \item solicitudes, su estado y la conversión a proyecto;
+  \item mensajes de contacto.
+\end{itemize}
+
+Confirmar una reunión o cambiar el porcentaje de avance no tiene pantalla en
+este panel. Esas dos acciones se hacen con la API, como explica el manual
+técnico. Un cliente no puede usarlas.
+
+\section{Preguntas frecuentes}
+
+\begin{itemize}
+  \item \textbf{No puedo entrar.} Revisar mayúsculas y, si hubo varios fallos, esperar 15 minutos.
+  \item \textbf{No veo los proyectos de otra empresa.} Es el comportamiento esperado.
+  \item \textbf{La reunión no se agenda.} El fin debe ir después del inicio, durar entre 15 minutos y 4 horas, y no empalmarse con otra cita activa.
+  \item \textbf{La foto no cambia.} El archivo tiene que ser JPG, PNG o WebP y pesar como máximo 2 MB.
+  \item \textbf{El día y la noche vuelven al otro modo.} El navegador recuerda la última elección en ese equipo.
+\end{itemize}
+
+\section{Soporte}
+
+En la demostración de la materia el contacto visible del sitio es
+\texttt{contacto@devstudio.local}. Para una instalación propia, quien opera el
+servidor es quien restablece una contraseña olvidada: el sitio no envía correo
+de recuperación.
+
+\end{document}

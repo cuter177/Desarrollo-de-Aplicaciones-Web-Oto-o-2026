@@ -23,15 +23,15 @@ final class SiteConfig
 
         return [
             'nombre' => self::text('APP_NAME', 'DevStudio'),
-            'tagline' => self::text('COMPANY_TAGLINE', 'Software que hace crecer tu negocio'),
+            'tagline' => self::text('COMPANY_TAGLINE', 'Claridad para tu negocio, sin que sepas de sistemas'),
             'descripcion' => self::text(
                 'COMPANY_DESCRIPTION',
-                'Diseñamos sitios web, dashboards y aplicaciones móviles para empresas que quieren vender más y trabajar con menos procesos manuales.'
+                'Acompañamos a empresas de Puebla a conseguir clientes, ordenar la operación y atender desde el teléfono.'
             ),
             'email' => self::text('COMPANY_EMAIL', 'contacto@devstudio.local'),
-            'telefono' => self::text('COMPANY_PHONE', '+52 55 0000 0000'),
+            'telefono' => self::text('COMPANY_PHONE', '+52 222 000 0000'),
             'whatsapp' => self::text('COMPANY_WHATSAPP', '') ?? '',
-            'direccion' => self::text('COMPANY_ADDRESS', 'Ciudad de México, México'),
+            'direccion' => self::text('COMPANY_ADDRESS', 'Puebla, México'),
             'horario' => self::text('COMPANY_HOURS', 'Lunes a viernes, 9:00 a 18:00'),
             'sitio' => self::text('APP_URL', 'http://localhost:8080'),
             'redes' => $redes,

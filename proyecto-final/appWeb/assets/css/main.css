@@ -46,7 +46,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
 }
 
 body {
@@ -150,18 +150,20 @@ img {
    ========================================================================== */
 
 .site-header {
-  background: var(--color-surface);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgb(255 255 255 / 96%);
   border-bottom: 1px solid var(--color-border);
 }
 
 .site-header__inner {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: 1.5rem;
   min-height: 4rem;
-  padding-block: var(--space-3);
+  padding-block: 0.65rem;
 }
 
 .brand {
@@ -176,12 +178,14 @@ img {
 .brand__mark {
   display: inline-grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: var(--radius-sm);
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.5rem;
   background: var(--color-primary);
   color: #fff;
-  font-size: 0.8125rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 .brand__name {
@@ -193,10 +197,10 @@ img {
    ========================================================================== */
 
 .hero {
-  padding-block: var(--space-7);
+  padding-block: calc(var(--space-7) + var(--space-4)) var(--space-7);
   background:
-    radial-gradient(circle at 15% 20%, rgb(31 94 255 / 12%), transparent 45%),
-    radial-gradient(circle at 85% 10%, rgb(0 166 126 / 10%), transparent 40%);
+    radial-gradient(circle at 15% 20%, rgb(31 94 255 / 8%), transparent 42%),
+    var(--color-bg);
 }
 
 .hero__eyebrow {
@@ -209,14 +213,87 @@ img {
 }
 
 .hero__title {
+  max-width: 18ch;
   margin-bottom: var(--space-4);
-  font-size: clamp(2rem, 8vw, 3.25rem);
+  font-size: clamp(2.15rem, 7vw, 3.6rem);
+  letter-spacing: -0.03em;
 }
 
 .hero__lead {
   max-width: 65ch;
   color: var(--color-muted);
   font-size: 1.0625rem;
+}
+
+.hero__layout {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.hero__layout .hero__title,
+.hero__layout .hero__lead {
+  max-width: none;
+}
+
+.hero-panel .stats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hero-panel .stat {
+  background: var(--color-bg);
+}
+
+.hero-panel {
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.hero-panel__list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-panel__list li {
+  margin: 0;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero-panel__list li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.home-split {
+  display: grid;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .hero__layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(17rem, 0.85fr);
+    gap: var(--space-7);
+  }
+
+  .hero__layout .hero__title {
+    font-size: clamp(2.5rem, 3.5vw, 3.35rem);
+  }
+
+  .home-split {
+    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+  }
+
+  .home-split .faq,
+  .home-split .case-teaser {
+    max-width: none;
+  }
 }
 
 /* Cards
@@ -326,7 +403,7 @@ img {
   }
 
   .site-header__inner {
-    min-height: 4.5rem;
+    min-height: 4.25rem;
   }
 }
 
@@ -340,10 +417,6 @@ img {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {

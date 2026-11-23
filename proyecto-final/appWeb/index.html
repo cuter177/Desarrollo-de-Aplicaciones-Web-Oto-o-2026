@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Sitio web de DevStudio, desarrollo de software web, dashboards y aplicaciones móviles.">
-  <title>DevStudio — Desarrollo de software</title>
+  <meta name="description" content="DevStudio acompaña a negocios de Puebla a conseguir clientes, ordenar la operación y atender sin perderse en mensajes.">
+  <title>DevStudio — Para negocios de Puebla</title>
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <script type="module" src="assets/js/main.js" defer></script>
@@ -15,108 +15,249 @@
 
   <header class="site-header">
     <div class="container site-header__inner">
-      <a class="brand" href="index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+      <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
 
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="index.html" aria-current="page">Inicio</a></li>
-          <li><a class="site-nav__link" href="pages/servicios.html">Servicios</a></li>
-          <li><a class="site-nav__link" href="pages/portafolio.html">Portafolio</a></li>
-          <li><a class="site-nav__link" href="pages/nosotros.html">Nosotros</a></li>
-          <li><a class="site-nav__link" href="pages/contacto.html">Contacto</a></li>
-          <li><a class="site-nav__link" href="pages/cotizacion.html">Diagnóstico</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="pages/login.html">Iniciar sesión</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="pages/registro.html">Crear cuenta</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="pages/admin/dashboard.html">Administración</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
+          <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">
-            Cerrar sesión
-          </button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
   </header>
 
   <main id="contenido">
-    <section class="hero">
+    <section class="hero hero--home">
+      <div class="container hero__layout">
+        <div>
+          <p class="hero__eyebrow">Puebla</p>
+          <h1 class="hero__title">Tu negocio necesita que el siguiente paso quede claro</h1>
+          <p class="hero__lead">
+            Si los clientes no llegan, todo vive en WhatsApp o no sabes cuánto
+            vendes, lo platicamos en cristiano. Tú cuentas cómo trabaja tu
+            negocio. Nosotros te decimos qué conviene y lo dejamos funcionando.
+          </p>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/portafolio.html">Ver un caso</a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-labelledby="problemas-titulo">
+          <p class="hero__eyebrow" id="problemas-titulo">Si esto te suena familiar</p>
+          <ul class="hero-panel__list">
+            <li>Preguntan por WhatsApp y la conversación se pierde entre los chats.</li>
+            <li>Tienes un local, pero en internet no se entiende qué vendes ni cómo llegar.</li>
+            <li>Las citas, los pedidos y las cuentas viven en libretas o en hojas que nadie actualiza.</li>
+            <li>Quieres avanzar, pero no sabes qué te conviene ni por dónde empezar.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--muted">
       <div class="container">
-        <p class="hero__eyebrow">Desarrollo web, dashboards y apps</p>
-        <h1 class="hero__title">Software que hace crecer tu negocio</h1>
-        <p class="hero__lead">
-          Diseñamos sitios web, tableros de indicadores y aplicaciones móviles
-          para que tu empresa venda más, decida con datos y trabaje con menos
-          procesos manuales.
-        </p>
-        <div class="hero__actions">
-          <a class="btn" href="pages/cotizacion.html">Hacer mi diagnóstico</a>
-          <a class="btn btn--secondary" href="pages/registro.html">Crear cuenta de cliente</a>
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">La solución</p>
+            <h2 class="section__title">Qué puede cambiar</h2>
+            <p class="section__lead">
+              Tres resultados. Eliges el que se parece a tu día a día. El detalle
+              lo vemos juntos.
+            </p>
+          </div>
+        </div>
+        <div class="grid">
+          <a class="card card--link" href="/pages/servicio-detalle.html?slug=desarrollo-web">
+            <h3 class="card__title">Que te encuentren</h3>
+            <p class="card__body">
+              Una página clara para que alguien de Puebla sepa qué ofreces,
+              dónde estás y cómo escribirte.
+            </p>
+            <span class="card__link">Ver esta solución</span>
+          </a>
+          <a class="card card--link" href="/pages/servicio-detalle.html?slug=dashboards">
+            <h3 class="card__title">Que la operación no dependa de mensajes</h3>
+            <p class="card__body">
+              Ventas, citas y pendientes en un solo lugar, para decidir sin
+              armar reportes a mano.
+            </p>
+            <span class="card__link">Ver esta solución</span>
+          </a>
+          <a class="card card--link" href="/pages/servicio-detalle.html?slug=apps-moviles">
+            <h3 class="card__title">Que atiendas desde el teléfono</h3>
+            <p class="card__body">
+              Tus clientes piden, consultan o regresan desde el celular, sin
+              llamarte cada vez.
+            </p>
+            <span class="card__link">Ver esta solución</span>
+          </a>
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="container">
-        <h2 class="section__title">Cómo te ayudamos</h2>
-        <div class="grid">
-          <a class="card card--link" href="/pages/servicio-detalle.html?slug=desarrollo-web">
-            <h3 class="card__title">Presencia digital</h3>
-            <p class="card__body">
-              Sitios corporativos y portales que presentan tu negocio, captan
-              prospectos y funcionan en cualquier dispositivo.
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">Cómo empieza</p>
+            <h2 class="section__title">Tres pasos, sin que sepas de tecnología</h2>
+            <p class="section__lead">
+              No tienes que elegir herramientas ni aprender sistemas. Con que
+              conozcas tu negocio es suficiente.
             </p>
-            <span class="badge badge--success">Plan Esencial</span>
-            <span class="card__link">Conocer servicio →</span>
-          </a>
-
-          <a class="card card--link" href="/pages/servicio-detalle.html?slug=dashboards">
-            <h3 class="card__title">Datos para decidir</h3>
-            <p class="card__body">
-              Dashboards, reportes automatizados e integraciones para medir
-              ventas, operación y crecimiento en tiempo real.
-            </p>
-            <span class="badge badge--info">Plan Crecimiento</span>
-            <span class="card__link">Conocer servicio →</span>
-          </a>
-
-          <a class="card card--link" href="/pages/servicio-detalle.html?slug=apps-moviles">
-            <h3 class="card__title">Software a la medida</h3>
-            <p class="card__body">
-              Aplicaciones web y móviles, consultoría y acompañamiento para
-              transformar procesos críticos de tu empresa.
-            </p>
-            <span class="badge badge--warning">Plan Transformación</span>
-            <span class="card__link">Conocer servicio →</span>
-          </a>
+          </div>
         </div>
-        <div class="hero__actions">
-          <a class="btn" href="pages/cotizacion.html">Descubrir mi plan</a>
-          <a class="btn btn--secondary" href="pages/servicios.html">Ver todos los servicios</a>
-          <a class="btn btn--ghost" href="pages/portafolio.html">Ver portafolio</a>
+        <ol class="steps steps--three">
+          <li class="step">
+            <span class="step__number" aria-hidden="true">1</span>
+            <h3 class="step__title">Platicamos</h3>
+            <p class="step__text">
+              Nos cuentas qué vendes, quién te busca y dónde se te atora el día.
+            </p>
+          </li>
+          <li class="step">
+            <span class="step__number" aria-hidden="true">2</span>
+            <h3 class="step__title">Te decimos qué conviene</h3>
+            <p class="step__text">
+              Te proponemos un solo siguiente paso, con tiempo y alcance que se
+              entienden.
+            </p>
+          </li>
+          <li class="step">
+            <span class="step__number" aria-hidden="true">3</span>
+            <h3 class="step__title">Lo dejamos funcionando</h3>
+            <p class="step__text">
+              Queda listo para usarse y te mostramos cómo, sin manuales raros.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section--muted">
+      <div class="container home-split">
+        <div>
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">Dudas</p>
+            <h2 class="section__title">Preguntas de quien va a decidir</h2>
+          </div>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>¿Esto le sirve a un negocio de Puebla?</summary>
+            <p>
+              Sí, si vendes o das un servicio y hoy dependes del mostrador, del
+              teléfono o de WhatsApp. No importa si eres un local, un consultorio
+              o una empresa con varias personas.
+            </p>
+          </details>
+          <details>
+            <summary>¿Cuánto tarda?</summary>
+            <p>
+              La primera conversación es breve. El tiempo de dejarlo funcionando
+              depende de qué tan grande sea el problema. Te lo decimos antes de
+              empezar, no después.
+            </p>
+          </details>
+          <details>
+            <summary>¿Tengo que crear una cuenta?</summary>
+            <p>
+              No para contarnos tu negocio. La cuenta sirve después, si ya hay
+              un trabajo en curso y quieres ver avances. Crear cuenta sigue
+              disponible desde el inicio de sesión.
+            </p>
+          </details>
+          <details>
+            <summary>¿Qué pasa después de escribir?</summary>
+            <p>
+              Alguien del equipo lee tu mensaje y te contacta en horario de
+              oficina para afinar el problema. No recibes una propuesta genérica
+              automática.
+            </p>
+          </details>
+          <details>
+            <summary>¿Qué no tengo que decidir yo?</summary>
+            <p>
+              No tienes que elegir lenguajes, servidores ni herramientas. Eso lo
+              proponemos nosotros, y solo lo explicamos si te interesa saberlo.
+            </p>
+          </details>
+        </div>
+        </div>
+        <div>
+        <div class="section-head section-head--plain">
+          <div>
+            <p class="hero__eyebrow">Un caso</p>
+            <h2 class="section__title">El resultado, primero</h2>
+          </div>
+        </div>
+        <article class="case-teaser">
+          <p class="case-teaser__result">
+            Una sola agenda para todos los consultorios y menos errores al agendar.
+          </p>
+          <p class="case-teaser__context">
+            Una clínica dejó de llevar las citas en varios lados. El equipo las
+            ve juntas y se equivoca menos.
+          </p>
+          <a class="btn btn--secondary" href="/pages/caso-detalle.html?slug=sistema-citas-nexo">Leer el caso</a>
+        </article>
         </div>
       </div>
     </section>
 
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2>Cuéntanos tu negocio</h2>
+            <p>
+              Llámanos en
+              <span data-config="horario">Lunes a viernes, 9:00 a 18:00</span>
+              o déjanos tus datos. Estamos en
+              <span data-config="direccion">Puebla, México</span>.
+            </p>
+            <p>
+              <a data-config-link="telefono" href="tel:+522220000000">
+                <span data-config="telefono">+52 222 000 0000</span>
+              </a>
+              <a data-config-link="whatsapp" href="#" hidden>WhatsApp</a>
+            </p>
+          </div>
+          <div class="hero__actions">
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container site-footer__inner">
-      <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
+      <p><strong data-config="nombre">DevStudio</strong> · <span data-config="direccion">Puebla, México</span> · © 2026</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

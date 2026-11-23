@@ -32,7 +32,7 @@ function agregarMeta(texto) {
 
 function mostrarNoEncontrado() {
   titulo.textContent = 'Caso no encontrado';
-  sector.textContent = 'Portafolio';
+  sector.textContent = 'Casos';
   meta.replaceChildren();
   contenido.hidden = true;
   cta.hidden = true;
@@ -41,15 +41,15 @@ function mostrarNoEncontrado() {
 }
 
 function renderTecnologias(lista) {
+  const bloque = document.querySelector('#caso-hecho');
   tecnologias.replaceChildren();
 
   if (!Array.isArray(lista) || lista.length === 0) {
-    const item = document.createElement('li');
-    item.className = 'tech';
-    item.textContent = 'Por definir';
-    tecnologias.append(item);
+    bloque.hidden = true;
     return;
   }
+
+  bloque.hidden = false;
 
   lista.forEach((nombre) => {
     const item = document.createElement('li');

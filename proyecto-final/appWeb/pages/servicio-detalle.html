@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="Detalle de servicios de desarrollo de software de DevStudio.">
-  <title>Servicio — DevStudio</title>
+  <meta name="description" content="Qué problema resuelve esta solución y qué cambia en el negocio.">
+  <title>Solución — DevStudio</title>
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script type="module" src="/assets/js/pages/servicio-detalle.js" defer></script>
@@ -16,25 +16,24 @@
   <header class="site-header">
     <div class="container site-header__inner">
       <a class="brand" href="/index.html" aria-label="DevStudio, inicio">
-        <span class="brand__mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="brand__mark" aria-hidden="true">DS</span>
         <span class="brand__name" data-config="nombre">DevStudio</span>
       </a>
+
       <nav class="site-nav" aria-label="Navegación principal">
         <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="/index.html">Inicio</a></li>
-          <li><a class="site-nav__link" href="/pages/servicios.html" aria-current="page">Servicios</a></li>
-          <li><a class="site-nav__link" href="/pages/portafolio.html">Portafolio</a></li>
-          <li><a class="site-nav__link" href="/pages/nosotros.html">Nosotros</a></li>
+          <li><a class="site-nav__link" href="/pages/servicios.html" aria-current="page">Soluciones</a></li>
+          <li><a class="site-nav__link" href="/pages/portafolio.html">Casos</a></li>
+          <li><a class="site-nav__link" href="/pages/nosotros.html">Cómo trabajamos</a></li>
           <li><a class="site-nav__link" href="/pages/contacto.html">Contacto</a></li>
-          <li><a class="site-nav__link" href="/pages/cotizacion.html">Diagnóstico</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/login.html">Iniciar sesión</a></li>
-          <li data-auth="guest"><a class="site-nav__link" href="/pages/registro.html">Crear cuenta</a></li>
-          <li data-auth="session"><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
-          <li data-auth="admin"><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="session" hidden><a class="site-nav__link" href="/pages/portal/index.html">Mi portal</a></li>
+          <li data-auth="admin" hidden><a class="site-nav__link" href="/pages/admin/dashboard.html">Administración</a></li>
+          <li data-auth="guest"><a class="site-nav__link site-nav__quiet" href="/pages/login.html?nuevo=1">Iniciar sesión</a></li>
         </ul>
         <div class="site-header__actions">
-          <span class="site-header__user" data-auth="session" data-user-name></span>
-          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout">Cerrar sesión</button>
+          <span class="site-header__user" data-auth="session" data-user-name hidden></span>
+          <button class="btn btn--secondary" type="button" data-auth="session" data-action="logout" hidden>Cerrar sesión</button>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
         </div>
       </nav>
     </div>
@@ -43,12 +42,12 @@
   <main id="contenido">
     <section class="hero" id="servicio-hero">
       <div class="container">
-        <p class="hero__eyebrow">Servicio</p>
-        <h1 class="hero__title" id="servicio-titulo">Cargando servicio…</h1>
+        <p class="hero__eyebrow">Solución</p>
+        <h1 class="hero__title" id="servicio-titulo">Cargando…</h1>
         <p class="hero__lead" id="servicio-descripcion"></p>
         <div class="hero__actions" id="servicio-acciones" hidden>
-          <a class="btn" href="/pages/cotizacion.html">Solicitar diagnóstico</a>
-          <a class="btn btn--secondary" href="/pages/contacto.html">Hablar con el equipo</a>
+          <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+          <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
         </div>
       </div>
     </section>
@@ -57,24 +56,36 @@
       <div class="container">
         <div class="contact-grid">
           <section class="panel" aria-labelledby="beneficios-title" id="panel-beneficios">
-            <h2 class="panel__title" id="beneficios-title">Qué incluye</h2>
+            <h2 class="panel__title" id="beneficios-title">Qué cambia en el negocio</h2>
             <ul class="check-list" id="servicio-beneficios"></ul>
           </section>
 
           <section class="panel" aria-labelledby="casos-title">
-            <h2 class="panel__title" id="casos-title">Casos destacados</h2>
-            <p class="muted">Ejemplos de proyectos publicados por el equipo.</p>
+            <h2 class="panel__title" id="casos-title">Casos parecidos</h2>
+            <p class="muted">Resultados de negocios que ya pasaron por esto.</p>
             <div class="case-grid" id="servicio-casos"></div>
           </section>
         </div>
+
+        <details class="tech-note" id="servicio-hecho">
+          <summary>Si quieres saber con qué está hecho</summary>
+          <div class="tech-note__tools">
+            <div class="service-card__icon" id="servicio-icono"></div>
+            <p class="muted" id="servicio-nombre-tecnico"></p>
+          </div>
+          <p class="tech-note__label" id="servicio-alcance-label" hidden>Detalle del alcance</p>
+          <ul class="check-list" id="servicio-alcance" hidden></ul>
+          <p class="tech-note__label">Herramientas del estudio</p>
+          <ul class="tech-list" id="servicio-tecnologias"></ul>
+        </details>
       </div>
     </section>
 
     <section class="section" id="servicio-no-encontrado" hidden>
       <div class="container">
         <div class="empty-state">
-          <p>El servicio que buscas no existe o ya no está disponible.</p>
-          <a class="btn btn--secondary" href="/pages/servicios.html">Volver a servicios</a>
+          <p>La solución que buscas no existe o ya no está disponible.</p>
+          <a class="btn btn--secondary" href="/pages/servicios.html">Volver a soluciones</a>
         </div>
       </div>
     </section>
@@ -83,15 +94,15 @@
       <div class="container">
         <div class="cta-band">
           <div>
-            <h2>Convirtamos este servicio en un plan concreto</h2>
+            <h2>¿Este es tu caso?</h2>
             <p>
-              Cuéntanos tu situación y tus objetivos. Te propondremos alcance,
-              etapas y una inversión estimada.
+              Cuéntanos cómo trabajas. Te decimos si esta solución te sirve y
+              cuál sería el primer paso.
             </p>
           </div>
           <div class="hero__actions">
-            <a class="btn" href="/pages/cotizacion.html">Hacer mi diagnóstico</a>
-            <a class="btn btn--secondary" href="/pages/contacto.html">Escribir al equipo</a>
+            <a class="btn" href="/pages/cotizacion.html">Hablar de mi negocio</a>
+            <a class="btn btn--secondary" href="/pages/contacto.html">Llamar o escribir</a>
           </div>
         </div>
       </div>
@@ -102,15 +113,15 @@
     <div class="container site-footer__inner">
       <p><strong data-config="nombre">DevStudio</strong> · © 2026. Todos los derechos reservados.</p>
       <nav class="site-footer__nav" aria-label="Enlaces del pie">
-        <a href="/pages/servicios.html">Servicios</a>
-        <a href="/pages/portafolio.html">Portafolio</a>
-        <a href="/pages/nosotros.html">Nosotros</a>
+        <a href="/pages/servicios.html">Soluciones</a>
+        <a href="/pages/portafolio.html">Casos</a>
+        <a href="/pages/nosotros.html">Cómo trabajamos</a>
         <a href="/pages/contacto.html">Contacto</a>
-        <a href="/pages/cotizacion.html">Diagnóstico</a>
+        <a href="/pages/cotizacion.html">Cuéntanos tu negocio</a>
       </nav>
       <p>
         <a data-config-link="email" href="mailto:contacto@devstudio.local"><span data-config="email">contacto@devstudio.local</span></a>
-        · <a data-config-link="telefono" href="tel:+525500000000"><span data-config="telefono">+52 55 0000 0000</span></a>
+        · <a data-config-link="telefono" href="tel:+522220000000"><span data-config="telefono">+52 222 000 0000</span></a>
       </p>
     </div>
   </footer>

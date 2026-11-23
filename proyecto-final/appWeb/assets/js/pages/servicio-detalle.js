@@ -1,6 +1,6 @@
 import { apiGet } from '../api.js';
 import { iniciarPagina } from '../app.js';
-import { aplicarConfig, crearTarjetaProyecto } from '../public.js';
+import { aplicarConfig, crearTarjetaProyecto, enfoqueDe, iconoServicio } from '../public.js';
 
 const hero = document.querySelector('#servicio-hero');
 const titulo = document.querySelector('#servicio-titulo');
@@ -10,6 +10,11 @@ const contenido = document.querySelector('#servicio-contenido');
 const beneficios = document.querySelector('#servicio-beneficios');
 const panelBeneficios = document.querySelector('#panel-beneficios');
 const casos = document.querySelector('#servicio-casos');
+const icono = document.querySelector('#servicio-icono');
+const nombreTecnico = document.querySelector('#servicio-nombre-tecnico');
+const alcance = document.querySelector('#servicio-alcance');
+const alcanceLabel = document.querySelector('#servicio-alcance-label');
+const tecnologias = document.querySelector('#servicio-tecnologias');
 const noEncontrado = document.querySelector('#servicio-no-encontrado');
 const cta = document.querySelector('#servicio-cta');
 
@@ -17,26 +22,56 @@ const params = new URLSearchParams(window.location.search);
 const slug = params.get('slug');
 
 function mostrarNoEncontrado() {
-  titulo.textContent = 'Servicio no encontrado';
+  titulo.textContent = 'Solución no encontrada';
   descripcion.textContent = '';
-  hero.querySelector('.hero__eyebrow').textContent = 'Servicios';
+  hero.querySelector('.hero__eyebrow').textContent = 'Soluciones';
   acciones.hidden = true;
   contenido.hidden = true;
   cta.hidden = true;
   noEncontrado.hidden = false;
-  document.title = 'Servicio no encontrado — DevStudio';
+  document.title = 'Solución no encontrada — DevStudio';
 }
 
-function renderBeneficios(lista) {
-  beneficios.replaceChildren();
+function llenarLista(contenedor, textos) {
+  contenedor.replaceChildren();
 
-  lista.forEach((beneficio) => {
+  textos.forEach((texto) => {
     const item = document.createElement('li');
-    item.textContent = beneficio;
-    beneficios.append(item);
+    item.textContent = texto;
+    contenedor.append(item);
   });
+}
 
-  panelBeneficios.hidden = lista.length === 0;
+function renderBeneficios(servicio) {
+  const enfoque = enfoqueDe(servicio);
+  const guardados = Array.isArray(servicio.beneficios) ? servicio.beneficios : [];
+  const visibles = enfoque?.beneficios ?? guardados;
+
+  llenarLista(beneficios, visibles);
+  panelBeneficios.hidden = visibles.length === 0;
+
+  const tecnicos = enfoque ? guardados : [];
+  llenarLista(alcance, tecnicos);
+  alcance.hidden = tecnicos.length === 0;
+  alcanceLabel.hidden = tecnicos.length === 0;
+}
+
+function renderTecnologias(lista) {
+  tecnologias.replaceChildren();
+
+  if (!Array.isArray(lista) || lista.length === 0) {
+    const item = document.createElement('li');
+    item.textContent = 'El detalle de herramientas se comparte en la conversación.';
+    tecnologias.append(item);
+    return;
+  }
+
+  lista.forEach((herramienta) => {
+    const item = document.createElement('li');
+    item.className = 'tech';
+    item.textContent = herramienta.nombre;
+    tecnologias.append(item);
+  });
 }
 
 function renderCasos(lista) {
@@ -63,12 +98,21 @@ async function cargar() {
     const data = await apiGet(`/servicios/${encodeURIComponent(slug)}`);
     const servicio = data.servicio;
 
-    titulo.textContent = servicio.nombre;
-    descripcion.textContent = servicio.descripcion;
-    document.title = `${servicio.nombre} — DevStudio`;
+    const enfoque = enfoqueDe(servicio);
+    titulo.textContent = enfoque?.titulo ?? servicio.nombre;
+    descripcion.textContent = enfoque?.texto ?? servicio.descripcion;
+    document.title = `${enfoque?.titulo ?? servicio.nombre} — DevStudio`;
+    nombreTecnico.textContent = servicio.nombre;
+    icono.innerHTML = iconoServicio(servicio.icono);
 
-    renderBeneficios(Array.isArray(servicio.beneficios) ? servicio.beneficios : []);
+    renderBeneficios(servicio);
     renderCasos(data.casos);
+
+    try {
+      renderTecnologias(await apiGet('/tecnologias'));
+    } catch {
+      renderTecnologias([]);
+    }
 
     acciones.hidden = false;
     contenido.hidden = false;
@@ -80,7 +124,7 @@ async function cargar() {
       return;
     }
 
-    titulo.textContent = 'No se pudo cargar el servicio';
+    titulo.textContent = 'No se pudo cargar la solución';
     descripcion.textContent = 'Revisa tu conexión e inténtalo de nuevo.';
     acciones.hidden = true;
     contenido.hidden = true;
